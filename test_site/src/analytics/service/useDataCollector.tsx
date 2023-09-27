@@ -1,14 +1,14 @@
 import { FC, PropsWithChildren, createContext, useContext } from "react";
 import { DataCollectorContextValue } from "./DataCollectorContextValue";
 
-const DataCollectorContext = createContext<
-  ReturnType<typeof DataCollectorContextValue>
->({ action: (any) => {} });
+const DataCollectorContext =
+  createContext<ReturnType<typeof DataCollectorContextValue>>(null);
 
 export const DataCollectorContextProvider: FC<PropsWithChildren> = ({
   children,
 }) => {
   const value = DataCollectorContextValue();
+
   return (
     <DataCollectorContext.Provider value={value}>
       {children}
