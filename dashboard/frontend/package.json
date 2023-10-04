@@ -9,9 +9,11 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "formik": "^2.4.5",
     "next": "^13.5.4",
     "react": "latest",
-    "react-dom": "latest"
+    "react-dom": "latest",
+    "yup": "^1.3.2"
   },
   "devDependencies": {
     "@types/node": "latest",
