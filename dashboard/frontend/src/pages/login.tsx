@@ -1,5 +1,5 @@
-import ActionButton from "@/components/actionbutton/actionbutton";
-import AuthenticationContainer from "@/components/containers/authentication";
+import ActionButton from "@/components/buttons/actionbutton";
+import AuthenticationLayout from "@/components/layouts/authentication";
 import InputField from "@/components/inputfield/inputfield";
 import Spacer from "@/components/spacer/spacer";
 import { LoginCredentials, LoginSchema } from "@/schemas/loginschema";
@@ -13,7 +13,7 @@ const Login = () => {
   };
 
   return (
-    <AuthenticationContainer>
+    <AuthenticationLayout>
       <Formik
         initialValues={initialValues}
         validationSchema={LoginSchema}
@@ -42,7 +42,7 @@ const Login = () => {
       >
         {"Don't have an account?"}
       </Link>
-    </AuthenticationContainer>
+    </AuthenticationLayout>
   );
 };
 
