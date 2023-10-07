@@ -4,6 +4,7 @@ import {
   MdOutlineDashboardCustomize,
   MdOutlineSpaceDashboard,
 } from "react-icons/md";
+import { CgWebsite } from "react-icons/cg";
 import IconLink from "../links/iconlink";
 
 const NavigationBar: FC = () => {
@@ -16,8 +17,13 @@ const NavigationBar: FC = () => {
           </IconLink>
         </li>
         <li>
-          <IconLink href="/settings" label="Metrics">
+          <IconLink href="/metrics" label="Metrics">
             <MdOutlineDashboardCustomize />
+          </IconLink>
+        </li>
+        <li>
+          <IconLink href="/websites" label="Websites">
+            <CgWebsite />
           </IconLink>
         </li>
         <div className="h-0.5 w-full md:h-full md:w-0.5" />

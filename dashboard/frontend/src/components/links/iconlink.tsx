@@ -12,7 +12,7 @@ const IconLink: FC<PropsWithChildren<Props>> = ({ children, href, label }) => {
       href={href}
       className="flex flex-col justify-center items-center gap-1 text-xs"
     >
-      <div className="text-4xl">{children}</div>
+      <div className="text-3xl">{children}</div>
       {label ?? <p>{label}</p>}
     </Link>
   );
