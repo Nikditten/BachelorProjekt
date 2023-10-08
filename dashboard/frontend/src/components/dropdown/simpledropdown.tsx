@@ -1,23 +1,28 @@
-import { FC, useState } from "react";
+import useOutsideClick from "@/utils/hooks/useOutsideClick";
+import { FC, useRef, useState } from "react";
 import { GoChevronDown, GoChevronUp } from "react-icons/go";
 
 interface Props {
   options: string[];
+  selected: string;
   onSelect: (option: string) => void;
 }
 
-const SimpleDropdown: FC<Props> = ({ options, onSelect }) => {
-  const [isOpen, setIsOpen] = useState<boolean>(true);
-  const [selected, setSelected] = useState<string>(options[0]);
+const SimpleDropdown: FC<Props> = ({ options, selected, onSelect }) => {
+  const [isOpen, setIsOpen] = useState<boolean>(false);
+  const ref = useRef(null);
 
   const handleSelection = (option: string) => {
-    setSelected(option);
     onSelect(option);
     setIsOpen(false);
   };
 
+  useOutsideClick(ref, () => {
+    setIsOpen(false);
+  });
+
   return (
-    <div className="relative">
+    <div className="relative" ref={ref}>
       <button
         type="button"
         className="max-h-20 h-fit w-full text-start overflow-hidden flex flex-row justify-start items-center gap-4 text-2xl font-light"
