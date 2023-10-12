@@ -25,7 +25,7 @@ const SimpleDropdown: FC<Props> = ({ options, selected, onSelect }) => {
     <div className="relative" ref={ref}>
       <button
         type="button"
-        className="max-h-20 h-fit w-full text-start overflow-hidden flex flex-row justify-start items-center gap-4 text-2xl font-light"
+        className="flex flex-row items-center justify-start w-full overflow-hidden text-2xl font-light max-h-20 h-fit text-start gap-4"
         onClick={() => setIsOpen(!isOpen)}
       >
         <h1>{selected}</h1>

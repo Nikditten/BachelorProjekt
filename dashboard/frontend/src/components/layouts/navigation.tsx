@@ -1,11 +1,11 @@
-import { FC, PropsWithChildren } from "react";
-import NavigationBar from "../navigationbar/navigationbar";
+import { FC, PropsWithChildren } from 'react';
+import NavigationBar from '../navigationbar/navigationbar';
 
 const NavigationLayout: FC<PropsWithChildren> = ({ children }) => {
   return (
-    <div className="h-screen w-screen flex flex-col md:flex-row justify-start items-center p-4 gap-4">
+    <div className='flex flex-col items-center justify-start w-screen h-screen p-4 gap-4 md:flex-row'>
       <NavigationBar />
-      <main className="h-full w-full">{children}</main>
+      <main className='w-full h-full p-6 overflow-y-auto'>{children}</main>
     </div>
   );
 };

@@ -9,7 +9,7 @@ const Navigation: FC<PropsWithChildren> = ({ children }) => {
   const isActive = (href: string) => (pathname === href ? "underline" : "none");
 
   return (
-    <main className="h-screen w-screen flex flex-col justify-start items-center">
+    <main className="flex flex-col items-center justify-start w-screen h-screen">
       <nav className="w-full h-16 px-6 text-xl text-white bg-blue-400">
         <ul className="flex flex-row items-center justify-center h-full gap-6">
           {navigation_data.map((item) => {

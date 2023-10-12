@@ -1,39 +1,56 @@
-import { FC } from "react";
+import { FC, useState } from 'react';
 import {
+  MdAdd,
   MdOutlineAccountCircle,
-  MdOutlineDashboardCustomize,
   MdOutlineSpaceDashboard,
-} from "react-icons/md";
-import { CgWebsite } from "react-icons/cg";
-import IconLink from "../links/iconlink";
+} from 'react-icons/md';
+import Account from '../account/account';
+import IconButton from '../buttons/iconbutton';
+import IconLink from '../links/iconlink';
+import Spacer from '../spacer/spacer';
 
 const NavigationBar: FC = () => {
+  const [accountModalOpen, setAccountModalOpen] = useState<boolean>(false);
+
+  const onAccountModalOpen = () => setAccountModalOpen(true);
+  const onAccountModalClose = () => setAccountModalOpen(false);
+
   return (
-    <nav className="h-20 w-full md:h-full md:w-20 p-4 rounded-xl shadow-2xl shadow-gray-400">
-      <ul className="h-full w-full flex flex-row md:flex-col justify-center items-center gap-8 py-2">
-        <li>
-          <IconLink href="/" label="Overview">
-            <MdOutlineSpaceDashboard />
-          </IconLink>
-        </li>
-        <li>
-          <IconLink href="/metrics" label="Metrics">
-            <MdOutlineDashboardCustomize />
-          </IconLink>
-        </li>
-        <li>
-          <IconLink href="/websites" label="Websites">
-            <CgWebsite />
-          </IconLink>
-        </li>
-        <div className="h-0.5 w-full md:h-full md:w-0.5" />
-        <li>
-          <IconLink href="/account" label="Account">
-            <MdOutlineAccountCircle />
-          </IconLink>
-        </li>
-      </ul>
-    </nav>
+    <>
+      <Account
+        isOpen={accountModalOpen}
+        onClose={onAccountModalClose}
+      />
+      <nav className='w-full h-20 px-4 py-6 shadow-2xl md:h-full md:w-20 rounded-xl shadow-gray-400'>
+        <ul className='flex flex-row items-center justify-between w-full h-full gap-10 md:flex-col'>
+          <li>
+            <IconLink
+              href='/'
+              label='Overview'
+            >
+              <MdOutlineSpaceDashboard />
+            </IconLink>
+          </li>
+          <Spacer vertical />
+          <li>
+            <IconLink
+              href='/create'
+              label='Website'
+            >
+              <MdAdd />
+            </IconLink>
+          </li>
+          <li>
+            <IconButton
+              onClick={onAccountModalOpen}
+              label='Account'
+            >
+              <MdOutlineAccountCircle />
+            </IconButton>
+          </li>
+        </ul>
+      </nav>
+    </>
   );
 };
 

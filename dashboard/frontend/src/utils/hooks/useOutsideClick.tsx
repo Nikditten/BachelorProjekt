@@ -1,8 +1,8 @@
 // SOURCE - https://medium.com/@kevinfelisilda/click-outside-element-event-using-react-hooks-2c540814b661 (08/10/2023)
 
-import { useEffect } from "react";
+import { useEffect } from 'react';
 
-const useOutsideClick = (ref: any, callback: () => void) => {
+const useOutsideClick = (callback: () => void, ref: any) => {
   const handleClick = (e: MouseEvent) => {
     if (ref.current && !ref.current.contains(e.target)) {
       callback();
@@ -10,10 +10,10 @@ const useOutsideClick = (ref: any, callback: () => void) => {
   };
 
   useEffect(() => {
-    document.addEventListener("click", handleClick);
+    document.addEventListener('click', handleClick);
 
     return () => {
-      document.removeEventListener("click", handleClick);
+      document.removeEventListener('click', handleClick);
     };
   });
 };

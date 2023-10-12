@@ -1,15 +1,15 @@
-import ActionButton from "@/components/buttons/actionbutton";
-import AuthenticationLayout from "@/components/layouts/authentication";
-import InputField from "@/components/inputfield/inputfield";
-import Spacer from "@/components/spacer/spacer";
-import { LoginCredentials, LoginSchema } from "@/schemas/loginschema";
-import { Form, Formik } from "formik";
-import Link from "next/link";
+import ActionButton from '@/components/buttons/actionbutton';
+import InputField from '@/components/inputfield/inputfield';
+import AuthenticationLayout from '@/components/layouts/authentication';
+import Spacer from '@/components/spacer/spacer';
+import { LoginSchema, LoginType } from '@/schemas/loginschema';
+import { Form, Formik } from 'formik';
+import Link from 'next/link';
 
 const Login = () => {
-  const initialValues: LoginCredentials = {
-    username: "",
-    password: "",
+  const initialValues: LoginType = {
+    username: '',
+    password: '',
   };
 
   return (
@@ -25,10 +25,18 @@ const Login = () => {
         }}
       >
         {(props) => (
-          <Form className="flex flex-col items-center justify-center gap-4">
-            <InputField name="username" label="Username" type="name" />
+          <Form className='flex flex-col items-center justify-center gap-4'>
+            <InputField
+              name='username'
+              label='Username'
+              type='name'
+            />
 
-            <InputField name="password" label="Password" type="password" />
+            <InputField
+              name='password'
+              label='Password'
+              type='password'
+            />
             <ActionButton disabled={props.isSubmitting}>Login</ActionButton>
           </Form>
         )}
@@ -37,8 +45,8 @@ const Login = () => {
       <Spacer />
 
       <Link
-        className="font-light text-center text-gray-400 hover:text-gray-900"
-        href="/signup"
+        className='font-light text-center text-gray-400 hover:text-gray-900'
+        href='/signup'
       >
         {"Don't have an account?"}
       </Link>

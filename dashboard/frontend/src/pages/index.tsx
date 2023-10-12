@@ -1,16 +1,20 @@
-import { ReactElement } from "react";
-import { NextPageWithLayout } from "./_app";
-import NavigationLayout from "@/components/layouts/navigation";
-import WebsitePickerLayout from "@/components/layouts/websitepicker";
+import NavigationLayout from '@/components/layouts/navigation';
+import WebsiteConfigLayout from '@/components/layouts/websiteconfig';
+import { ReactElement } from 'react';
+import { NextPageWithLayout } from './_app';
 
 const Home: NextPageWithLayout = () => {
-  return <div className="h-full w-full">INDEX</div>;
+  return (
+    <div className='flex items-center justify-center w-full h-full'>
+      INDEX
+    </div>
+  );
 };
 
 Home.getLayout = function getLayout(page: ReactElement) {
   return (
     <NavigationLayout>
-      <WebsitePickerLayout>{page}</WebsitePickerLayout>
+      <WebsiteConfigLayout>{page}</WebsiteConfigLayout>
     </NavigationLayout>
   );
 };

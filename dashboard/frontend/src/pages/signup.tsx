@@ -1,16 +1,16 @@
-import ActionButton from "@/components/buttons/actionbutton";
-import AuthenticationLayout from "@/components/layouts/authentication";
-import InputField from "@/components/inputfield/inputfield";
-import Spacer from "@/components/spacer/spacer";
-import { SignupCredentials, SignupSchema } from "@/schemas/signupschema";
-import { Form, Formik } from "formik";
-import Link from "next/link";
+import ActionButton from '@/components/buttons/actionbutton';
+import InputField from '@/components/inputfield/inputfield';
+import AuthenticationLayout from '@/components/layouts/authentication';
+import Spacer from '@/components/spacer/spacer';
+import { SignupSchema, SignupType } from '@/schemas/signupschema';
+import { Form, Formik } from 'formik';
+import Link from 'next/link';
 
 const SignUp = () => {
-  const initialValues: SignupCredentials = {
-    name: "",
-    username: "",
-    password: "",
+  const initialValues: SignupType = {
+    name: '',
+    username: '',
+    password: '',
   };
 
   return (
@@ -26,12 +26,24 @@ const SignUp = () => {
         }}
       >
         {(props) => (
-          <Form className="flex flex-col items-center justify-center gap-4">
-            <InputField name="name" label="Name" type="name" />
+          <Form className='flex flex-col items-center justify-center gap-4'>
+            <InputField
+              name='name'
+              label='Name'
+              type='name'
+            />
 
-            <InputField name="username" label="Username" type="name" />
+            <InputField
+              name='username'
+              label='Username'
+              type='name'
+            />
 
-            <InputField name="password" label="Password" type="password" />
+            <InputField
+              name='password'
+              label='Password'
+              type='password'
+            />
 
             <ActionButton disabled={props.isSubmitting}>Register</ActionButton>
           </Form>
@@ -41,10 +53,10 @@ const SignUp = () => {
       <Spacer />
 
       <Link
-        className="font-light text-center text-gray-400 hover:text-gray-900"
-        href="/login"
+        className='font-light text-center text-gray-400 hover:text-gray-900'
+        href='/login'
       >
-        {"Already have an account?"}
+        {'Already have an account?'}
       </Link>
     </AuthenticationLayout>
   );
