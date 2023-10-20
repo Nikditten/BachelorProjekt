@@ -2,6 +2,7 @@ import { FC, PropsWithChildren, useState } from 'react';
 import {
   MdInfoOutline,
   MdOutlineDashboardCustomize,
+  MdOutlineSettings,
   MdSettings,
 } from 'react-icons/md';
 import Modal from '../dialogs/modal';
@@ -58,7 +59,7 @@ const WebsiteConfigLayout: FC<PropsWithChildren> = ({ children }) => {
           </li>
           <li>
             <button onClick={handleOpenSettings}>
-              <MdSettings />
+              <MdOutlineSettings />
             </button>
             <Modal
               isShown={showSettings}

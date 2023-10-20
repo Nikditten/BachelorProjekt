@@ -1,14 +1,18 @@
 import NavigationLayout from '@/components/layouts/navigation';
 import CreateWebsiteButton from '@/components/website/createwebsitebutton';
+import CreateWebsiteForm from '@/components/website/createwebsiteform';
 import WebsiteCard from '@/components/website/websitecard';
-import { ReactElement } from 'react';
+import { ReactElement, useState } from 'react';
 import { NextPageWithLayout } from './_app';
 
 const Create: NextPageWithLayout = () => {
+  const [createWebsiteVisible, setCreateWebsiteVisible] =
+    useState<boolean>(false);
+
   return (
     <div className='flex flex-col items-center justify-center w-full h-full gap-6'>
       <h1 className='w-full text-start text-4xl'>Your websites</h1>
-      <div className='h-full w-full grid grid-cols-1 lg:grid-cols-2 2xl:grid-cols-3 gap-4 grid-rows-4'>
+      <div className='h-full w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 md:grid-rows-4'>
         <WebsiteCard
           title='Test website 2'
           id='1218e7yh237r28320ur32'
@@ -29,7 +33,15 @@ const Create: NextPageWithLayout = () => {
           title='Test website 2'
           id='1218e7yh237r28320ur32'
         />
-        <CreateWebsiteButton onClick={() => {}} />
+        {createWebsiteVisible ? (
+          <CreateWebsiteForm
+            isVisible={createWebsiteVisible}
+            onHide={() => setCreateWebsiteVisible(false)}
+            onSubmit={() => {}}
+          />
+        ) : (
+          <CreateWebsiteButton onClick={() => setCreateWebsiteVisible(true)} />
+        )}
       </div>
     </div>
   );
