@@ -4,6 +4,7 @@ import CreateWebsiteForm from '@/components/website/createwebsiteform';
 import WebsiteCard from '@/components/website/websitecard';
 import { ReactElement, useState } from 'react';
 import { NextPageWithLayout } from './_app';
+import Grid from '@/components/layouts/grid';
 
 const Create: NextPageWithLayout = () => {
   const [createWebsiteVisible, setCreateWebsiteVisible] =
@@ -12,7 +13,7 @@ const Create: NextPageWithLayout = () => {
   return (
     <div className='flex flex-col items-center justify-center w-full h-full gap-6'>
       <h1 className='w-full text-start text-4xl'>Your websites</h1>
-      <div className='h-full w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 md:grid-rows-4'>
+      <Grid>
         <WebsiteCard
           title='Test website 2'
           id='1218e7yh237r28320ur32'
@@ -42,7 +43,7 @@ const Create: NextPageWithLayout = () => {
         ) : (
           <CreateWebsiteButton onClick={() => setCreateWebsiteVisible(true)} />
         )}
-      </div>
+      </Grid>
     </div>
   );
 };

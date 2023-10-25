@@ -3,9 +3,9 @@ import NavigationBar from '../navigationbar/navigationbar';
 
 const NavigationLayout: FC<PropsWithChildren> = ({ children }) => {
   return (
-    <div className='flex flex-col items-center justify-start w-screen h-screen p-4 gap-4 md:flex-row'>
+    <div className='flex flex-col items-center justify-start w-screen h-screen p-4 gap-4 md:flex-row overflow-y-auto'>
       <NavigationBar />
-      <main className='w-full h-full p-6 overflow-y-auto'>{children}</main>
+      <main className='w-full h-full p-6'>{children}</main>
     </div>
   );
 };

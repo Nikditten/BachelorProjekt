@@ -3,7 +3,6 @@ import {
   MdInfoOutline,
   MdOutlineDashboardCustomize,
   MdOutlineSettings,
-  MdSettings,
 } from 'react-icons/md';
 import Modal from '../dialogs/modal';
 import SimpleDropdown from '../dropdown/simpledropdown';
@@ -27,7 +26,7 @@ const WebsiteConfigLayout: FC<PropsWithChildren> = ({ children }) => {
 
   return (
     <div className='flex flex-col items-center justify-center w-full h-full gap-4'>
-      <div className='flex flex-row items-center justify-between w-full pr-4'>
+      <div className='flex flex-col md:flex-row items-center justify-between w-full md:pr-4'>
         <SimpleDropdown
           options={websites}
           selected={selectedWebsite}

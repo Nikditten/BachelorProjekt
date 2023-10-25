@@ -2,7 +2,6 @@ import { CreateWebsiteFormSchema } from '@/schemas/createwebsite';
 import { Form, Formik } from 'formik';
 import { FC } from 'react';
 import { MdClose } from 'react-icons/md';
-import ActionButton from '../buttons/actionbutton';
 import IconButton from '../buttons/iconbutton';
 import InputField from '../inputfield/inputfield';
 
@@ -25,26 +24,17 @@ const CreateWebsiteForm: FC<Props> = ({ isVisible, onHide, onSubmit }) => {
       <Formik
         initialValues={{ name: '' }}
         validationSchema={CreateWebsiteFormSchema}
-        onSubmit={(values, actions) => {
+        onSubmit={(values) => {
           onSubmit(values.name);
-          actions.setSubmitting(false);
           onHide();
         }}
       >
-        {(props) => (
-          <Form className='flex flex-col gap-2'>
-            <InputField
-              name='name'
-              label='Name'
-            />
-            <ActionButton
-              type='submit'
-              disabled={props.isSubmitting}
-            >
-              Create
-            </ActionButton>
-          </Form>
-        )}
+        <Form className='flex flex-row justify-center items-end gap-2'>
+          <InputField
+            name='name'
+            label='Name'
+          />
+        </Form>
       </Formik>
     </div>
   );
