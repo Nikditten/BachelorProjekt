@@ -7,7 +7,7 @@ import { NextPageWithLayout } from './_app';
 
 const Home: NextPageWithLayout = () => {
   return (
-    <div className='h-full w-full grid gap-8 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 md:grid-rows-5'>
+    <div className='h-full w-full grid gap-8 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4'>
       <HeaderContainer
         className='col-span-4 row-span-2'
         title='Sessions'
@@ -18,14 +18,15 @@ const Home: NextPageWithLayout = () => {
             'Unique',
             'Avg. pages visited',
             'Avg. time spent',
+            'Bounce rate',
           ]}
-          tableData={[['10.000', '2342', '12', '10:00']]}
+          tableData={[['10.000', '2342', '12', '10:00', '1212']]}
         />
       </HeaderContainer>
 
       <HeaderContainer
-        className='col-span-2 row-span-4'
-        title='General'
+        className='col-span-4 row-span-4'
+        title='Page statistics'
       >
         <TableContainer
           tableheaders={['Page', 'Landing', 'Leaving', 'Visits', 'Time spent']}
@@ -37,8 +38,8 @@ const Home: NextPageWithLayout = () => {
       </HeaderContainer>
 
       <HeaderContainer
-        className='col-span-2 row-span-4'
-        title='Bounce rates'
+        className='col-span-2 row-span-2'
+        title='Bounce rate per page'
       >
         <TableContainer
           tableheaders={['Page', 'Total']}
@@ -64,15 +65,40 @@ const Home: NextPageWithLayout = () => {
       </HeaderContainer>
 
       <HeaderContainer
-        className='col-span-2 row-span-2'
+        className='col-span-1 row-span-2'
         title='Browser'
       >
         <TableContainer
           tableheaders={['Browser', 'Total']}
           tableData={[
             ['Chrome', '23.232'],
-            ['iOS', '10.000'],
+            ['Safari', '10.000'],
+            ['Firefox', '12.121'],
           ]}
+        />
+      </HeaderContainer>
+
+      <HeaderContainer
+        className='col-span-1 row-span-2'
+        title='Operating system'
+      >
+        <TableContainer
+          tableheaders={['System', 'Total']}
+          tableData={[
+            ['Windows', '1212'],
+            ['Mac', '2321'],
+            ['iOS', '1213'],
+          ]}
+        />
+      </HeaderContainer>
+
+      <HeaderContainer
+        className='col-span-2 row-span-2'
+        title='Screen size'
+      >
+        <TableContainer
+          tableheaders={['< 600', '< 768', '< 992', '< 1200', '> 1200']}
+          tableData={[['12', '1212', '121', '232', '232']]}
         />
       </HeaderContainer>
     </div>

@@ -69,7 +69,7 @@ const WebsiteConfigLayout: FC<PropsWithChildren> = ({ children }) => {
           </li>
         </ul>
       </div>
-      {children}
+      <div className='h-full w-full overflow-y-auto'>{children}</div>
     </div>
   );
 };

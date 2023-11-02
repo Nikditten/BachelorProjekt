@@ -2,7 +2,7 @@ import { FC, PropsWithChildren } from 'react';
 
 interface Props {
   title: string;
-  className: string;
+  className?: string;
 }
 
 const HeaderContainer: FC<PropsWithChildren<Props>> = ({
