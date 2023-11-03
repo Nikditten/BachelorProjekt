@@ -19,6 +19,6 @@ export default function App({ Component, pageProps }: AppPropsWithLayout) {
   return getLayout(
     <SettingsContextProvider>
       <Component {...pageProps} />
-    </SettingsContextProvider>
+    </SettingsContextProvider>,
   );
 }

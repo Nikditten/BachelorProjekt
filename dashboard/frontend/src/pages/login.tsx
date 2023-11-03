@@ -1,15 +1,15 @@
-import ActionButton from '@/components/buttons/actionbutton';
-import InputField from '@/components/inputfield/inputfield';
-import AuthenticationLayout from '@/components/layouts/authentication';
-import Spacer from '@/components/spacer/spacer';
-import { LoginSchema, LoginType } from '@/schemas/loginschema';
-import { Form, Formik } from 'formik';
-import Link from 'next/link';
+import ActionButton from "@/components/buttons/actionbutton";
+import InputField from "@/components/inputfield/inputfield";
+import AuthenticationLayout from "@/components/layouts/authentication";
+import Spacer from "@/components/spacer/spacer";
+import { LoginSchema, LoginType } from "@/schemas/loginschema";
+import { Form, Formik } from "formik";
+import Link from "next/link";
 
 const Login = () => {
   const initialValues: LoginType = {
-    username: '',
-    password: '',
+    username: "",
+    password: "",
   };
 
   return (
@@ -45,7 +45,7 @@ const Login = () => {
       <Spacer />
 
       <Link
-        className='font-light text-center text-gray-400 hover:text-gray-900'
+        className='text-center font-light text-gray-400 hover:text-gray-900'
         href='/signup'
       >
         {"Don't have an account?"}

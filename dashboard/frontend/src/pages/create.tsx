@@ -1,17 +1,17 @@
-import NavigationLayout from '@/components/layouts/navigation';
-import CreateWebsiteButton from '@/components/website/createwebsitebutton';
-import CreateWebsiteForm from '@/components/website/createwebsiteform';
-import WebsiteCard from '@/components/website/websitecard';
-import { ReactElement, useState } from 'react';
-import { NextPageWithLayout } from './_app';
-import Grid from '@/components/layouts/grid';
+import Grid from "@/components/layouts/grid";
+import NavigationLayout from "@/components/layouts/navigation";
+import CreateWebsiteButton from "@/components/website/createwebsitebutton";
+import CreateWebsiteForm from "@/components/website/createwebsiteform";
+import WebsiteCard from "@/components/website/websitecard";
+import { ReactElement, useState } from "react";
+import { NextPageWithLayout } from "./_app";
 
 const Create: NextPageWithLayout = () => {
   const [createWebsiteVisible, setCreateWebsiteVisible] =
     useState<boolean>(false);
 
   return (
-    <div className='flex flex-col items-center justify-center w-full h-full gap-6'>
+    <div className='flex h-full w-full flex-col items-center justify-center gap-6'>
       <h1 className='w-full text-start text-4xl'>Your websites</h1>
       <Grid>
         <WebsiteCard

@@ -1,6 +1,6 @@
 version: '3.8'
 services:
-  # BASED ON https://github.com/khezen/compose-postgres/blob/master/docker-compose.yml
+  # SOURCE https://github.com/khezen/compose-postgres/blob/master/docker-compose.yml
   db:
     image: postgres:latest
     restart: always

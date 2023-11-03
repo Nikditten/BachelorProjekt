@@ -1,16 +1,16 @@
-import ActionButton from '@/components/buttons/actionbutton';
-import InputField from '@/components/inputfield/inputfield';
-import AuthenticationLayout from '@/components/layouts/authentication';
-import Spacer from '@/components/spacer/spacer';
-import { SignupSchema, SignupType } from '@/schemas/signupschema';
-import { Form, Formik } from 'formik';
-import Link from 'next/link';
+import ActionButton from "@/components/buttons/actionbutton";
+import InputField from "@/components/inputfield/inputfield";
+import AuthenticationLayout from "@/components/layouts/authentication";
+import Spacer from "@/components/spacer/spacer";
+import { SignupSchema, SignupType } from "@/schemas/signupschema";
+import { Form, Formik } from "formik";
+import Link from "next/link";
 
 const SignUp = () => {
   const initialValues: SignupType = {
-    name: '',
-    username: '',
-    password: '',
+    name: "",
+    username: "",
+    password: "",
   };
 
   return (
@@ -53,10 +53,10 @@ const SignUp = () => {
       <Spacer />
 
       <Link
-        className='font-light text-center text-gray-400 hover:text-gray-900'
+        className='text-center font-light text-gray-400 hover:text-gray-900'
         href='/login'
       >
-        {'Already have an account?'}
+        {"Already have an account?"}
       </Link>
     </AuthenticationLayout>
   );
