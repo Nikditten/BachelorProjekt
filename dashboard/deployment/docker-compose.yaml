@@ -1,0 +1,17 @@
+version: '3.8'
+services:
+  # BASED ON https://github.com/khezen/compose-postgres/blob/master/docker-compose.yml
+  db:
+    image: postgres:latest
+    restart: always
+    ports:
+      - 5432:5432
+    env_file:
+      - .env
+    environment:
+      POSTGRES_DB: AnalyticsDB
+    volumes:
+      - db_data:/var/lib/postgresql/data
+
+volumes:
+  db_data:
