@@ -3,7 +3,7 @@ using Domain.Common;
 
 namespace Domain.Entities
 {
-    public class User : BaseEntity
+    public sealed class User : BaseEntity
     {
         public required string Name { get; set; }
 
@@ -12,5 +12,7 @@ namespace Domain.Entities
         public required string HashedPassword { get; set; }
 
         public required string Salt { get; set; }
+
+        public ICollection<TeamMember>? TeamMembers { get; set; }
     }
 }

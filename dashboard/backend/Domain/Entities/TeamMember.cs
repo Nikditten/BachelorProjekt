@@ -1,13 +1,18 @@
 using Domain.Common;
+using Domain.Enums;
 
 namespace Domain.Entities
 {
-    public class TeamMember
+    public sealed class TeamMember : BaseEntity
     {
-        public Guid UserId { get; set; }
-        public Guid WebsiteId { get; set; }
-        public int Role { get; set; }
-        public DateTimeOffset CreatedAt { get; set; }
-        public DateTimeOffset UpdatedAt { get; set; }
+        public required Guid UserId { get; set; }
+
+        public required Guid WebsiteId { get; set; }
+
+        public UserRole Role { get; set; } = UserRole.USER;
+
+        public User? User { get; set; }
+
+        public Website? Website { get; set; }
     }
 }

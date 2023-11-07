@@ -2,9 +2,12 @@ using Domain.Common;
 
 namespace Domain.Entities
 {
-    public class Analytic : BaseEntity
+    public sealed class Analytic : BaseEntity
     {
-        public Guid SessionId { get; set; }
+        public required Guid SessionId { get; set; }
+
         public required string Href { get; set; }
+
+        public Session? Session { get; set; }
     }
 }
