@@ -1,3 +1,4 @@
+using API;
 using Application;
 using Infrastructure;
 
@@ -5,6 +6,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddApplicationServices();
 builder.Services.AddInfrastructureServices(builder.Configuration);
+builder.Services.AddAPIServices();
 
 // Add services to the container.
 

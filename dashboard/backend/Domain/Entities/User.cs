@@ -11,7 +11,7 @@ namespace Domain.Entities
 
         public required string HashedPassword { get; set; }
 
-        public required string Salt { get; set; }
+        public required byte[] Salt { get; set; }
 
         public ICollection<TeamMember>? TeamMembers { get; set; }
     }

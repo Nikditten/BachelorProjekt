@@ -13,10 +13,12 @@
   <ItemGroup>
     <None Remove="Common\" />
     <None Remove="Common\Interfaces\" />
+    <None Remove="Users\" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Common\" />
     <Folder Include="Common\Interfaces\" />
+    <Folder Include="Users\" />
   </ItemGroup>
   <PropertyGroup>
     <TargetFramework>net7.0</TargetFramework>
