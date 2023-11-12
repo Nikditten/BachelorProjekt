@@ -3,7 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Application.Users.Commands;
+using Application.Users.Query;
+using Application.Users.Query.LoginUser;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 
@@ -17,37 +20,18 @@ namespace API.Controllers
 
         public UserController(IMediator mediator) => _mediator = mediator;
 
-        // GET: api/values
-        [HttpGet]
-        public IEnumerable<string> Get()
-        {
-            return new string[] { "value1", "value2" };
-        }
-
-        // GET api/values/5
-        [HttpGet("{id}")]
-        public string Get(int id)
-        {
-            return "value";
-        }
-
-        // POST api/values
-        [HttpPost]
-        public async Task<ActionResult<Guid>> Post([FromBody] CreateUserCommand command)
+        [AllowAnonymous]
+        [HttpPost("[action]")]
+        public async Task<ActionResult<string>> Create([FromBody] CreateUserCommand command)
         {
             return await _mediator.Send(command);
         }
 
-        // PUT api/values/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody]string value)
+        [AllowAnonymous]
+        [HttpPost("[action]")]
+        public async Task<ActionResult<string>> Login([FromBody] LoginUserQuery query)
         {
-        }
-
-        // DELETE api/values/5
-        [HttpDelete("{id}")]
-        public void Delete(int id)
-        {
+            return await _mediator.Send(query);
         }
     }
 }

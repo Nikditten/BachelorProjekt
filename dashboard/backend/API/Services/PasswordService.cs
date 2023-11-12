@@ -20,7 +20,7 @@ namespace API.Services
                 password: password,
                 salt: salt,
                 prf: KeyDerivationPrf.HMACSHA256,
-                iterationCount: 1000,
+                iterationCount: 10000,
                 numBytesRequested: 256 / 8
                 ));
 

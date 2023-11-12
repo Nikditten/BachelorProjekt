@@ -6,8 +6,8 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace Infrastructure
 {
-	public static class DependencyInjection
-	{
+	public static class ConfigureServices
+    {
 		public static void AddInfrastructureServices(this IServiceCollection services, IConfiguration configuration)
 		{
             // SOURCE: https://www.npgsql.org/efcore/index.html

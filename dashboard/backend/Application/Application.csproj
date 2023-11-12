@@ -14,11 +14,13 @@
     <None Remove="Common\" />
     <None Remove="Common\Interfaces\" />
     <None Remove="Users\" />
+    <None Remove="Users\Commands\CreateUser\" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Common\" />
     <Folder Include="Common\Interfaces\" />
     <Folder Include="Users\" />
+    <Folder Include="Users\Commands\CreateUser\" />
   </ItemGroup>
   <PropertyGroup>
     <TargetFramework>net7.0</TargetFramework>
