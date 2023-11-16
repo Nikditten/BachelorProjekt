@@ -17,6 +17,7 @@
     <None Remove="Users\" />
     <None Remove="Users\Commands\CreateUser\" />
     <None Remove="Common\Behaviors\" />
+    <None Remove="Users\Commands\LoginUser\" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Common\" />
@@ -24,6 +25,7 @@
     <Folder Include="Users\" />
     <Folder Include="Users\Commands\CreateUser\" />
     <Folder Include="Common\Behaviors\" />
+    <Folder Include="Users\Commands\LoginUser\" />
   </ItemGroup>
   <PropertyGroup>
     <TargetFramework>net7.0</TargetFramework>

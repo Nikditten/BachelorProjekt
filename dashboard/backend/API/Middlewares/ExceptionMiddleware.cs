@@ -32,10 +32,24 @@ namespace API.Middlewares
 
                 if (exception.Errors is not null)
                 {
-                    problemDetails.Extensions["errors"] = exception.Errors.Select(x => new {field=x.PropertyName, error=x.ErrorMessage}).ToList();
+                    problemDetails.Extensions["errors"] = exception.Errors.Select(x => new { field = x.PropertyName, error = x.ErrorMessage }).ToList();
                 }
 
                 context.Response.StatusCode = StatusCodes.Status400BadRequest;
+
+                await context.Response.WriteAsJsonAsync(problemDetails);
+            }
+            catch (Exception)
+            {
+                var problemDetails = new ProblemDetails
+                {
+                    Status = StatusCodes.Status500InternalServerError,
+                    Type = "Exception",
+                    Title = "Error",
+                    Detail = "An internal error has occured",
+                };
+
+                context.Response.StatusCode = StatusCodes.Status500InternalServerError;
 
                 await context.Response.WriteAsJsonAsync(problemDetails);
             }

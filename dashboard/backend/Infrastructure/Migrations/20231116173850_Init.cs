@@ -19,7 +19,7 @@ namespace Infrastructure.Migrations
                     Name = table.Column<string>(type: "text", nullable: false),
                     Username = table.Column<string>(type: "text", nullable: false),
                     HashedPassword = table.Column<string>(type: "text", nullable: false),
-                    Salt = table.Column<string>(type: "text", nullable: false),
+                    Salt = table.Column<byte[]>(type: "bytea", nullable: false),
                     CreatedAt = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false),
                     UpdatedAt = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false)
                 },
@@ -34,6 +34,7 @@ namespace Infrastructure.Migrations
                 {
                     ID = table.Column<Guid>(type: "uuid", nullable: false),
                     Name = table.Column<string>(type: "text", nullable: false),
+                    UserId = table.Column<Guid>(type: "uuid", nullable: false),
                     CreatedAt = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false),
                     UpdatedAt = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false)
                 },
@@ -67,27 +68,26 @@ namespace Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "TeamMembers",
+                name: "Shares",
                 columns: table => new
                 {
                     ID = table.Column<Guid>(type: "uuid", nullable: false),
                     UserId = table.Column<Guid>(type: "uuid", nullable: false),
                     WebsiteId = table.Column<Guid>(type: "uuid", nullable: false),
-                    Role = table.Column<int>(type: "integer", nullable: false),
                     CreatedAt = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false),
                     UpdatedAt = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_TeamMembers", x => x.ID);
+                    table.PrimaryKey("PK_Shares", x => x.ID);
                     table.ForeignKey(
-                        name: "FK_TeamMembers_Users_UserId",
+                        name: "FK_Shares_Users_UserId",
                         column: x => x.UserId,
                         principalTable: "Users",
                         principalColumn: "ID",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_TeamMembers_Websites_WebsiteId",
+                        name: "FK_Shares_Websites_WebsiteId",
                         column: x => x.WebsiteId,
                         principalTable: "Websites",
                         principalColumn: "ID",
@@ -126,13 +126,13 @@ namespace Infrastructure.Migrations
                 column: "WebsiteId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_TeamMembers_UserId",
-                table: "TeamMembers",
+                name: "IX_Shares_UserId",
+                table: "Shares",
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_TeamMembers_WebsiteId",
-                table: "TeamMembers",
+                name: "IX_Shares_WebsiteId",
+                table: "Shares",
                 column: "WebsiteId");
         }
 
@@ -143,7 +143,7 @@ namespace Infrastructure.Migrations
                 name: "Analytics");
 
             migrationBuilder.DropTable(
-                name: "TeamMembers");
+                name: "Shares");
 
             migrationBuilder.DropTable(
                 name: "Sessions");

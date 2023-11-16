@@ -12,7 +12,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20231107151607_Init")]
+    [Migration("20231116173850_Init")]
     partial class Init
     {
         /// <inheritdoc />
@@ -87,7 +87,7 @@ namespace Infrastructure.Migrations
                     b.ToTable("Sessions");
                 });
 
-            modelBuilder.Entity("Domain.Entities.TeamMember", b =>
+            modelBuilder.Entity("Domain.Entities.Share", b =>
                 {
                     b.Property<Guid>("ID")
                         .ValueGeneratedOnAdd()
@@ -95,9 +95,6 @@ namespace Infrastructure.Migrations
 
                     b.Property<DateTimeOffset>("CreatedAt")
                         .HasColumnType("timestamp with time zone");
-
-                    b.Property<int>("Role")
-                        .HasColumnType("integer");
 
                     b.Property<DateTimeOffset>("UpdatedAt")
                         .HasColumnType("timestamp with time zone");
@@ -114,7 +111,7 @@ namespace Infrastructure.Migrations
 
                     b.HasIndex("WebsiteId");
 
-                    b.ToTable("TeamMembers");
+                    b.ToTable("Shares");
                 });
 
             modelBuilder.Entity("Domain.Entities.User", b =>
@@ -134,9 +131,9 @@ namespace Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<string>("Salt")
+                    b.Property<byte[]>("Salt")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasColumnType("bytea");
 
                     b.Property<DateTimeOffset>("UpdatedAt")
                         .HasColumnType("timestamp with time zone");
@@ -166,6 +163,9 @@ namespace Infrastructure.Migrations
                     b.Property<DateTimeOffset>("UpdatedAt")
                         .HasColumnType("timestamp with time zone");
 
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uuid");
+
                     b.HasKey("ID");
 
                     b.ToTable("Websites");
@@ -193,16 +193,16 @@ namespace Infrastructure.Migrations
                     b.Navigation("Website");
                 });
 
-            modelBuilder.Entity("Domain.Entities.TeamMember", b =>
+            modelBuilder.Entity("Domain.Entities.Share", b =>
                 {
                     b.HasOne("Domain.Entities.User", "User")
-                        .WithMany("TeamMembers")
+                        .WithMany("Shares")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("Domain.Entities.Website", "Website")
-                        .WithMany("TeamMembers")
+                        .WithMany("Shares")
                         .HasForeignKey("WebsiteId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -219,14 +219,14 @@ namespace Infrastructure.Migrations
 
             modelBuilder.Entity("Domain.Entities.User", b =>
                 {
-                    b.Navigation("TeamMembers");
+                    b.Navigation("Shares");
                 });
 
             modelBuilder.Entity("Domain.Entities.Website", b =>
                 {
                     b.Navigation("Sessions");
 
-                    b.Navigation("TeamMembers");
+                    b.Navigation("Shares");
                 });
 #pragma warning restore 612, 618
         }

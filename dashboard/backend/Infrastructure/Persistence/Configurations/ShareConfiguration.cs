@@ -5,19 +5,19 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Infrastructure.Persistence.Configurations
 {
-	public class TeamMemberConfiguration : IEntityTypeConfiguration<TeamMember>
+	public class SharesConfiguration : IEntityTypeConfiguration<Share>
     {
-        public void Configure(EntityTypeBuilder<TeamMember> builder)
+        public void Configure(EntityTypeBuilder<Share> builder)
         {
             builder
                 .HasOne(x => x.User)
-                .WithMany(x => x.TeamMembers)
+                .WithMany(x => x.Shares)
                 .HasForeignKey(x => x.UserId)
                 .IsRequired(true);
 
             builder
                 .HasOne(x => x.Website)
-                .WithMany(x => x.TeamMembers)
+                .WithMany(x => x.Shares)
                 .HasForeignKey(x => x.WebsiteId)
                 .IsRequired(true);
         }

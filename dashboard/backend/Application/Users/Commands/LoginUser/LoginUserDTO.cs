@@ -1,5 +1,5 @@
 ﻿using System;
-namespace Application.Users.Query.LoginUser
+namespace Application.Users.Commands.LoginUser
 {
 	public class LoginUserDTO
 	{

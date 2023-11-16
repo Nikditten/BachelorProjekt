@@ -11,7 +11,7 @@ namespace Infrastructure.Persistence.Configurations
         public void Configure(EntityTypeBuilder<User> builder)
         {
             builder
-                .HasMany(x => x.TeamMembers)
+                .HasMany(x => x.Shares)
                 .WithOne(x => x.User)
                 .HasForeignKey(x => x.UserId)
                 .IsRequired(true);

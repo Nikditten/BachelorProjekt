@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿
 using Application.Users.Commands;
-using Application.Users.Query;
-using Application.Users.Query.LoginUser;
+using Application.Users.Commands.LoginUser;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -29,7 +25,7 @@ namespace API.Controllers
 
         [AllowAnonymous]
         [HttpGet("[action]")]
-        public async Task<ActionResult<string>> Login([FromBody] LoginUserQuery query)
+        public async Task<ActionResult<string>> Login([FromBody] LoginUserCommand query)
         {
             return await _mediator.Send(query);
         }

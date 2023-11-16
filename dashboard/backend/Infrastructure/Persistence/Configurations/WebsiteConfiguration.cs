@@ -10,7 +10,7 @@ namespace Infrastructure.Persistence.Configurations
         public void Configure(EntityTypeBuilder<Website> builder)
         {
             builder
-                .HasMany(x => x.TeamMembers)
+                .HasMany(x => x.Shares)
                 .WithOne(x => x.Website)
                 .HasForeignKey(x => x.WebsiteId)
                 .IsRequired(true);

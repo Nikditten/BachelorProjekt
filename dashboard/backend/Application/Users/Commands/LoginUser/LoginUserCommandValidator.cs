@@ -1,12 +1,12 @@
 ﻿
-using Application.Users.Query.LoginUser;
+using Application.Users.Commands.LoginUser;
 using FluentValidation;
 
-namespace Application.Users.Queries.LoginUser
+namespace Application.Users.Commands.LoginUser
 {
-	public class LoginUserQueryValidator : AbstractValidator<LoginUserQuery>
+	public class LoginUserCommandValidator : AbstractValidator<LoginUserCommand>
 	{
-		public LoginUserQueryValidator()
+		public LoginUserCommandValidator()
 		{
 			RuleFor(x => x.Username)
 				.NotEmpty();

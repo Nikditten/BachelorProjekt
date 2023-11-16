@@ -1,14 +1,12 @@
 ﻿
-
-using System.Text;
 using Application.Common.Interfaces;
 using Domain.Entities;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
-namespace Application.Users.Query.LoginUser
+namespace Application.Users.Commands.LoginUser
 {
-    public class LoginUserQueryHandler : IRequestHandler<LoginUserQuery, string>
+    public class LoginUserCommandHandler : IRequestHandler<LoginUserCommand, string>
     {
 
         private readonly IApplicationDbContext _applicationDbContext;
@@ -17,7 +15,7 @@ namespace Application.Users.Query.LoginUser
 
         private readonly ITokenService _tokenService;
 
-        public LoginUserQueryHandler(IApplicationDbContext applicationDbContext, IPasswordService passwordService, ITokenService tokenService)
+        public LoginUserCommandHandler(IApplicationDbContext applicationDbContext, IPasswordService passwordService, ITokenService tokenService)
         {
             _applicationDbContext = applicationDbContext;
 
@@ -26,7 +24,7 @@ namespace Application.Users.Query.LoginUser
             _tokenService = tokenService;
         }
 
-        public async Task<string> Handle(LoginUserQuery request, CancellationToken cancellationToken)
+        public async Task<string> Handle(LoginUserCommand request, CancellationToken cancellationToken)
         {
             User? user = await _applicationDbContext.Users.FirstOrDefaultAsync(x => x.Username == request.Username, cancellationToken);
 
