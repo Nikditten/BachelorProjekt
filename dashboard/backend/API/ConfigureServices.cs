@@ -13,7 +13,7 @@ namespace API
 			services.AddScoped<ITokenService, TokenService>();
 
 			services.ConfigureOptions<JwtOptionsSetup>();
-            services.ConfigureOptions<JwtBearerOptionsSetup>();
+			services.ConfigureOptions<JwtBearerOptionsSetup>();
         }
 	}
 }
