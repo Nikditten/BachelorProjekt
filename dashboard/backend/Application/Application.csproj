@@ -19,6 +19,8 @@
     <None Remove="Common\Behaviors\" />
     <None Remove="Users\Commands\LoginUser\" />
     <None Remove="Common\Mapping\" />
+    <None Remove="Websites\" />
+    <None Remove="Websites\Commands\" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Common\" />
@@ -28,6 +30,8 @@
     <Folder Include="Common\Behaviors\" />
     <Folder Include="Users\Commands\LoginUser\" />
     <Folder Include="Common\Mapping\" />
+    <Folder Include="Websites\" />
+    <Folder Include="Websites\Commands\" />
   </ItemGroup>
   <PropertyGroup>
     <TargetFramework>net7.0</TargetFramework>

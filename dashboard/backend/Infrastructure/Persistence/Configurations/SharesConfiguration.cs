@@ -1,13 +1,13 @@
-﻿using System;
+﻿
 using Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Infrastructure.Persistence.Configurations
 {
-	public class SharesConfiguration : IEntityTypeConfiguration<Share>
+	public class SharesConfiguration : IEntityTypeConfiguration<Shares>
     {
-        public void Configure(EntityTypeBuilder<Share> builder)
+        public void Configure(EntityTypeBuilder<Shares> builder)
         {
             builder
                 .HasOne(x => x.User)

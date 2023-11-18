@@ -12,6 +12,7 @@ namespace API.Services
 {
     public class TokenService : ITokenService
     {
+        // SOURCE: https://www.youtube.com/watch?v=4cFhYUK8wnc&list=PLYpjLpq5ZDGtJOHUbv7KHuxtYLk1nJPw5
         private readonly JwtOptions _options;
 
         private JwtSecurityTokenHandler tokenHandler = new JwtSecurityTokenHandler();
@@ -26,7 +27,7 @@ namespace API.Services
             List<Claim> claims = new List<Claim>
             {
                 new Claim(JwtRegisteredClaimNames.Name, user.Name),
-                new Claim("userid", user.ID.ToString()),
+                new Claim(JwtRegisteredClaimNames.NameId, user.ID.ToString()),
             };
 
             byte[] key = Encoding.UTF8.GetBytes(_options.Key);

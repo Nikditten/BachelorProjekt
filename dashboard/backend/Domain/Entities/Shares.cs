@@ -1,9 +1,8 @@
 using Domain.Common;
-using Domain.Enums;
 
 namespace Domain.Entities
 {
-    public sealed class Share : BaseEntity
+    public sealed class Shares : BaseEntity
     {
         public required Guid UserId { get; set; }
 

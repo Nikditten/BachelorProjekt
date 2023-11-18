@@ -9,7 +9,7 @@ namespace Application.Common.Interfaces
 
         DbSet<User> Users { get; set; }
 
-		DbSet<Share> Shares { get; set; }
+		DbSet<Shares> Shares { get; set; }
 
 		DbSet<Website> Websites { get; set; }
 

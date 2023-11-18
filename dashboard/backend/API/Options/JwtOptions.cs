@@ -3,10 +3,10 @@ namespace API.Options
 {
     // SOURCE: https://www.youtube.com/watch?v=4cFhYUK8wnc&list=PLYpjLpq5ZDGtJOHUbv7KHuxtYLk1nJPw5
     public class JwtOptions
-	{
-		public static string SectionName = "JwtSettings";
+    {
+        public static string SectionName = "JwtSettings";
 
-		public string Issuer { get; set; }
+        public string Issuer { get; set; }
 
         public string Audience { get; set; }
 

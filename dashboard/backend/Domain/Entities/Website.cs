@@ -8,7 +8,7 @@ namespace Domain.Entities
 
         public required Guid UserId { get; set; }
 
-        public ICollection<Share>? Shares { get; set; }
+        public ICollection<Shares>? Shares { get; set; }
 
         public ICollection<Session>? Sessions { get; set; }
     }

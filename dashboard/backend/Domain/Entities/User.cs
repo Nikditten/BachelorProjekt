@@ -13,6 +13,6 @@ namespace Domain.Entities
 
         public required byte[] Salt { get; set; }
 
-        public ICollection<Share>? Shares { get; set; }
+        public ICollection<Shares>? Shares { get; set; }
     }
 }

@@ -21,7 +21,7 @@ namespace Infrastructure.Persistence
         }
 
         public DbSet<User> Users { get; set; }
-        public DbSet<Share> Shares { get; set; }
+        public DbSet<Shares> Shares { get; set; }
         public DbSet<Website> Websites { get; set; }
         public DbSet<Analytic> Analytics { get; set; }
         public DbSet<Session> Sessions { get; set; }

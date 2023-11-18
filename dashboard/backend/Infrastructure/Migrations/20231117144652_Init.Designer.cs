@@ -12,7 +12,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20231116173850_Init")]
+    [Migration("20231117144652_Init")]
     partial class Init
     {
         /// <inheritdoc />
@@ -87,7 +87,7 @@ namespace Infrastructure.Migrations
                     b.ToTable("Sessions");
                 });
 
-            modelBuilder.Entity("Domain.Entities.Share", b =>
+            modelBuilder.Entity("Domain.Entities.Shares", b =>
                 {
                     b.Property<Guid>("ID")
                         .ValueGeneratedOnAdd()
@@ -193,7 +193,7 @@ namespace Infrastructure.Migrations
                     b.Navigation("Website");
                 });
 
-            modelBuilder.Entity("Domain.Entities.Share", b =>
+            modelBuilder.Entity("Domain.Entities.Shares", b =>
                 {
                     b.HasOne("Domain.Entities.User", "User")
                         .WithMany("Shares")
