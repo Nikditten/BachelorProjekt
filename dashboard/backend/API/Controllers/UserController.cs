@@ -1,6 +1,8 @@
 ﻿
 using Application.Users.Commands;
 using Application.Users.Commands.LoginUser;
+using Application.Users.Queries.GetUser;
+using Domain.Entities;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -25,7 +27,14 @@ namespace API.Controllers
 
         [AllowAnonymous]
         [HttpGet("[action]")]
-        public async Task<ActionResult<string>> Login([FromBody] LoginUserCommand query)
+        public async Task<ActionResult<string>> Login([FromBody] LoginUserCommand command)
+        {
+            return await _mediator.Send(command);
+        }
+
+        [Authorize]
+        [HttpGet("[action]")]
+        public async Task<ActionResult<GetUserDTO>> Me([FromQuery] GetUserQuery query)
         {
             return await _mediator.Send(query);
         }

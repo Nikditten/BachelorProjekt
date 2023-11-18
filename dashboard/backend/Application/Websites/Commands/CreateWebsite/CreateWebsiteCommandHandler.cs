@@ -3,7 +3,7 @@ using Application.Common.Interfaces;
 using Domain.Entities;
 using MediatR;
 
-namespace Application.Websites.Commands
+namespace Application.Websites.Commands.CreateWebsite
 {
     public class CreateWebsiteCommandHandler : IRequestHandler<CreateWebsiteCommand, string>
     {

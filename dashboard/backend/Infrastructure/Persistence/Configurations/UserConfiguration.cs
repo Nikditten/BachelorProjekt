@@ -15,6 +15,12 @@ namespace Infrastructure.Persistence.Configurations
                 .WithOne(x => x.User)
                 .HasForeignKey(x => x.UserId)
                 .IsRequired(true);
+
+            builder
+                .HasMany(x => x.Websites)
+                .WithOne(x => x.User)
+                .HasForeignKey(x => x.UserId)
+                .IsRequired(true);
         }
     }
 }

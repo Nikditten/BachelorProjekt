@@ -39,8 +39,10 @@ namespace API.Middlewares
 
                 await context.Response.WriteAsJsonAsync(problemDetails);
             }
-            catch (Exception)
+            catch (Exception exception)
             {
+                Console.WriteLine(exception);
+
                 var problemDetails = new ProblemDetails
                 {
                     Status = StatusCodes.Status500InternalServerError,

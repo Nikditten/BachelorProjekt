@@ -7,9 +7,9 @@ namespace Application.Common.Interfaces
 	{
 		Task<int> SaveChangesAsync(CancellationToken cancellationToken);
 
-        DbSet<User> Users { get; set; }
+		DbSet<User> Users { get; set; }
 
-		DbSet<Shares> Shares { get; set; }
+		DbSet<Shared> Shares { get; set; }
 
 		DbSet<Website> Websites { get; set; }
 

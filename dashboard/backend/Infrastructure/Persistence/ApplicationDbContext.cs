@@ -7,8 +7,8 @@ namespace Infrastructure.Persistence
 {
     public class ApplicationDbContext : DbContext, IApplicationDbContext
     {
-       
-        public ApplicationDbContext(DbContextOptions options) : base(options) {}
+
+        public ApplicationDbContext(DbContextOptions options) : base(options) { }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -21,7 +21,7 @@ namespace Infrastructure.Persistence
         }
 
         public DbSet<User> Users { get; set; }
-        public DbSet<Shares> Shares { get; set; }
+        public DbSet<Shared> Shares { get; set; }
         public DbSet<Website> Websites { get; set; }
         public DbSet<Analytic> Analytics { get; set; }
         public DbSet<Session> Sessions { get; set; }
