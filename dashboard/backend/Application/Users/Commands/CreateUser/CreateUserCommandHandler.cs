@@ -1,4 +1,5 @@
 ﻿
+using Application.Common.Exceptions;
 using Application.Common.Interfaces;
 using Domain.Entities;
 using MediatR;
@@ -27,7 +28,7 @@ namespace Application.Users.Commands
         {
             User? existingUser = await _applicationDbContext.Users.FirstOrDefaultAsync(x => x.Username == request.Username, cancellationToken);
 
-            if (existingUser != null) throw new HttpRequestException();
+            if (existingUser != null) throw new AlreadyExistsException("Username already exists");
 
             byte[] salt = _passwordService.GenerateSalt();
 

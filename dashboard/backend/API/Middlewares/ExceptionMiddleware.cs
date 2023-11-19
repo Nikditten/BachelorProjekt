@@ -1,4 +1,5 @@
 ﻿using System;
+using Application.Common.Exceptions;
 using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
 
@@ -20,38 +21,47 @@ namespace API.Middlewares
             {
                 await _next(context);
             }
-            catch (ValidationException exception)
-            {
-                var problemDetails = new ProblemDetails
-                {
-                    Status = StatusCodes.Status400BadRequest,
-                    Type = "ValidationException",
-                    Title = "Validation error",
-                    Detail = "One or more validation errors has occurred"
-                };
-
-                if (exception.Errors is not null)
-                {
-                    problemDetails.Extensions["errors"] = exception.Errors.Select(x => new { field = x.PropertyName, error = x.ErrorMessage }).ToList();
-                }
-
-                context.Response.StatusCode = StatusCodes.Status400BadRequest;
-
-                await context.Response.WriteAsJsonAsync(problemDetails);
-            }
             catch (Exception exception)
             {
-                Console.WriteLine(exception);
+                var exceptionType = exception.GetType();
+
+                int statusCode;
+
+                switch (exception)
+                {
+                    case UnauthorizedAccessException:
+                        statusCode = StatusCodes.Status401Unauthorized;
+                        break;
+                    case NullReferenceException:
+                        statusCode = StatusCodes.Status404NotFound;
+                        break;
+                    case ArgumentException:
+                        statusCode = StatusCodes.Status400BadRequest;
+                        break;
+                    case ValidationException:
+                        statusCode = StatusCodes.Status400BadRequest;
+                        break;
+                    case AlreadyExistsException:
+                        statusCode = StatusCodes.Status409Conflict;
+                        break;
+                    default:
+                        statusCode = StatusCodes.Status500InternalServerError;
+                        break;
+                }
 
                 var problemDetails = new ProblemDetails
                 {
-                    Status = StatusCodes.Status500InternalServerError,
-                    Type = "Exception",
-                    Title = "Error",
-                    Detail = "An internal error has occured",
+                    Status = statusCode,
+                    Type = exceptionType.Name,
+                    Title = "An error occurred",
+                    Detail = exceptionType == typeof(ValidationException) ? "One or more validation errors occurred." : exception.Message,
                 };
 
-                context.Response.StatusCode = StatusCodes.Status500InternalServerError;
+                if (exception is ValidationException validationException)
+                {
+                    problemDetails.Extensions["errors"] = validationException.Errors.Select(x => new { field = x.PropertyName, error = x.ErrorMessage }).ToList();
+                }
+                context.Response.StatusCode = statusCode;
 
                 await context.Response.WriteAsJsonAsync(problemDetails);
             }
