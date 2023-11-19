@@ -1,21 +1,24 @@
 using Application.Common.Interfaces;
-using Application.Common.Mapping;
+using Application.DTOs;
+using AutoMapper;
 using Domain.Entities;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
 namespace Application.Users.Queries.GetUser
 {
-    public class GetUserQueryHandler : IRequestHandler<GetUserQuery, GetUserDTO>
+    public class GetUserQueryHandler : IRequestHandler<GetUserQuery, UserDTO>
     {
         private readonly IApplicationDbContext _applicationDbContext;
         private readonly IUserService _userService;
-        public GetUserQueryHandler(IApplicationDbContext applicationDbContext, IUserService userService)
+        private readonly IMapper _mapper;
+        public GetUserQueryHandler(IApplicationDbContext applicationDbContext, IUserService userService, IMapper mapper)
         {
             _applicationDbContext = applicationDbContext;
             _userService = userService;
+            _mapper = mapper;
         }
-        public async Task<GetUserDTO> Handle(GetUserQuery request, CancellationToken cancellationToken)
+        public async Task<UserDTO> Handle(GetUserQuery request, CancellationToken cancellationToken)
         {
             string userId = _userService.Id;
 
@@ -29,7 +32,7 @@ namespace Application.Users.Queries.GetUser
 
             if (user is null) throw new UnauthorizedAccessException();
 
-            return TMapper<User, GetUserDTO>.Map(user);
+            return _mapper.Map<UserDTO>(user);
         }
     }
 }
