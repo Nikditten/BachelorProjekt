@@ -21,12 +21,7 @@ namespace Application.Websites.Commands.CreateWebsite
 
         public async Task<string> Handle(CreateWebsiteCommand request, CancellationToken cancellationToken)
         {
-
-            string userId = _userService.Id;
-
-            if (userId is null) throw new UnauthorizedAccessException();
-
-            var website = new Website { Name = request.Name, UserId = new Guid(userId) };
+            var website = new Website { Name = request.Name, UserId = new Guid(_userService.Id) };
 
             _applicationDbContext.Websites.Add(website);
 

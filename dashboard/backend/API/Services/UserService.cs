@@ -15,7 +15,7 @@ namespace API.Services
             _httpContextAccessor = httpContextAccessor;
         }
 
-        public string? Id => _httpContextAccessor.HttpContext?.User?.FindFirstValue(ClaimTypes.NameIdentifier);
+        public string Id => _httpContextAccessor.HttpContext?.User?.FindFirstValue(ClaimTypes.NameIdentifier) ?? throw new NullReferenceException("User is not logged in");
     }
 }
 
