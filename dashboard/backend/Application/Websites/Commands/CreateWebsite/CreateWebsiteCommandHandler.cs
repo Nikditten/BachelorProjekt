@@ -1,4 +1,5 @@
 ﻿
+using Application.Common.Exceptions;
 using Application.Common.Interfaces;
 using Domain.Entities;
 using MediatR;
@@ -21,6 +22,10 @@ namespace Application.Websites.Commands.CreateWebsite
 
         public async Task<string> Handle(CreateWebsiteCommand request, CancellationToken cancellationToken)
         {
+            var websiteExists = _applicationDbContext.Websites.Any(x => x.Name == request.Name && x.UserId == new Guid(_userService.Id));
+
+            if (websiteExists) throw new AlreadyExistsException("Website already exists");
+
             var website = new Website { Name = request.Name, UserId = new Guid(_userService.Id) };
 
             _applicationDbContext.Websites.Add(website);

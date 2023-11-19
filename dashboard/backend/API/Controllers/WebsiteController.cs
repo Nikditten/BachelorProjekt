@@ -1,5 +1,6 @@
 ﻿using Application.Shares.Commands.ShareWebsite;
 using Application.Websites.Commands.CreateWebsite;
+using Application.Websites.Commands.DeleteWebsite;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -16,6 +17,13 @@ namespace API.Controllers
         [Authorize]
         [HttpPost("[action]")]
         public async Task<ActionResult<string>> Create([FromBody] CreateWebsiteCommand command)
+        {
+            return await _mediator.Send(command);
+        }
+
+        [Authorize]
+        [HttpDelete("[action]")]
+        public async Task<ActionResult<Unit>> Delete([FromBody] DeleteWebsiteCommand command)
         {
             return await _mediator.Send(command);
         }
