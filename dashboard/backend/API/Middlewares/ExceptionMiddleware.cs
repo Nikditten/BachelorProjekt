@@ -1,5 +1,4 @@
-﻿using System;
-using Application.Common.Exceptions;
+﻿using Application.Common.Exceptions;
 using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
 
@@ -23,6 +22,8 @@ namespace API.Middlewares
             }
             catch (Exception exception)
             {
+                Console.WriteLine(exception);
+
                 var exceptionType = exception.GetType();
 
                 int statusCode;
@@ -43,6 +44,9 @@ namespace API.Middlewares
                         break;
                     case AlreadyExistsException:
                         statusCode = StatusCodes.Status409Conflict;
+                        break;
+                    case WrongPasswordException:
+                        statusCode = StatusCodes.Status401Unauthorized;
                         break;
                     default:
                         statusCode = StatusCodes.Status500InternalServerError;

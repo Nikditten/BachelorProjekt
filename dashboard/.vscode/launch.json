@@ -5,7 +5,14 @@
   "version": "0.2.0",
   "configurations": [
     {
-      "name": ".NET Core Launch (web)",
+      "name": "Frontned",
+      "type": "node-terminal",
+      "request": "launch",
+      "command": "npm run dev",
+      "cwd": "${workspaceFolder}/frontend"
+    },
+    {
+      "name": "Backend",
       "type": "coreclr",
       "request": "launch",
       "preLaunchTask": "build",

@@ -1,4 +1,5 @@
 ﻿
+using Application.Common.Exceptions;
 using Application.Common.Interfaces;
 using Domain.Entities;
 using MediatR;
@@ -28,11 +29,11 @@ namespace Application.Users.Commands.LoginUser
         {
             User? user = await _applicationDbContext.Users.FirstOrDefaultAsync(x => x.Username == request.Username, cancellationToken);
 
-            if (user == null) throw new HttpRequestException();
+            if (user == null) throw new NullReferenceException("User does not exist");
 
             bool samePassword = _passwordService.VerifyPassword(request.Password, user.HashedPassword, user.Salt);
 
-            if (!samePassword) throw new HttpRequestException();
+            if (!samePassword) throw new WrongPasswordException("Wrong password");
 
             return _tokenService.CreateToken(user);
         }

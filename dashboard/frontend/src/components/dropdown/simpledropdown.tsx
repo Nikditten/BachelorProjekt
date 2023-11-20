@@ -1,6 +1,6 @@
-import useOutsideClick from '@/utils/hooks/useOutsideClick';
-import { FC, useRef, useState } from 'react';
-import { GoChevronDown, GoChevronUp } from 'react-icons/go';
+import { useOutsideClick } from "@/utils/hooks";
+import { FC, useRef, useState } from "react";
+import { GoChevronDown, GoChevronUp } from "react-icons/go";
 
 interface Props {
   options: string[];
@@ -28,7 +28,7 @@ const SimpleDropdown: FC<Props> = ({ options, selected, onSelect }) => {
     >
       <button
         type='button'
-        className='flex flex-row items-center justify-start w-full overflow-hidden text-2xl font-light text-start gap-4'
+        className='flex w-full flex-row items-center justify-start gap-4 overflow-hidden text-start text-2xl font-light'
         onClick={() => setIsOpen(!isOpen)}
       >
         <h1>{selected}</h1>
@@ -36,16 +36,16 @@ const SimpleDropdown: FC<Props> = ({ options, selected, onSelect }) => {
       </button>
 
       <ul
-        className={`max-h-52 w-52 md:w-80 overflow-y-auto absolute mt-2 py-2 bg-white border-black rounded-b-lg shadow-gray-400 shadow-2xl ${
-          isOpen ? 'visible' : 'hidden'
+        className={`absolute mt-2 max-h-52 w-52 overflow-y-auto rounded-b-lg border-black bg-white py-2 shadow-2xl shadow-gray-400 md:w-80 ${
+          isOpen ? "visible" : "hidden"
         }`}
       >
         {options.map((option, index) => (
           <li
             key={option}
             onClick={() => handleSelection(option)}
-            className={`px-4 py-2 cursor-pointer border-gray-300 overflow-x-hidden whitespace-nowrap hover:whitespace-normal text-ellipsis ${
-              index !== options.length - 1 && 'border-b-[1px]'
+            className={`cursor-pointer overflow-x-hidden text-ellipsis whitespace-nowrap border-gray-300 px-4 py-2 hover:whitespace-normal ${
+              index !== options.length - 1 && "border-b-[1px]"
             }`}
           >
             {option}

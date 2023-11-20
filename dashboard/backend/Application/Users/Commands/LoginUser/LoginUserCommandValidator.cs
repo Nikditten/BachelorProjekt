@@ -12,12 +12,8 @@ namespace Application.Users.Commands.LoginUser
 				.NotEmpty();
 
 			RuleFor(x => x.Password)
-                .NotEmpty()
-                .MinimumLength(8)
-                .Must(y => y.Any(char.IsDigit))
-                .Must(y => y.Any(char.IsLower))
-                .Must(y => y.Any(char.IsUpper));
-        }
+				.NotEmpty();
+		}
 	}
 }
 

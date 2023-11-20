@@ -26,7 +26,7 @@ namespace API.Controllers
         }
 
         [AllowAnonymous]
-        [HttpGet("[action]")]
+        [HttpPost("[action]")]
         public async Task<ActionResult<string>> Login([FromBody] LoginUserCommand command)
         {
             return await _mediator.Send(command);

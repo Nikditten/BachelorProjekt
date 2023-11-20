@@ -38,6 +38,17 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+// SOURCE: https://learn.microsoft.com/en-us/aspnet/core/security/cors?view=aspnetcore-8.0
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowAll", builder =>
+    {
+        builder.AllowAnyOrigin()
+            .AllowAnyMethod()
+            .AllowAnyHeader();
+    });
+});
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -50,6 +61,8 @@ if (app.Environment.IsDevelopment())
 app.UseMiddleware<ExceptionMiddleware>();
 
 app.UseHttpsRedirection();
+
+app.UseCors("AllowAll");
 
 app.UseAuthentication();
 app.UseAuthorization();

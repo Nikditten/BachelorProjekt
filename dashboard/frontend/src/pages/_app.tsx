@@ -1,10 +1,10 @@
-import { SettingsContextProvider } from "@/services/settings/useSettings";
+import { AuthContextProvider } from "@/services/auth/useAuth";
 import "@/styles/globals.css";
 import { NextPage } from "next";
 import type { AppProps } from "next/app";
 import { ReactElement, ReactNode } from "react";
 
-// SOURCE - nextpage with layout: https://nextjs.org/docs/pages/building-your-application/routing/pages-and-layouts (06/10/2023)
+// SOURCE: nextpage with layout: https://nextjs.org/docs/pages/building-your-application/routing/pages-and-layouts (06/10/2023)
 export type NextPageWithLayout<P = {}, IP = P> = NextPage<P, IP> & {
   getLayout?: (page: ReactElement) => ReactNode;
 };
@@ -17,8 +17,8 @@ export default function App({ Component, pageProps }: AppPropsWithLayout) {
   const getLayout = Component.getLayout ?? ((page) => page);
 
   return getLayout(
-    <SettingsContextProvider>
+    <AuthContextProvider>
       <Component {...pageProps} />
-    </SettingsContextProvider>,
+    </AuthContextProvider>,
   );
 }
