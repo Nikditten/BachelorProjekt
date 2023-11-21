@@ -12,7 +12,7 @@ const Create: NextPageWithLayout = () => {
 
   return (
     <div className='flex h-full w-full flex-col items-center justify-center gap-6'>
-      <h1 className='w-full text-start text-4xl'>Your websites</h1>
+      <h1 className='w-full text-start text-4xl'>Manage websites</h1>
       <Grid>
         <WebsiteCard
           title='Test website 2'
