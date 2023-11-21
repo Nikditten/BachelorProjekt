@@ -1,11 +1,12 @@
-import {
-  ChangeUsernameSchema,
-  ChangeUsernameType,
-} from "@/schemas/changeemailschema";
+import { ChangeNameSchema, ChangeNameType } from "@/schemas/changenameschema";
 import {
   ChangePasswordSchema,
   ChangePasswordType,
 } from "@/schemas/changepasswordschema";
+import {
+  ChangeUsernameSchema,
+  ChangeUsernameType,
+} from "@/schemas/changeusernameschema";
 import { useAuth } from "@/services/auth/useAuth";
 import { useBackend } from "@/utils/hooks";
 import { Form, Formik } from "formik";
@@ -21,7 +22,20 @@ interface Props {
 
 const Account: FC<Props> = ({ isOpen, onClose }) => {
   const { user, checkAuth } = useAuth();
-  const { changeUsername, changePassword } = useBackend();
+  const { changeName, changeUsername, changePassword } = useBackend();
+
+  const changeNameInitialValue: ChangeNameType = {
+    name: user?.name || "",
+  };
+
+  const handleNameChange = useCallback(
+    async (values: ChangeNameType, actions: any) => {
+      await changeName(values.name);
+      await checkAuth();
+      actions.setSubmitting(false);
+    },
+    [changeName, checkAuth],
+  );
 
   const changeUsernameInitialValue: ChangeUsernameType = {
     username: user?.username || "",
@@ -63,29 +77,55 @@ const Account: FC<Props> = ({ isOpen, onClose }) => {
       <div className='flex h-full w-full flex-col gap-6'>
         <h1 className='w-full text-center text-4xl'>Account settings</h1>
         <div className='flex h-full w-full flex-col items-center justify-start gap-4 md:flex-row md:items-start md:justify-evenly md:gap-0'>
-          <Formik
-            initialValues={changeUsernameInitialValue}
-            validationSchema={ChangeUsernameSchema}
-            onSubmit={async (values, actions) =>
-              handleUsernameChange(values, actions)
-            }
-          >
-            {(props) => (
-              <Form className='flex flex-col gap-2'>
-                <InputField
-                  name='username'
-                  label='Username'
-                />
+          <div className='flex h-full flex-col items-center justify-start gap-6'>
+            <Formik
+              initialValues={changeNameInitialValue}
+              validationSchema={ChangeNameSchema}
+              onSubmit={async (values, actions) =>
+                handleNameChange(values, actions)
+              }
+            >
+              {(props) => (
+                <Form className='flex flex-col gap-2'>
+                  <InputField
+                    name='name'
+                    label='Name'
+                  />
 
-                <ActionButton
-                  type='submit'
-                  disabled={props.isSubmitting}
-                >
-                  Change username
-                </ActionButton>
-              </Form>
-            )}
-          </Formik>
+                  <ActionButton
+                    type='submit'
+                    disabled={props.isSubmitting}
+                  >
+                    Change name
+                  </ActionButton>
+                </Form>
+              )}
+            </Formik>
+
+            <Formik
+              initialValues={changeUsernameInitialValue}
+              validationSchema={ChangeUsernameSchema}
+              onSubmit={async (values, actions) =>
+                handleUsernameChange(values, actions)
+              }
+            >
+              {(props) => (
+                <Form className='flex flex-col gap-2'>
+                  <InputField
+                    name='username'
+                    label='Username'
+                  />
+
+                  <ActionButton
+                    type='submit'
+                    disabled={props.isSubmitting}
+                  >
+                    Change username
+                  </ActionButton>
+                </Form>
+              )}
+            </Formik>
+          </div>
 
           <Formik
             initialValues={changePasswordInitialValue}

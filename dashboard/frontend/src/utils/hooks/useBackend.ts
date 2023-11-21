@@ -9,6 +9,7 @@ interface Backend {
     username: string,
     password: string,
   ) => Promise<IApiResponse>;
+  changeName: (name: string) => Promise<IApiResponse>;
   changeUsername: (username: string) => Promise<IApiResponse>;
   changePassword: (
     oldPassword: string,
@@ -83,6 +84,20 @@ export const useBackend = (): Backend => {
     };
   }, [fetchCall]);
 
+  const changeName = useCallback(
+    async (name: string): Promise<IApiResponse> => {
+      const res = await fetchCall("User/Name", "PUT", {
+        name: name,
+      });
+
+      return {
+        status: res.status,
+        content: await res.statusText,
+      };
+    },
+    [fetchCall],
+  );
+
   const changeUsername = useCallback(
     async (username: string): Promise<IApiResponse> => {
       const res = await fetchCall("User/Username", "PUT", {
@@ -121,6 +136,7 @@ export const useBackend = (): Backend => {
     userLogin,
     getUser,
     userSignup,
+    changeName,
     changeUsername,
     changePassword,
   };

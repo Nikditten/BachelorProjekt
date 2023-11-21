@@ -8,6 +8,7 @@ using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Application.Users.Commands.ChangePassword;
+using Application.Users.Commands.ChangeName;
 
 
 namespace API.Controllers
@@ -51,6 +52,13 @@ namespace API.Controllers
         [Authorize]
         [HttpPut("[action]")]
         public async Task<ActionResult<Unit>> Password([FromBody] ChangePasswordCommand command)
+        {
+            return await _mediator.Send(command);
+        }
+
+        [Authorize]
+        [HttpPut("[action]")]
+        public async Task<ActionResult<Unit>> Name([FromBody] ChangeNameCommand command)
         {
             return await _mediator.Send(command);
         }
