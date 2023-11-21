@@ -2,7 +2,7 @@ import { useCallback } from "react";
 import { useCookies } from ".";
 import { IApiResponse } from "../types";
 
-interface Backend {
+interface BackendAuth {
   userLogin: (username: string, password: string) => Promise<IApiResponse>;
   userSignup: (
     name: string,
@@ -19,7 +19,7 @@ interface Backend {
   getUser: () => Promise<IApiResponse>;
 }
 
-export const useBackend = (): Backend => {
+export const useBackendAuth = (): BackendAuth => {
   const url = process.env.NEXT_PUBLIC_BACKEND_URL;
 
   const { getCookie } = useCookies();

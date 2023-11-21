@@ -4,14 +4,14 @@ import AuthenticationLayout from "@/components/layouts/authentication";
 import Spacer from "@/components/spacer/spacer";
 import { LoginSchema, LoginType } from "@/schemas/loginschema";
 import { useAuth } from "@/services/auth/useAuth";
-import { useBackend } from "@/utils/hooks";
+import { useBackendAuth } from "@/utils/hooks";
 import { Form, Formik } from "formik";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { useCallback } from "react";
 
 const Login = () => {
-  const { userLogin } = useBackend();
+  const { userLogin } = useBackendAuth();
   const { login } = useAuth();
   const router = useRouter();
 

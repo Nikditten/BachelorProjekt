@@ -1,4 +1,4 @@
-import { useBackend, useCookies } from "@/utils/hooks";
+import { useBackendAuth, useCookies } from "@/utils/hooks";
 import { AuthState, IUser } from "@/utils/types";
 import { useCallback, useEffect, useState } from "react";
 
@@ -17,7 +17,13 @@ export const AuthContextValue = (): AuthProps => {
   const [user, setUser] = useState<IUser | null>(null);
 
   const { setCookie, deleteCookie } = useCookies();
-  const { getUser } = useBackend();
+  const { getUser } = useBackendAuth();
+
+  const logout = useCallback(() => {
+    setAuthState(AuthState.NotAuthenticated);
+    setUser(null);
+    deleteCookie("auth");
+  }, [deleteCookie]);
 
   const checkAuth = useCallback(async () => {
     setAuthState(AuthState.Authenticating);
@@ -34,14 +40,9 @@ export const AuthContextValue = (): AuthProps => {
 
       setUser(fetchedUser);
     } else {
-      setAuthState(AuthState.NotAuthenticated);
-      setUser(null);
+      await logout();
     }
-  }, [getUser]);
-
-  useEffect(() => {
-    checkAuth();
-  }, []);
+  }, [getUser, logout]);
 
   const login = useCallback(
     async (token: string) => {
@@ -52,11 +53,9 @@ export const AuthContextValue = (): AuthProps => {
     [checkAuth, setCookie],
   );
 
-  const logout = useCallback(() => {
-    setAuthState(AuthState.NotAuthenticated);
-    setUser(null);
-    deleteCookie("auth");
-  }, [deleteCookie]);
+  useEffect(() => {
+    checkAuth();
+  }, []);
 
   return {
     authState,

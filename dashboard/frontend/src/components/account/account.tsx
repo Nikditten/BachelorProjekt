@@ -8,7 +8,7 @@ import {
   ChangeUsernameType,
 } from "@/schemas/changeusernameschema";
 import { useAuth } from "@/services/auth/useAuth";
-import { useBackend } from "@/utils/hooks";
+import { useBackendAuth } from "@/utils/hooks";
 import { Form, Formik } from "formik";
 import { FC, useCallback } from "react";
 import ActionButton from "../buttons/actionbutton";
@@ -22,7 +22,7 @@ interface Props {
 
 const Account: FC<Props> = ({ isOpen, onClose }) => {
   const { user, checkAuth } = useAuth();
-  const { changeName, changeUsername, changePassword } = useBackend();
+  const { changeName, changeUsername, changePassword } = useBackendAuth();
 
   const changeNameInitialValue: ChangeNameType = {
     name: user?.name || "",

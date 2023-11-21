@@ -4,7 +4,7 @@ import AuthenticationLayout from "@/components/layouts/authentication";
 import Spacer from "@/components/spacer/spacer";
 import { SignupSchema, SignupType } from "@/schemas/signupschema";
 import { useAuth } from "@/services/auth/useAuth";
-import { useBackend } from "@/utils/hooks";
+import { useBackendAuth } from "@/utils/hooks";
 import { Form, Formik } from "formik";
 import Link from "next/link";
 import { useRouter } from "next/router";
@@ -17,7 +17,7 @@ const SignUp = () => {
     password: "",
   };
 
-  const { userSignup } = useBackend();
+  const { userSignup } = useBackendAuth();
   const { login } = useAuth();
   const router = useRouter();
 

@@ -1,13 +1,13 @@
-import { FC, useState } from 'react';
+import { FC, useState } from "react";
 import {
   MdAdd,
   MdOutlineAccountCircle,
   MdOutlineSpaceDashboard,
-} from 'react-icons/md';
-import Account from '../account/account';
-import IconButton from '../buttons/iconbutton';
-import IconLink from '../links/iconlink';
-import Spacer from '../spacer/spacer';
+} from "react-icons/md";
+import Account from "../account/account";
+import IconButton from "../buttons/iconbutton";
+import IconLink from "../links/iconlink";
+import Spacer from "../spacer/spacer";
 
 const NavigationBar: FC = () => {
   const [accountModalOpen, setAccountModalOpen] = useState<boolean>(false);
@@ -21,8 +21,8 @@ const NavigationBar: FC = () => {
         isOpen={accountModalOpen}
         onClose={onAccountModalClose}
       />
-      <nav className='w-full h-20 px-4 py-6 shadow-2xl md:h-full md:w-20 rounded-xl shadow-gray-400'>
-        <ul className='flex flex-row items-center justify-between w-full h-full gap-10 md:flex-col'>
+      <nav className='h-20 w-full rounded-xl px-4 py-6 shadow-2xl shadow-gray-400 md:h-full md:w-20'>
+        <ul className='flex h-full w-full flex-row items-center justify-between gap-10 md:flex-col'>
           <li>
             <IconLink
               href='/'
