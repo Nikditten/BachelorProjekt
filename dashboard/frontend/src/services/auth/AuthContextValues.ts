@@ -1,53 +1,62 @@
 import { useBackend, useCookies } from "@/utils/hooks";
-import { AuthState, User } from "@/utils/types";
-import { useState } from "react";
+import { AuthState, IUser } from "@/utils/types";
+import { useCallback, useEffect, useState } from "react";
 
 type AuthProps = {
   authState: AuthState;
   checkAuth: () => void;
   login: (token: string) => void;
   logout: () => void;
-  user?: User;
+  user: IUser | null;
 };
 
 export const AuthContextValue = (): AuthProps => {
   const [authState, setAuthState] = useState<AuthState>(
     AuthState.NotAuthenticated,
   );
-  const [user, setUser] = useState<User | undefined>(undefined);
+  const [user, setUser] = useState<IUser | null>(null);
 
   const { setCookie, deleteCookie } = useCookies();
   const { getUser } = useBackend();
 
-  const checkAuth = async () => {
+  const checkAuth = useCallback(async () => {
     setAuthState(AuthState.Authenticating);
 
     const res = await getUser();
 
     if (res.status === 200) {
       setAuthState(AuthState.Authenticated);
-      const user: User = {
+      const fetchedUser: IUser = {
         id: res.content.id,
         name: res.content.name,
+        username: res.content.username,
       };
-      setUser(user);
+
+      setUser(fetchedUser);
     } else {
       setAuthState(AuthState.NotAuthenticated);
-      setUser(undefined);
+      setUser(null);
     }
-  };
+  }, [getUser]);
 
-  const login = async (token: string) => {
-    setCookie("auth", token);
+  useEffect(() => {
+    checkAuth();
+  }, []);
 
-    await checkAuth();
-  };
+  const login = useCallback(
+    async (token: string) => {
+      setCookie("auth", token);
 
-  const logout = () => {
+      await checkAuth();
+    },
+    [checkAuth, setCookie],
+  );
+
+  const logout = useCallback(() => {
     setAuthState(AuthState.NotAuthenticated);
-    setUser(undefined);
+    setUser(null);
     deleteCookie("auth");
-  };
+  }, [deleteCookie]);
 
   return {
     authState,

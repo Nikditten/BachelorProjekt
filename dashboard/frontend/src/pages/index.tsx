@@ -10,6 +10,7 @@ const Home: NextPageWithLayout = () => {
   const { user } = useAuth();
 
   useEffect(() => console.log(user), [user]);
+
   return (
     <div className='grid h-full w-full gap-8 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4'>
       <HeaderContainer

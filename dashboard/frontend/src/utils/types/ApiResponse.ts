@@ -1,4 +1,4 @@
-export type ApiResponse = {
+export interface IApiResponse {
   status: number;
   content: any;
-};
+}

@@ -8,9 +8,10 @@ import { useBackend } from "@/utils/hooks";
 import { Form, Formik } from "formik";
 import Link from "next/link";
 import { useRouter } from "next/router";
+import { useCallback } from "react";
 
 const Login = () => {
-  const { authenticate } = useBackend();
+  const { userLogin } = useBackend();
   const { login } = useAuth();
   const router = useRouter();
 
@@ -19,24 +20,26 @@ const Login = () => {
     password: "",
   };
 
-  const handleSubmit = async (values: LoginType, actions: any) => {
-    const { username, password } = values;
-    const { setSubmitting, setFieldError } = actions;
+  const handleSubmit = useCallback(
+    async (values: LoginType, actions: any) => {
+      const { username, password } = values;
+      const { setSubmitting } = actions;
 
-    setSubmitting(true);
+      setSubmitting(true);
 
-    const response = await authenticate(username, password);
+      const response = await userLogin(username, password);
 
-    if (response.status === 200) {
-      await login(response.content);
-      router.push("/");
-    } else if (response.status === 401) {
-      setFieldError("password", response.content.detail);
-      console.log(response.content);
-    }
+      if (response.status === 200) {
+        await login(response.content);
+        router.push("/");
+      } else {
+        alert("Invalid credentials");
+      }
 
-    setSubmitting(false);
-  };
+      setSubmitting(false);
+    },
+    [login, router, userLogin],
+  );
 
   return (
     <AuthenticationLayout>

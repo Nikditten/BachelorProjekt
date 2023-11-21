@@ -1,7 +1,7 @@
 ﻿using MediatR;
 
 // SOURCE: https://code-maze.com/cqrs-mediatr-in-aspnet-core/
-namespace Application.Users.Commands
+namespace Application.Users.Commands.CreateUser
 {
     public class CreateUserCommand : IRequest<string>
     {

@@ -20,7 +20,9 @@ namespace Application.Shares.Commands.ShareWebsite
         {
             Website? website = await _applicationDbContext.Websites.FirstOrDefaultAsync(x => x.ID == request.Id, cancellationToken);
 
-            if (website is null || website.UserId != new Guid(_userService.Id)) throw new UnauthorizedAccessException();
+            if (website == null) throw new NullReferenceException("Website does not exist");
+
+            if (website.UserId != new Guid(_userService.Id)) throw new UnauthorizedAccessException();
 
             var shares = new Shared { UserId = request.UserId, WebsiteId = request.Id };
 

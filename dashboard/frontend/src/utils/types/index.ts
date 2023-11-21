@@ -1,3 +1,3 @@
-export type { ApiResponse } from "./ApiResponse";
+export type { IApiResponse } from "./ApiResponse";
 export { AuthState } from "./AuthState";
-export type { User } from "./User";
+export type { IUser } from "./User";

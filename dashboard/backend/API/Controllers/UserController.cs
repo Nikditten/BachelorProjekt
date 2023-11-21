@@ -1,11 +1,13 @@
 ﻿
 using Application.DTOs;
-using Application.Users.Commands;
+using Application.Users.Commands.CreateUser;
 using Application.Users.Commands.LoginUser;
+using Application.Users.Commands.ChangeUsername;
 using Application.Users.Queries.GetUser;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Application.Users.Commands.ChangePassword;
 
 
 namespace API.Controllers
@@ -37,6 +39,20 @@ namespace API.Controllers
         public async Task<ActionResult<UserDTO>> Me([FromQuery] GetUserQuery query)
         {
             return await _mediator.Send(query);
+        }
+
+        [Authorize]
+        [HttpPut("[action]")]
+        public async Task<ActionResult<Unit>> Username([FromBody] ChangeUsernameCommand command)
+        {
+            return await _mediator.Send(command);
+        }
+
+        [Authorize]
+        [HttpPut("[action]")]
+        public async Task<ActionResult<Unit>> Password([FromBody] ChangePasswordCommand command)
+        {
+            return await _mediator.Send(command);
         }
     }
 }

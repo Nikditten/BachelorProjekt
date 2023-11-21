@@ -6,6 +6,7 @@ namespace Application.DTOs
     {
         public required Guid ID { get; set; }
         public required string Name { get; set; }
+        public required string URL { get; set; }
         public ICollection<Session>? Sessions { get; set; }
     }
 }

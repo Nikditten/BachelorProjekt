@@ -26,7 +26,7 @@ namespace Application.Websites.Commands.CreateWebsite
 
             if (websiteExists) throw new AlreadyExistsException("Website already exists");
 
-            var website = new Website { Name = request.Name, UserId = new Guid(_userService.Id) };
+            var website = new Website { Name = request.Name, UserId = new Guid(_userService.Id), Url = request.Url };
 
             _applicationDbContext.Websites.Add(website);
 

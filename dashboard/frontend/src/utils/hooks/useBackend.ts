@@ -1,9 +1,21 @@
+import { useCallback } from "react";
 import { useCookies } from ".";
-import { ApiResponse } from "../types";
+import { IApiResponse } from "../types";
 
 interface Backend {
-  authenticate: (username: string, password: string) => Promise<ApiResponse>;
-  getUser: () => Promise<ApiResponse>;
+  userLogin: (username: string, password: string) => Promise<IApiResponse>;
+  userSignup: (
+    name: string,
+    username: string,
+    password: string,
+  ) => Promise<IApiResponse>;
+  changeUsername: (username: string) => Promise<IApiResponse>;
+  changePassword: (
+    oldPassword: string,
+    newPassword: string,
+    confirmPassword: string,
+  ) => Promise<IApiResponse>;
+  getUser: () => Promise<IApiResponse>;
 }
 
 export const useBackend = (): Backend => {
@@ -11,45 +23,105 @@ export const useBackend = (): Backend => {
 
   const { getCookie } = useCookies();
 
-  const fetchCall = async (endpoint: string, method: string, body?: any) => {
-    const res = await fetch(`${url}/${endpoint}`, {
-      method: method,
-      headers: {
-        "Content-Type": "application/json",
-        authorization: `Bearer ${getCookie("auth")}`,
-      },
-      body: body ? JSON.stringify(body) : null,
-    });
+  const fetchCall = useCallback(
+    async (endpoint: string, method: string, body?: any) => {
+      const res = await fetch(`${url}/${endpoint}`, {
+        method: method,
+        headers: {
+          "Content-Type": "application/json",
+          authorization: `Bearer ${getCookie("auth")}`,
+        },
+        body: body ? JSON.stringify(body) : null,
+      });
 
-    return res;
-  };
+      return res;
+    },
+    [getCookie, url],
+  );
 
-  const authenticate = async (
-    username: string,
-    password: string,
-  ): Promise<ApiResponse> => {
-    const res = await fetchCall("User/Login", "POST", {
-      username: username,
-      password: password,
-    });
+  const userLogin = useCallback(
+    async (username: string, password: string): Promise<IApiResponse> => {
+      const res = await fetchCall("User/Login", "POST", {
+        username: username,
+        password: password,
+      });
 
-    return {
-      status: res.status,
-      content: res.status == 200 ? await res.text() : await res.json(),
-    };
-  };
+      return {
+        status: res.status,
+        content: res.status == 200 ? await res.text() : await res.json(),
+      };
+    },
+    [fetchCall],
+  );
 
-  const getUser = async (): Promise<ApiResponse> => {
+  const userSignup = useCallback(
+    async (
+      name: string,
+      username: string,
+      password: string,
+    ): Promise<IApiResponse> => {
+      const res = await fetchCall("User/Create", "POST", {
+        name: name,
+        username: username,
+        password: password,
+      });
+
+      return {
+        status: res.status,
+        content: res.status == 200 && (await res.text()),
+      };
+    },
+    [fetchCall],
+  );
+
+  const getUser = useCallback(async (): Promise<IApiResponse> => {
     const res = await fetchCall("User/Me", "GET", null);
 
     return {
       status: res.status,
-      content: await res.json(),
+      content: res.status === 200 ? await res.json() : await res.statusText,
     };
-  };
+  }, [fetchCall]);
+
+  const changeUsername = useCallback(
+    async (username: string): Promise<IApiResponse> => {
+      const res = await fetchCall("User/Username", "PUT", {
+        username: username,
+      });
+
+      return {
+        status: res.status,
+        content: await res.statusText,
+      };
+    },
+    [fetchCall],
+  );
+
+  const changePassword = useCallback(
+    async (
+      oldPassword: string,
+      newPassword: string,
+      confirmPassword: string,
+    ) => {
+      const res = await fetchCall("User/Password", "PUT", {
+        oldPassword: oldPassword,
+        newPassword: newPassword,
+        confirmPassword: confirmPassword,
+      });
+
+      return {
+        status: res.status,
+        content: await res.statusText,
+      };
+    },
+    [fetchCall],
+  );
 
   return {
-    authenticate,
+    userLogin,
     getUser,
+    userSignup,
+    changeUsername,
+    changePassword,
   };
 };
