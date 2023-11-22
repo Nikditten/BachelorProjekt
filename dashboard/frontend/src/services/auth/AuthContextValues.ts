@@ -1,4 +1,5 @@
-import { useBackendAuth, useCookies } from "@/utils/hooks";
+import { deleteCookie, setCookie } from "@/utils/cookie";
+import { useBackendAuth } from "@/utils/hooks";
 import { AuthState, IUser } from "@/utils/types";
 import { useCallback, useEffect, useState } from "react";
 
@@ -15,15 +16,13 @@ export const AuthContextValue = (): AuthProps => {
     AuthState.NotAuthenticated,
   );
   const [user, setUser] = useState<IUser | null>(null);
-
-  const { setCookie, deleteCookie } = useCookies();
   const { getUser } = useBackendAuth();
 
   const logout = useCallback(() => {
     setAuthState(AuthState.NotAuthenticated);
     setUser(null);
     deleteCookie("auth");
-  }, [deleteCookie]);
+  }, []);
 
   const checkAuth = useCallback(async () => {
     setAuthState(AuthState.Authenticating);
@@ -50,7 +49,7 @@ export const AuthContextValue = (): AuthProps => {
 
       await checkAuth();
     },
-    [checkAuth, setCookie],
+    [checkAuth],
   );
 
   useEffect(() => {

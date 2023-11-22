@@ -1,4 +1,5 @@
 import { AuthContextProvider } from "@/services/auth/useAuth";
+import { WebsiteContextProvider } from "@/services/website/useWebsite";
 import "@/styles/globals.css";
 import { NextPage } from "next";
 import type { AppProps } from "next/app";
@@ -18,7 +19,9 @@ export default function App({ Component, pageProps }: AppPropsWithLayout) {
 
   return (
     <AuthContextProvider>
-      {getLayout(<Component {...pageProps} />)}
+      <WebsiteContextProvider>
+        {getLayout(<Component {...pageProps} />)}
+      </WebsiteContextProvider>
     </AuthContextProvider>
   );
 }

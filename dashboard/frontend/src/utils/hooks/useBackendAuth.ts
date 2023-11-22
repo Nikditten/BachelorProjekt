@@ -1,5 +1,5 @@
 import { useCallback } from "react";
-import { useCookies } from ".";
+import fetchCall from "../api";
 import { IApiResponse } from "../types";
 
 interface BackendAuth {
@@ -20,26 +20,6 @@ interface BackendAuth {
 }
 
 export const useBackendAuth = (): BackendAuth => {
-  const url = process.env.NEXT_PUBLIC_BACKEND_URL;
-
-  const { getCookie } = useCookies();
-
-  const fetchCall = useCallback(
-    async (endpoint: string, method: string, body?: any) => {
-      const res = await fetch(`${url}/${endpoint}`, {
-        method: method,
-        headers: {
-          "Content-Type": "application/json",
-          authorization: `Bearer ${getCookie("auth")}`,
-        },
-        body: body ? JSON.stringify(body) : null,
-      });
-
-      return res;
-    },
-    [getCookie, url],
-  );
-
   const userLogin = useCallback(
     async (username: string, password: string): Promise<IApiResponse> => {
       const res = await fetchCall("User/Login", "POST", {
@@ -52,7 +32,7 @@ export const useBackendAuth = (): BackendAuth => {
         content: res.status == 200 ? await res.text() : await res.json(),
       };
     },
-    [fetchCall],
+    [],
   );
 
   const userSignup = useCallback(
@@ -72,7 +52,7 @@ export const useBackendAuth = (): BackendAuth => {
         content: res.status == 200 && (await res.text()),
       };
     },
-    [fetchCall],
+    [],
   );
 
   const getUser = useCallback(async (): Promise<IApiResponse> => {
@@ -95,7 +75,7 @@ export const useBackendAuth = (): BackendAuth => {
         content: await res.statusText,
       };
     },
-    [fetchCall],
+    [],
   );
 
   const changeUsername = useCallback(
@@ -109,7 +89,7 @@ export const useBackendAuth = (): BackendAuth => {
         content: await res.statusText,
       };
     },
-    [fetchCall],
+    [],
   );
 
   const changePassword = useCallback(
@@ -129,7 +109,7 @@ export const useBackendAuth = (): BackendAuth => {
         content: await res.statusText,
       };
     },
-    [fetchCall],
+    [],
   );
 
   return {
