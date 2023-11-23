@@ -3,7 +3,7 @@ import { FC } from 'react';
 
 interface Props {
   name: string;
-  type?: 'text' | 'number' | 'name' | 'email' | 'password' | 'date';
+  type?: 'text' | 'number' | 'name' | 'email' | 'password' | 'date' | 'url';
   label?: string;
   placeholder?: string;
 }

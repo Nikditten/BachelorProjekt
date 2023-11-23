@@ -1,11 +1,12 @@
 import { useOutsideClick } from "@/utils/hooks";
+import { IWebsite } from "@/utils/types";
 import { FC, useRef, useState } from "react";
 import { GoChevronDown, GoChevronUp } from "react-icons/go";
 
 interface Props {
-  options: string[];
-  selected: string;
-  onSelect: (option: string) => void;
+  options: IWebsite[];
+  selected: IWebsite | null;
+  onSelect: (option: IWebsite | null) => void;
 }
 
 const SimpleDropdown: FC<Props> = ({ options, selected, onSelect }) => {
@@ -13,13 +14,15 @@ const SimpleDropdown: FC<Props> = ({ options, selected, onSelect }) => {
   const ref = useRef(null);
 
   const handleSelection = (option: string) => {
-    onSelect(option);
+    const selected = options.find((website) => website.id === option);
+
+    onSelect(selected ?? null);
     setIsOpen(false);
   };
 
-  useOutsideClick(ref, () => {
+  useOutsideClick(() => {
     setIsOpen(false);
-  });
+  }, ref);
 
   return (
     <div
@@ -31,7 +34,7 @@ const SimpleDropdown: FC<Props> = ({ options, selected, onSelect }) => {
         className='flex w-full flex-row items-center justify-start gap-4 overflow-hidden text-start text-2xl font-light'
         onClick={() => setIsOpen(!isOpen)}
       >
-        <h1>{selected}</h1>
+        <h1>{selected?.name ?? "Select a website"}</h1>
         {isOpen ? <GoChevronUp /> : <GoChevronDown />}
       </button>
 
@@ -42,13 +45,13 @@ const SimpleDropdown: FC<Props> = ({ options, selected, onSelect }) => {
       >
         {options.map((option, index) => (
           <li
-            key={option}
-            onClick={() => handleSelection(option)}
+            key={option.id}
+            onClick={() => handleSelection(option.id)}
             className={`cursor-pointer overflow-x-hidden text-ellipsis whitespace-nowrap border-gray-300 px-4 py-2 hover:whitespace-normal ${
               index !== options.length - 1 && "border-b-[1px]"
             }`}
           >
-            {option}
+            {option.name}
           </li>
         ))}
       </ul>

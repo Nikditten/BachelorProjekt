@@ -3,10 +3,17 @@ import NavigationLayout from "@/components/layouts/navigation";
 import CreateWebsiteButton from "@/components/website/createwebsitebutton";
 import CreateWebsiteForm from "@/components/website/createwebsiteform";
 import WebsiteCard from "@/components/website/websitecard";
+import { useWebsite } from "@/services/website/useWebsite";
 import { ReactElement, useState } from "react";
 import { NextPageWithLayout } from "./_app";
 
 const Create: NextPageWithLayout = () => {
+  const { websites, deleteWebsiteById, createNewWebsite, updateWebsiteById } =
+    useWebsite();
+
+  // SOURCE: https://stackoverflow.com/questions/39501289/in-reactjs-how-to-copy-text-to-clipboard
+  const copyToClipboard = (text: string) => navigator.clipboard.writeText(text);
+
   const [createWebsiteVisible, setCreateWebsiteVisible] =
     useState<boolean>(false);
 
@@ -14,31 +21,19 @@ const Create: NextPageWithLayout = () => {
     <div className='flex h-full w-full flex-col items-center justify-center gap-6'>
       <h1 className='w-full text-start text-4xl'>Manage websites</h1>
       <Grid>
-        <WebsiteCard
-          title='Test website 2'
-          id='1218e7yh237r28320ur32'
-        />
-        <WebsiteCard
-          title='Test website 2'
-          id='1218e7yh237r28320ur32'
-        />
-        <WebsiteCard
-          title='Test website 2'
-          id='1218e7yh237r28320ur32'
-        />
-        <WebsiteCard
-          title='Test website 2'
-          id='1218e7yh237r28320ur32'
-        />
-        <WebsiteCard
-          title='Test website 2'
-          id='1218e7yh237r28320ur32'
-        />
+        {websites.map((website) => (
+          <WebsiteCard
+            key={website.id}
+            website={website}
+            onUpdate={(name, url) => updateWebsiteById(website.id, name, url)}
+            onCopy={() => copyToClipboard(website.id)}
+            onDelete={() => deleteWebsiteById(website.id)}
+          />
+        ))}
         {createWebsiteVisible ? (
           <CreateWebsiteForm
-            isVisible={createWebsiteVisible}
             onHide={() => setCreateWebsiteVisible(false)}
-            onSubmit={() => {}}
+            onSubmit={(name, url) => createNewWebsite(name, url)}
           />
         ) : (
           <CreateWebsiteButton onClick={() => setCreateWebsiteVisible(true)} />

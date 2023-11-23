@@ -17,7 +17,7 @@ namespace Application.Users.Commands.ChangeName
         }
         public async Task<Unit> Handle(ChangeNameCommand request, CancellationToken cancellationToken)
         {
-            Guid userId = new Guid(_userService.Id);
+            Guid userId = _userService.Id;
 
             User? user = await _applicationDbContext.Users.FirstOrDefaultAsync(x => x.ID == userId, cancellationToken);
 

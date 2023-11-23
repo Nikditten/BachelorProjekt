@@ -22,7 +22,7 @@ namespace Application.Shares.Commands.ShareWebsite
 
             if (website == null) throw new NullReferenceException("Website does not exist");
 
-            if (website.UserId != new Guid(_userService.Id)) throw new UnauthorizedAccessException();
+            if (website.UserId != _userService.Id) throw new UnauthorizedAccessException();
 
             var shares = new Shared { UserId = request.UserId, WebsiteId = request.Id };
 

@@ -1,6 +1,9 @@
-﻿using Application.Shares.Commands.ShareWebsite;
+﻿using Application.DTOs;
+using Application.Shares.Commands.ShareWebsite;
 using Application.Websites.Commands.CreateWebsite;
 using Application.Websites.Commands.DeleteWebsite;
+using Application.Websites.Commands.UpdateWebsite;
+using Application.Websites.Queries.GetWebsites;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -23,7 +26,7 @@ namespace API.Controllers
 
         [Authorize]
         [HttpDelete("[action]")]
-        public async Task<ActionResult<Unit>> Delete([FromBody] DeleteWebsiteCommand command)
+        public async Task<ActionResult<Unit>> Delete([FromQuery] DeleteWebsiteCommand command)
         {
             return await _mediator.Send(command);
         }
@@ -31,6 +34,20 @@ namespace API.Controllers
         [Authorize]
         [HttpPost("[action]")]
         public async Task<ActionResult<Unit>> Share([FromBody] ShareWebsiteCommand command)
+        {
+            return await _mediator.Send(command);
+        }
+
+        [Authorize]
+        [HttpGet("[action]")]
+        public async Task<ActionResult<List<WebsiteDTO>>> UserWebsites([FromQuery] GetWebsitesQuery query)
+        {
+            return await _mediator.Send(query);
+        }
+
+        [Authorize]
+        [HttpPut("[action]")]
+        public async Task<ActionResult<Unit>> Update([FromBody] UpdateWebsiteCommand command)
         {
             return await _mediator.Send(command);
         }

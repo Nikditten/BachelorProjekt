@@ -20,12 +20,12 @@ namespace Application.Users.Queries.GetUser
         }
         public async Task<UserDTO> Handle(GetUserQuery request, CancellationToken cancellationToken)
         {
-            User? user = await _applicationDbContext.Users.Where(x => x.ID == new Guid(_userService.Id))
-            .Include(x => x.Websites)
-                                                        .Include(x => x.Shares)
-                                                        .ThenInclude(x => x.Website)
-                                                        .AsNoTracking()
-                                                        .FirstOrDefaultAsync(cancellationToken);
+            User? user = await _applicationDbContext.Users.Where(x => x.ID == _userService.Id)
+                .Include(x => x.Shares)
+                .ThenInclude(x => x.Website)
+                .Include(x => x.Websites)
+                .AsNoTracking()
+                .FirstOrDefaultAsync(cancellationToken);
 
             if (user is null) throw new UnauthorizedAccessException();
 

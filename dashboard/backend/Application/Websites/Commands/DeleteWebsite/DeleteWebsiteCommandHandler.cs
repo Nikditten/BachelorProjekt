@@ -21,7 +21,7 @@ namespace Application.Websites.Commands.DeleteWebsite
 
             if (website is null) throw new NullReferenceException("Website does not exist");
 
-            if (website.UserId != new Guid(_userService.Id)) throw new UnauthorizedAccessException();
+            if (website.UserId != _userService.Id) throw new UnauthorizedAccessException();
 
             _applicationDbContext.Websites.Remove(website);
 

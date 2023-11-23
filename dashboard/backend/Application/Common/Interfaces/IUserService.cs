@@ -3,7 +3,7 @@ namespace Application.Common.Interfaces
 {
     public interface IUserService
     {
-        string Id { get; }
+        Guid Id { get; }
     }
 }
 

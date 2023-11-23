@@ -1,3 +1,4 @@
+import { useWebsite } from "@/services/website/useWebsite";
 import { FC, PropsWithChildren, useState } from "react";
 import {
   MdInfoOutline,
@@ -8,8 +9,7 @@ import SimpleDropdown from "../dropdown/simpledropdown";
 import Modal from "../modal/modal";
 
 const WebsiteConfigLayout: FC<PropsWithChildren> = ({ children }) => {
-  const websites = ["Website test 1", "Test website 2"];
-  const [selectedWebsite, setSelectedWebsite] = useState<string>(websites[0]);
+  const { websites, activeWebsite, setActiveWebsite } = useWebsite();
 
   const [showInfo, setShowInfo] = useState<boolean>(false);
   const [showSettings, setShowSettings] = useState<boolean>(false);
@@ -29,8 +29,8 @@ const WebsiteConfigLayout: FC<PropsWithChildren> = ({ children }) => {
       <div className='flex w-full flex-col items-center justify-between md:flex-row md:pr-4'>
         <SimpleDropdown
           options={websites}
-          selected={selectedWebsite}
-          onSelect={(option) => setSelectedWebsite(option)}
+          selected={activeWebsite}
+          onSelect={(option) => setActiveWebsite(option)}
         />
 
         <ul className='flex flex-row items-center justify-center gap-8 text-2xl'>
@@ -42,7 +42,7 @@ const WebsiteConfigLayout: FC<PropsWithChildren> = ({ children }) => {
               isShown={showCustomMetrics}
               onClose={handleCloseCustomMetrics}
             >
-              THIS IS CUSTOM METRICS FOR {selectedWebsite}
+              THIS IS CUSTOM METRICS FOR {activeWebsite?.name ?? "NO WEBSITE"}
             </Modal>
           </li>
           <li>
@@ -53,7 +53,7 @@ const WebsiteConfigLayout: FC<PropsWithChildren> = ({ children }) => {
               isShown={showInfo}
               onClose={handleCloseInfo}
             >
-              THIS IS INFO ABOUT {selectedWebsite}
+              THIS IS INFO ABOUT {activeWebsite?.name ?? "NO WEBSITE"}
             </Modal>
           </li>
           <li>
@@ -64,7 +64,7 @@ const WebsiteConfigLayout: FC<PropsWithChildren> = ({ children }) => {
               isShown={showSettings}
               onClose={handleCloseSettings}
             >
-              THIS IS SETTINGS FOR {selectedWebsite}
+              THIS IS SETTINGS FOR {activeWebsite?.name ?? "NO WEBSITE"}
             </Modal>
           </li>
         </ul>

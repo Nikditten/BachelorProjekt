@@ -1,32 +1,73 @@
-import { FC } from 'react';
-import { BiCopy } from 'react-icons/bi';
-import { MdDeleteOutline, MdOutlineSettings } from 'react-icons/md';
-import IconButton from '../buttons/iconbutton';
+import { IWebsite } from "@/utils/types";
+import { FC, useState } from "react";
+import { MdDeleteOutline, MdEdit } from "react-icons/md";
+import IconButton from "../buttons/iconbutton";
+import CreateWebsiteForm from "./createwebsiteform";
 
 interface Props {
-  title: string;
-  id: string;
+  website: IWebsite;
+  onUpdate: (name: string, url: string) => void;
+  onCopy: () => void;
+  onDelete: () => void;
 }
 
-const WebsiteCard: FC<Props> = ({ title, id }) => {
+const WebsiteCard: FC<Props> = ({ website, onUpdate, onCopy, onDelete }) => {
+  const [editMode, setEditMode] = useState<boolean>(false);
+  const [apiKeyText, setApiKeyText] = useState<string>(website.id);
+
+  const handleOnCopy = () => {
+    onCopy();
+    setApiKeyText("Copied!");
+    setTimeout(() => {
+      setApiKeyText(website.id);
+    }, 500);
+  };
+
+  if (editMode)
+    return (
+      <CreateWebsiteForm
+        website={website}
+        onHide={() => setEditMode(false)}
+        onSubmit={onUpdate}
+      />
+    );
+
   return (
-    <div className='w-full h-48 shadow-md rounded-lg shadow-gray-400 flex flex-col justify-between items-center p-6'>
+    <div className='flex h-56 w-full flex-col items-center justify-between rounded-lg p-6 shadow-md shadow-gray-400'>
       <div className='w-full text-start'>
-        <h1 className='font-bold w-full text-xl'>{title}</h1>
-        <h3 className='w-full mt-3'>Your API key:</h3>
-        <span className='font-thin'>{id}</span>
+        <h1 className='w-full text-xl font-bold'>{website.name}</h1>
+        <a
+          className='text-md w-full font-light underline'
+          href={website.url}
+          target='_blank'
+          rel='noreferrer'
+        >
+          {website.url}
+        </a>
+        <h4 className='mt-3 w-full'>API key:</h4>
+        <button
+          className='text-start'
+          onClick={handleOnCopy}
+        >
+          <span className='font-thin'>{apiKeyText}</span>
+        </button>
       </div>
 
-      <ul className='w-full flex flex-row items-center justify-end gap-4'>
-        <li>
-          <IconButton onClick={() => {}}>
-            <BiCopy />
-          </IconButton>
-        </li>
+      <ul className='flex w-full flex-row items-center justify-end gap-4'>
+        {website.isAdmin && (
+          <li>
+            <IconButton
+              className='hover:text-orange-400'
+              onClick={() => setEditMode(true)}
+            >
+              <MdEdit />
+            </IconButton>
+          </li>
+        )}
         <li>
           <IconButton
             className='hover:text-red-600'
-            onClick={() => {}}
+            onClick={onDelete}
           >
             <MdDeleteOutline />
           </IconButton>

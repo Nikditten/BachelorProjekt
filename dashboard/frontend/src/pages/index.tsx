@@ -2,15 +2,10 @@ import HeaderContainer from "@/components/containers/headercontainer";
 import TableContainer from "@/components/containers/tablecontainer";
 import NavigationLayout from "@/components/layouts/navigation";
 import WebsiteConfigLayout from "@/components/layouts/websiteconfig";
-import { useAuth } from "@/services/auth/useAuth";
-import { ReactElement, useEffect } from "react";
+import { ReactElement } from "react";
 import { NextPageWithLayout } from "./_app";
 
 const Home: NextPageWithLayout = () => {
-  const { user } = useAuth();
-
-  useEffect(() => console.log(user), [user]);
-
   return (
     <div className='grid h-full w-full gap-8 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4'>
       <HeaderContainer

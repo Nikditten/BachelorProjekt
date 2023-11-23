@@ -97,7 +97,7 @@ export const useBackendAuth = (): BackendAuth => {
       oldPassword: string,
       newPassword: string,
       confirmPassword: string,
-    ) => {
+    ): Promise<IApiResponse> => {
       const res = await fetchCall("User/Password", "PUT", {
         oldPassword: oldPassword,
         newPassword: newPassword,

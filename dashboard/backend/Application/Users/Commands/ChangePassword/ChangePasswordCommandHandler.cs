@@ -21,7 +21,7 @@ namespace Application.Users.Commands.ChangePassword
 
         public async Task<Unit> Handle(ChangePasswordCommand request, CancellationToken cancellationToken)
         {
-            var userId = new Guid(_userService.Id);
+            var userId = _userService.Id;
 
             User? user = await _applicationDbContext.Users.FirstOrDefaultAsync(x => x.ID == userId, cancellationToken);
 
