@@ -32,13 +32,6 @@ namespace API.Controllers
         }
 
         [Authorize]
-        [HttpPost("[action]")]
-        public async Task<ActionResult<Unit>> Share([FromBody] ShareWebsiteCommand command)
-        {
-            return await _mediator.Send(command);
-        }
-
-        [Authorize]
         [HttpGet("[action]")]
         public async Task<ActionResult<List<WebsiteDTO>>> UserWebsites([FromQuery] GetWebsitesQuery query)
         {
@@ -51,6 +44,20 @@ namespace API.Controllers
         {
             return await _mediator.Send(command);
         }
+
+        [Authorize]
+        [HttpPost("[action]")]
+        public async Task<ActionResult<Unit>> Share([FromBody] ShareWebsiteCommand command)
+        {
+            return await _mediator.Send(command);
+        }
+        [Authorize]
+        [HttpDelete("[action]")]
+        public async Task<ActionResult<Unit>> DeleteShare([FromBody] ShareWebsiteCommand command)
+        {
+            return await _mediator.Send(command);
+        }
+
     }
 }
 

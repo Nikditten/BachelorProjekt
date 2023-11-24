@@ -1,7 +1,6 @@
 import { useBackend } from "@/utils/hooks/useBackend";
 import { IWebsite } from "@/utils/types";
 import { useCallback, useEffect, useState } from "react";
-import { useAuth } from "../auth/useAuth";
 
 type WebsiteProps = {
   websites: IWebsite[];
@@ -11,13 +10,19 @@ type WebsiteProps = {
   createNewWebsite: (name: string, url: string) => Promise<void>;
   deleteWebsiteById: (id: string) => Promise<void>;
   updateWebsiteById: (id: string, name: string, url: string) => Promise<void>;
+  createSharedWebsite: (websiteid: string, userid: string) => Promise<void>;
+  removeSharedWebsite: (websiteid: string, userid: string) => Promise<void>;
 };
 
 export const WebsiteContextValue = (): WebsiteProps => {
-  const { getWebsites, deleteWebsite, createWebsite, updateWebsite } =
-    useBackend();
-
-  const { user } = useAuth();
+  const {
+    getWebsites,
+    deleteWebsite,
+    createWebsite,
+    updateWebsite,
+    shareWebsite,
+    deleteSharedWebsite,
+  } = useBackend();
 
   const [websites, SetWebsites] = useState<IWebsite[]>([]);
 
@@ -41,9 +46,14 @@ export const WebsiteContextValue = (): WebsiteProps => {
 
       if (status === 200) {
         SetWebsites((prev) => prev.filter((website) => website.id !== id));
+
+        if (activeWebsite?.id === id) {
+          if (websites.length > 1) setActiveWebsite(websites[0]);
+          else setActiveWebsite(null);
+        }
       }
     },
-    [deleteWebsite],
+    [activeWebsite?.id, deleteWebsite, websites],
   );
 
   const createNewWebsite = useCallback(
@@ -89,6 +99,35 @@ export const WebsiteContextValue = (): WebsiteProps => {
     [updateWebsite],
   );
 
+  const createSharedWebsite = useCallback(
+    async (websiteid: string, userid: string) => {
+      const { status } = await shareWebsite(websiteid, userid);
+
+      if (status === 200) {
+        console.log("SUCCESS");
+      }
+    },
+    [shareWebsite],
+  );
+
+  const removeSharedWebsite = useCallback(
+    async (websiteid: string, userid: string) => {
+      const { status } = await deleteSharedWebsite(websiteid, userid);
+
+      if (status === 200) {
+        SetWebsites((prev) =>
+          prev.filter((website) => website.id !== websiteid),
+        );
+
+        if (activeWebsite?.id === websiteid) {
+          if (websites.length > 1) setActiveWebsite(websites[0]);
+          else setActiveWebsite(null);
+        }
+      }
+    },
+    [activeWebsite?.id, deleteSharedWebsite, websites],
+  );
+
   useEffect(() => {
     fetchWebsites();
   }, [fetchWebsites]);
@@ -101,5 +140,7 @@ export const WebsiteContextValue = (): WebsiteProps => {
     createNewWebsite,
     deleteWebsiteById,
     updateWebsiteById,
+    createSharedWebsite,
+    removeSharedWebsite,
   };
 };

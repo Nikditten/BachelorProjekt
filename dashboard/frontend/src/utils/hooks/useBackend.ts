@@ -11,6 +11,11 @@ interface Backend {
     name: string,
     url: string,
   ) => Promise<IApiResponse>;
+  shareWebsite: (id: string, userid: string) => Promise<IApiResponse>;
+  deleteSharedWebsite: (
+    websiteid: string,
+    userid: string,
+  ) => Promise<IApiResponse>;
 }
 
 export const useBackend = (): Backend => {
@@ -70,10 +75,42 @@ export const useBackend = (): Backend => {
     [],
   );
 
+  const shareWebsite = useCallback(
+    async (id: string, userid: string): Promise<IApiResponse> => {
+      const res = await fetchCall(`Shared/Create`, "POST", {
+        id,
+        userid,
+      });
+
+      return {
+        status: res.status,
+        content: await res.text(),
+      };
+    },
+    [],
+  );
+
+  const deleteSharedWebsite = useCallback(
+    async (websiteid: string, userid: string): Promise<IApiResponse> => {
+      const res = await fetchCall(`Shared/Delete`, "DELETE", {
+        websiteid,
+        userid,
+      });
+
+      return {
+        status: res.status,
+        content: await res.text(),
+      };
+    },
+    [],
+  );
+
   return {
     getWebsites,
     createWebsite,
     deleteWebsite,
     updateWebsite,
+    shareWebsite,
+    deleteSharedWebsite,
   };
 };

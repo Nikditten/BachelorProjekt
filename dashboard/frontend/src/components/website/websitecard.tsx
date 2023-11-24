@@ -1,6 +1,6 @@
 import { IWebsite } from "@/utils/types";
 import { FC, useState } from "react";
-import { MdDeleteOutline, MdEdit } from "react-icons/md";
+import { MdDeleteOutline, MdEdit, MdOutlinePersonRemove } from "react-icons/md";
 import IconButton from "../buttons/iconbutton";
 import CreateWebsiteForm from "./createwebsiteform";
 
@@ -69,7 +69,7 @@ const WebsiteCard: FC<Props> = ({ website, onUpdate, onCopy, onDelete }) => {
             className='hover:text-red-600'
             onClick={onDelete}
           >
-            <MdDeleteOutline />
+            {website.isAdmin ? <MdDeleteOutline /> : <MdOutlinePersonRemove />}
           </IconButton>
         </li>
       </ul>
