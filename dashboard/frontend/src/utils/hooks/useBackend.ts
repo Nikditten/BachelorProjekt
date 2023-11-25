@@ -24,7 +24,7 @@ export const useBackend = (): Backend => {
 
     return {
       status: res.status,
-      content: await res.json(),
+      content: (await res.json()) ?? null,
     };
   }, []);
 
@@ -38,7 +38,7 @@ export const useBackend = (): Backend => {
 
       return {
         status: res.status,
-        content: await res.json(),
+        content: null,
       };
     },
     [],
@@ -53,7 +53,7 @@ export const useBackend = (): Backend => {
 
       return {
         status: res.status,
-        content: await res.text(),
+        content: (await res.text()) ?? null,
       };
     },
     [],
@@ -69,22 +69,22 @@ export const useBackend = (): Backend => {
 
       return {
         status: res.status,
-        content: await res.text(),
+        content: null,
       };
     },
     [],
   );
 
   const shareWebsite = useCallback(
-    async (id: string, userid: string): Promise<IApiResponse> => {
+    async (id: string, username: string): Promise<IApiResponse> => {
       const res = await fetchCall(`Shared/Create`, "POST", {
         id,
-        userid,
+        username,
       });
 
       return {
         status: res.status,
-        content: await res.text(),
+        content: null,
       };
     },
     [],
@@ -99,7 +99,7 @@ export const useBackend = (): Backend => {
 
       return {
         status: res.status,
-        content: await res.text(),
+        content: null,
       };
     },
     [],

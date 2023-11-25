@@ -45,19 +45,6 @@ namespace API.Controllers
             return await _mediator.Send(command);
         }
 
-        [Authorize]
-        [HttpPost("[action]")]
-        public async Task<ActionResult<Unit>> Share([FromBody] ShareWebsiteCommand command)
-        {
-            return await _mediator.Send(command);
-        }
-        [Authorize]
-        [HttpDelete("[action]")]
-        public async Task<ActionResult<Unit>> DeleteShare([FromBody] ShareWebsiteCommand command)
-        {
-            return await _mediator.Send(command);
-        }
-
     }
 }
 

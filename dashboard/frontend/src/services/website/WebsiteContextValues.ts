@@ -100,11 +100,11 @@ export const WebsiteContextValue = (): WebsiteProps => {
   );
 
   const createSharedWebsite = useCallback(
-    async (websiteid: string, userid: string) => {
-      const { status } = await shareWebsite(websiteid, userid);
+    async (websiteid: string, username: string) => {
+      const { status } = await shareWebsite(websiteid, username);
 
       if (status === 200) {
-        console.log("SUCCESS");
+        console.log("Shared website");
       }
     },
     [shareWebsite],

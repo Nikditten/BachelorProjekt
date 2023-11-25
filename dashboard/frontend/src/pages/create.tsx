@@ -16,6 +16,7 @@ const Create: NextPageWithLayout = () => {
     createNewWebsite,
     updateWebsiteById,
     removeSharedWebsite,
+    createSharedWebsite,
   } = useWebsite();
   const { user } = useAuth();
 
@@ -33,6 +34,13 @@ const Create: NextPageWithLayout = () => {
     [deleteWebsiteById, removeSharedWebsite, user?.id],
   );
 
+  const onShare = useCallback(
+    (username: string, website: IWebsite) => {
+      createSharedWebsite(website.id, username);
+    },
+    [createSharedWebsite],
+  );
+
   return (
     <div className='flex h-full w-full flex-col items-center justify-center gap-6'>
       <h1 className='w-full text-start text-4xl'>Manage websites</h1>
@@ -42,6 +50,7 @@ const Create: NextPageWithLayout = () => {
             key={website.id}
             website={website}
             onUpdate={(name, url) => updateWebsiteById(website.id, name, url)}
+            onShare={(username: string) => onShare(username, website)}
             onCopy={() => copyToClipboard(website.id)}
             onDelete={() => handleDeleteWebsite(website)}
           />

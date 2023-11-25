@@ -1,6 +1,10 @@
 import { getCookie } from "./cookie";
 
-const fetchCall = async (endpoint: string, method: string, body?: any) => {
+const fetchCall = async (
+  endpoint: string,
+  method: string,
+  body?: any,
+): Promise<Response> => {
   const url = process.env.NEXT_PUBLIC_BACKEND_URL;
 
   const res = await fetch(`${url}/${endpoint}`, {

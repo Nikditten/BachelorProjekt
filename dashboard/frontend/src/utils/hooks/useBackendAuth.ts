@@ -27,9 +27,16 @@ export const useBackendAuth = (): BackendAuth => {
         password: password,
       });
 
+      if (res.status === 200) {
+        return {
+          status: res.status,
+          content: await res.text(),
+        };
+      }
+
       return {
         status: res.status,
-        content: res.status == 200 ? await res.text() : await res.json(),
+        content: res.statusText,
       };
     },
     [],
@@ -47,9 +54,16 @@ export const useBackendAuth = (): BackendAuth => {
         password: password,
       });
 
+      if (res.status === 200) {
+        return {
+          status: res.status,
+          content: await res.text(),
+        };
+      }
+
       return {
         status: res.status,
-        content: res.status == 200 && (await res.text()),
+        content: res.statusText,
       };
     },
     [],
@@ -58,11 +72,18 @@ export const useBackendAuth = (): BackendAuth => {
   const getUser = useCallback(async (): Promise<IApiResponse> => {
     const res = await fetchCall("User/Me", "GET", null);
 
+    if (res.status === 200) {
+      return {
+        status: res.status,
+        content: await res.text(),
+      };
+    }
+
     return {
       status: res.status,
-      content: res.status === 200 ? await res.json() : await res.statusText,
+      content: null,
     };
-  }, [fetchCall]);
+  }, []);
 
   const changeName = useCallback(
     async (name: string): Promise<IApiResponse> => {
@@ -72,7 +93,7 @@ export const useBackendAuth = (): BackendAuth => {
 
       return {
         status: res.status,
-        content: await res.statusText,
+        content: res.statusText,
       };
     },
     [],
@@ -86,7 +107,7 @@ export const useBackendAuth = (): BackendAuth => {
 
       return {
         status: res.status,
-        content: await res.statusText,
+        content: res.statusText,
       };
     },
     [],
@@ -106,7 +127,7 @@ export const useBackendAuth = (): BackendAuth => {
 
       return {
         status: res.status,
-        content: await res.statusText,
+        content: res.statusText,
       };
     },
     [],

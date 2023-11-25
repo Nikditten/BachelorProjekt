@@ -1,4 +1,5 @@
 
+using Application.Common.Exceptions;
 using Application.Common.Interfaces;
 using Domain.Entities;
 using MediatR;
@@ -20,11 +21,18 @@ namespace Application.Shares.Commands.ShareWebsite
         {
             Website? website = await _applicationDbContext.Websites.FirstOrDefaultAsync(x => x.ID == request.Id, cancellationToken);
 
+            User? user = await _applicationDbContext.Users.FirstOrDefaultAsync(x => x.Username == request.Username, cancellationToken);
+
             if (website == null) throw new NullReferenceException("Website does not exist");
+            if (user == null) throw new NullReferenceException("User does not exist");
 
             if (website.UserId != _userService.Id) throw new UnauthorizedAccessException();
 
-            var shares = new Shared { UserId = request.UserId, WebsiteId = request.Id };
+            Shared? shared = await _applicationDbContext.Shares.FirstOrDefaultAsync(x => x.UserId == user.ID && x.WebsiteId == request.Id, cancellationToken);
+
+            if (shared != null) throw new AlreadyExistsException("Website already shared with this user");
+
+            var shares = new Shared { UserId = user.ID, WebsiteId = request.Id };
 
             _applicationDbContext.Shares.Add(shares);
 

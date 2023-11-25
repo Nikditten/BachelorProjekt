@@ -1,18 +1,32 @@
 import { IWebsite } from "@/utils/types";
 import { FC, useState } from "react";
-import { MdDeleteOutline, MdEdit, MdOutlinePersonRemove } from "react-icons/md";
+import {
+  MdDeleteOutline,
+  MdEdit,
+  MdOutlinePersonRemove,
+  MdShare,
+} from "react-icons/md";
 import IconButton from "../buttons/iconbutton";
 import CreateWebsiteForm from "./createwebsiteform";
+import ShareWebsiteForm from "./sharewebsiteform";
 
 interface Props {
   website: IWebsite;
   onUpdate: (name: string, url: string) => void;
+  onShare: (username: string) => void;
   onCopy: () => void;
   onDelete: () => void;
 }
 
-const WebsiteCard: FC<Props> = ({ website, onUpdate, onCopy, onDelete }) => {
+const WebsiteCard: FC<Props> = ({
+  website,
+  onShare,
+  onUpdate,
+  onCopy,
+  onDelete,
+}) => {
   const [editMode, setEditMode] = useState<boolean>(false);
+  const [shareMode, setShareMode] = useState<boolean>(false);
   const [apiKeyText, setApiKeyText] = useState<string>(website.id);
 
   const handleOnCopy = () => {
@@ -23,7 +37,7 @@ const WebsiteCard: FC<Props> = ({ website, onUpdate, onCopy, onDelete }) => {
     }, 500);
   };
 
-  if (editMode)
+  if (editMode) {
     return (
       <CreateWebsiteForm
         website={website}
@@ -31,6 +45,17 @@ const WebsiteCard: FC<Props> = ({ website, onUpdate, onCopy, onDelete }) => {
         onSubmit={onUpdate}
       />
     );
+  }
+
+  if (shareMode) {
+    return (
+      <ShareWebsiteForm
+        website={website}
+        onHide={() => setShareMode(false)}
+        onSubmit={onShare}
+      />
+    );
+  }
 
   return (
     <div className='flex h-56 w-full flex-col items-center justify-between rounded-lg p-6 shadow-md shadow-gray-400'>
@@ -54,6 +79,16 @@ const WebsiteCard: FC<Props> = ({ website, onUpdate, onCopy, onDelete }) => {
       </div>
 
       <ul className='flex w-full flex-row items-center justify-end gap-4'>
+        {website.isAdmin && (
+          <li>
+            <IconButton
+              className='hover:text-green-600'
+              onClick={() => setShareMode(true)}
+            >
+              <MdShare />
+            </IconButton>
+          </li>
+        )}
         {website.isAdmin && (
           <li>
             <IconButton

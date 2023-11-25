@@ -9,7 +9,7 @@ namespace Application.Shares.Commands.ShareWebsite
             RuleFor(x => x.Id)
             .NotEmpty();
 
-            RuleFor(x => x.UserId)
+            RuleFor(x => x.Username)
             .NotEmpty();
         }
     }
