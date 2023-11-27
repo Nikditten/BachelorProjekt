@@ -75,7 +75,7 @@ export const useBackendAuth = (): BackendAuth => {
     if (res.status === 200) {
       return {
         status: res.status,
-        content: await res.text(),
+        content: await res.json(),
       };
     }
 

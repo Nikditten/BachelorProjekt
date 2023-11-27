@@ -1,6 +1,7 @@
 import { useBackend } from "@/utils/hooks/useBackend";
 import { IWebsite } from "@/utils/types";
 import { useCallback, useEffect, useState } from "react";
+import { useAuth } from "../auth/useAuth";
 
 type WebsiteProps = {
   websites: IWebsite[];
@@ -23,6 +24,8 @@ export const WebsiteContextValue = (): WebsiteProps => {
     shareWebsite,
     deleteSharedWebsite,
   } = useBackend();
+
+  const { user } = useAuth();
 
   const [websites, SetWebsites] = useState<IWebsite[]>([]);
 
@@ -101,10 +104,21 @@ export const WebsiteContextValue = (): WebsiteProps => {
 
   const createSharedWebsite = useCallback(
     async (websiteid: string, username: string) => {
-      const { status } = await shareWebsite(websiteid, username);
+      const { status, content } = await shareWebsite(websiteid, username);
 
       if (status === 200) {
-        console.log("Shared website");
+        SetWebsites((prev) =>
+          prev.map((website) => {
+            if (website.id === websiteid) {
+              return {
+                ...website,
+                sharedWith: [...(website.sharedWith ?? []), content],
+              };
+            }
+
+            return website;
+          }),
+        );
       }
     },
     [shareWebsite],
@@ -115,17 +129,34 @@ export const WebsiteContextValue = (): WebsiteProps => {
       const { status } = await deleteSharedWebsite(websiteid, userid);
 
       if (status === 200) {
-        SetWebsites((prev) =>
-          prev.filter((website) => website.id !== websiteid),
-        );
+        if (user?.id == userid) {
+          SetWebsites((prev) =>
+            prev.filter((website) => website.id !== websiteid),
+          );
 
-        if (activeWebsite?.id === websiteid) {
-          if (websites.length > 1) setActiveWebsite(websites[0]);
-          else setActiveWebsite(null);
+          if (activeWebsite?.id === websiteid) {
+            if (websites.length > 1) setActiveWebsite(websites[0]);
+            else setActiveWebsite(null);
+          }
+        } else {
+          SetWebsites((prev) =>
+            prev.map((website) => {
+              if (website.id === websiteid) {
+                return {
+                  ...website,
+                  sharedWith: website?.sharedWith?.filter(
+                    (user) => user.id !== userid,
+                  ),
+                };
+              }
+
+              return website;
+            }),
+          );
         }
       }
     },
-    [activeWebsite?.id, deleteSharedWebsite, websites],
+    [activeWebsite?.id, deleteSharedWebsite, user?.id, websites],
   );
 
   useEffect(() => {

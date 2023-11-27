@@ -22,10 +22,17 @@ export const useBackend = (): Backend => {
   const getWebsites = useCallback(async (): Promise<IApiResponse> => {
     const res = await fetchCall("Website/UserWebsites", "GET", null);
 
-    return {
-      status: res.status,
-      content: (await res.json()) ?? null,
-    };
+    try {
+      return {
+        status: res.status,
+        content: await res.json(),
+      };
+    } catch {
+      return {
+        status: res.status,
+        content: null,
+      };
+    }
   }, []);
 
   const deleteWebsite = useCallback(
@@ -51,10 +58,17 @@ export const useBackend = (): Backend => {
         url,
       });
 
-      return {
-        status: res.status,
-        content: (await res.text()) ?? null,
-      };
+      try {
+        return {
+          status: res.status,
+          content: await res.text(),
+        };
+      } catch {
+        return {
+          status: res.status,
+          content: null,
+        };
+      }
     },
     [],
   );
@@ -82,10 +96,17 @@ export const useBackend = (): Backend => {
         username,
       });
 
-      return {
-        status: res.status,
-        content: null,
-      };
+      try {
+        return {
+          status: res.status,
+          content: await res.json(),
+        };
+      } catch {
+        return {
+          status: res.status,
+          content: null,
+        };
+      }
     },
     [],
   );

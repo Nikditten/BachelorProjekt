@@ -27,14 +27,14 @@ export const AuthContextValue = (): AuthProps => {
   const checkAuth = useCallback(async () => {
     setAuthState(AuthState.Authenticating);
 
-    const res = await getUser();
+    const { status, content } = await getUser();
 
-    if (res.status === 200) {
+    if (status === 200) {
       setAuthState(AuthState.Authenticated);
       const fetchedUser: IUser = {
-        id: res.content.id,
-        name: res.content.name,
-        username: res.content.username,
+        id: content.id,
+        name: content.name,
+        username: content.username,
       };
 
       setUser(fetchedUser);
@@ -55,6 +55,8 @@ export const AuthContextValue = (): AuthProps => {
   useEffect(() => {
     checkAuth();
   }, []);
+
+  useEffect(() => console.log(user), [user]);
 
   return {
     authState,

@@ -33,7 +33,7 @@ namespace API.Controllers
 
         [Authorize]
         [HttpGet("[action]")]
-        public async Task<ActionResult<List<WebsiteDTO>>> UserWebsites([FromQuery] GetWebsitesQuery query)
+        public async Task<ActionResult<List<UserWebsiteDTO>>> UserWebsites([FromQuery] GetWebsitesQuery query)
         {
             return await _mediator.Send(query);
         }

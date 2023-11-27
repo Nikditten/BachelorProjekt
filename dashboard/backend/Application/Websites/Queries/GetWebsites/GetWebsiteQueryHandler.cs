@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Application.Websites.Queries.GetWebsites
 {
-    public class GetWebsitesQueryHandler : IRequestHandler<GetWebsitesQuery, List<WebsiteDTO>>
+    public class GetWebsitesQueryHandler : IRequestHandler<GetWebsitesQuery, List<UserWebsiteDTO>>
     {
         private readonly IApplicationDbContext _applicationDbContext;
         private readonly IUserService _userService;
@@ -19,20 +19,28 @@ namespace Application.Websites.Queries.GetWebsites
             _mapper = mapper;
         }
 
-        public async Task<List<WebsiteDTO>> Handle(GetWebsitesQuery request, CancellationToken cancellationToken)
+        public async Task<List<UserWebsiteDTO>> Handle(GetWebsitesQuery request, CancellationToken cancellationToken)
         {
             Guid userId = _userService.Id;
 
             var websites = await _applicationDbContext.Websites
                 .Where(x => x.UserId == userId || x.Shares.Any(x => x.UserId == userId))
-                .Select(x => new WebsiteDTO
+                .Select(x => new UserWebsiteDTO
                 {
                     ID = x.ID,
                     isAdmin = x.UserId == userId,
                     Name = x.Name,
                     URL = x.Url,
-                    Sessions = x.Sessions
-                }).ToListAsync(cancellationToken);
+                    Sessions = x.Sessions,
+                    SharedWith = x.UserId == userId ? x.Shares.Select(x => new UserDTO
+                    {
+                        ID = x.UserId,
+                        Name = x.User.Name,
+                        Username = x.User.Username
+                    }).ToList() : null
+                })
+                .AsNoTracking()
+                .ToListAsync(cancellationToken);
 
             return websites;
         }

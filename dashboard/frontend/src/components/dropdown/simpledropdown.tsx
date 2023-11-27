@@ -2,6 +2,7 @@ import { useOutsideClick } from "@/utils/hooks";
 import { IWebsite } from "@/utils/types";
 import { FC, useRef, useState } from "react";
 import { GoChevronDown, GoChevronUp } from "react-icons/go";
+import { MdPerson } from "react-icons/md";
 
 interface Props {
   options: IWebsite[];
@@ -39,7 +40,7 @@ const SimpleDropdown: FC<Props> = ({ options, selected, onSelect }) => {
       </button>
 
       <ul
-        className={`absolute mt-2 max-h-52 w-52 overflow-y-auto rounded-b-lg border-black bg-white py-2 shadow-2xl shadow-gray-400 md:w-80 ${
+        className={`absolute mt-2 max-h-52 w-52 overflow-y-auto rounded-lg border-black bg-white shadow-2xl shadow-gray-400 md:w-80 ${
           isOpen ? "visible" : "hidden"
         }`}
       >
@@ -47,11 +48,12 @@ const SimpleDropdown: FC<Props> = ({ options, selected, onSelect }) => {
           <li
             key={option.id}
             onClick={() => handleSelection(option.id)}
-            className={`cursor-pointer overflow-x-hidden text-ellipsis whitespace-nowrap border-gray-300 px-4 py-2 hover:whitespace-normal ${
+            className={`flex cursor-pointer flex-row items-center justify-between overflow-x-hidden text-ellipsis whitespace-nowrap border-gray-300 px-4 py-2 hover:whitespace-normal hover:bg-black hover:text-white ${
               index !== options.length - 1 && "border-b-[1px]"
             }`}
           >
-            {option.name}
+            <span>{option.name}</span>
+            {!option.isAdmin ? <MdPerson /> : null}
           </li>
         ))}
       </ul>
