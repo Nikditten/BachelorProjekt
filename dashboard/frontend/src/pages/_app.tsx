@@ -1,3 +1,4 @@
+import AuthGuard from "@/services/auth/AuthGuard";
 import { AuthContextProvider } from "@/services/auth/useAuth";
 import { WebsiteContextProvider } from "@/services/website/useWebsite";
 import "@/styles/globals.css";
@@ -19,9 +20,11 @@ export default function App({ Component, pageProps }: AppPropsWithLayout) {
 
   return (
     <AuthContextProvider>
-      <WebsiteContextProvider>
-        {getLayout(<Component {...pageProps} />)}
-      </WebsiteContextProvider>
+      <AuthGuard>
+        <WebsiteContextProvider>
+          {getLayout(<Component {...pageProps} />)}
+        </WebsiteContextProvider>
+      </AuthGuard>
     </AuthContextProvider>
   );
 }

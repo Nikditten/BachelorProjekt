@@ -13,7 +13,7 @@ type AuthProps = {
 
 export const AuthContextValue = (): AuthProps => {
   const [authState, setAuthState] = useState<AuthState>(
-    AuthState.NotAuthenticated,
+    AuthState.Authenticating,
   );
   const [user, setUser] = useState<IUser | null>(null);
   const { getUser } = useBackendAuth();
@@ -55,8 +55,6 @@ export const AuthContextValue = (): AuthProps => {
   useEffect(() => {
     checkAuth();
   }, []);
-
-  useEffect(() => console.log(user), [user]);
 
   return {
     authState,

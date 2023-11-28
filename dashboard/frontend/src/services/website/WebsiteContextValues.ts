@@ -161,7 +161,7 @@ export const WebsiteContextValue = (): WebsiteProps => {
 
   useEffect(() => {
     fetchWebsites();
-  }, [fetchWebsites]);
+  }, []);
 
   return {
     websites,
