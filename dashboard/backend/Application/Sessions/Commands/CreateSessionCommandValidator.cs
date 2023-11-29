@@ -6,7 +6,7 @@ namespace Application.Sessions.Commands.CreateSession
     {
         public CreateSessionCommandValidator()
         {
-            RuleFor(v => v.WebsiteId)
+            RuleFor(v => v.Key)
                 .NotEmpty();
 
             RuleFor(v => v.DeviceWidth)
@@ -25,7 +25,7 @@ namespace Application.Sessions.Commands.CreateSession
                 .NotEmpty();
 
             RuleFor(v => v.IsPWA)
-                .NotEmpty();
+                .NotNull();
         }
     }
 }

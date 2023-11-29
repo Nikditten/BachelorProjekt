@@ -12,7 +12,7 @@ namespace API.Controllers
         private readonly IMediator _mediator;
         public SessionController(IMediator mediator) => _mediator = mediator;
 
-        [Authorize]
+        [AllowAnonymous]
         [HttpPost("[action]")]
         public async Task<ActionResult<Guid>> Create([FromBody] CreateSessionCommand command)
         {
