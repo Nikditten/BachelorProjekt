@@ -63,6 +63,7 @@ export const WebsiteContextValue = (): WebsiteProps => {
     async (name: string, url: string) => {
       const website: IWebsite = {
         id: "",
+        key: "",
         isAdmin: true,
         name,
         url,
@@ -70,7 +71,8 @@ export const WebsiteContextValue = (): WebsiteProps => {
 
       const { status, content } = await createWebsite(name, url);
 
-      website.id = content;
+      website.id = content.id;
+      website.key = content.key;
 
       if (status === 200) {
         SetWebsites((prev) => [...prev, website]);

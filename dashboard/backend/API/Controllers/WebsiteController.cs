@@ -19,7 +19,7 @@ namespace API.Controllers
 
         [Authorize]
         [HttpPost("[action]")]
-        public async Task<ActionResult<string>> Create([FromBody] CreateWebsiteCommand command)
+        public async Task<ActionResult<CreatedWebsiteDTO>> Create([FromBody] CreateWebsiteCommand command)
         {
             return await _mediator.Send(command);
         }

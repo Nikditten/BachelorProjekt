@@ -6,7 +6,7 @@ using MediatR;
 
 namespace Application.Websites.Commands.CreateWebsite
 {
-    public class CreateWebsiteCommandHandler : IRequestHandler<CreateWebsiteCommand, string>
+    public class CreateWebsiteCommandHandler : IRequestHandler<CreateWebsiteCommand, CreatedWebsiteDTO>
     {
 
         private readonly IApplicationDbContext _applicationDbContext;
@@ -20,7 +20,7 @@ namespace Application.Websites.Commands.CreateWebsite
             _userService = userService;
         }
 
-        public async Task<string> Handle(CreateWebsiteCommand request, CancellationToken cancellationToken)
+        public async Task<CreatedWebsiteDTO> Handle(CreateWebsiteCommand request, CancellationToken cancellationToken)
         {
             var websiteExists = _applicationDbContext.Websites.Any(x => x.Name == request.Name && x.UserId == _userService.Id);
 
@@ -32,7 +32,9 @@ namespace Application.Websites.Commands.CreateWebsite
 
             await _applicationDbContext.SaveChangesAsync(cancellationToken);
 
-            return website.ID.ToString();
+            CreatedWebsiteDTO createdWebsiteDTO = new CreatedWebsiteDTO { Id = website.ID, Key = website.Key };
+
+            return createdWebsiteDTO;
         }
     }
 }

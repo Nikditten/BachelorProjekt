@@ -1,11 +1,11 @@
 using Domain.Enums;
-using Domain.Common;
+using MediatR;
 
-namespace Domain.Entities
+namespace Application.Sessions.Commands.CreateSession
 {
-    public sealed class Session : BaseEntity
+    public class CreateSessionCommand : IRequest<Guid>
     {
-        public required Guid WebsiteId { get; set; }
+        public required Guid Key { get; set; }
 
         public required int DeviceWidth { get; set; }
 
@@ -18,9 +18,5 @@ namespace Domain.Entities
         public required ScreenOrientation Orientation { get; set; }
 
         public required bool IsPWA { get; set; }
-
-        public Website? Website { get; set; }
-
-        public ICollection<Analytic>? Analytics { get; set; }
     }
 }

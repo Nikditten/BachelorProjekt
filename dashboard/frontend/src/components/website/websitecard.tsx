@@ -26,13 +26,13 @@ const WebsiteCard: FC<Props> = ({
   onDelete,
 }) => {
   const [editMode, setEditMode] = useState<boolean>(false);
-  const [apiKeyText, setApiKeyText] = useState<string>(website.id);
+  const [apiKeyText, setApiKeyText] = useState<string>(website.key);
 
   const handleOnCopy = () => {
     onCopy();
     setApiKeyText("Copied!");
     setTimeout(() => {
-      setApiKeyText(website.id);
+      setApiKeyText(website.key);
     }, 500);
   };
 
