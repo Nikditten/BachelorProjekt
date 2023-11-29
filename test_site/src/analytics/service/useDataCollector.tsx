@@ -1,8 +1,9 @@
-import { FC, PropsWithChildren, createContext, useContext } from "react";
-import { DataCollectorContextValue } from "./DataCollectorContextValue";
+import { FC, PropsWithChildren, createContext, useContext } from 'react';
+import { DataCollectorContextValue } from './DataCollectorContextValue';
 
-const DataCollectorContext =
-  createContext<ReturnType<typeof DataCollectorContextValue>>(null);
+const DataCollectorContext = createContext<
+  ReturnType<typeof DataCollectorContextValue>
+>({} as any);
 
 export const DataCollectorContextProvider: FC<PropsWithChildren> = ({
   children,
