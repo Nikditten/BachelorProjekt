@@ -11,7 +11,7 @@ const reportData = async (content: any, type: 'Session' | 'Analytic') => {
     body: JSON.stringify(content),
   });
 
-  if (res.status === 200) return true;
+  if (res.status === 200) return res.text();
   else return false;
 };
 

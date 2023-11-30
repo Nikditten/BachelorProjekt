@@ -28,6 +28,7 @@ namespace Application.Websites.Queries.GetWebsites
                 .Select(x => new UserWebsiteDTO
                 {
                     ID = x.ID,
+                    Key = x.Key,
                     isAdmin = x.UserId == userId,
                     Name = x.Name,
                     URL = x.Url,
