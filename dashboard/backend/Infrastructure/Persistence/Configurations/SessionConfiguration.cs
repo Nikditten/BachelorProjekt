@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Infrastructure.Persistence.Configurations
 {
-	public class SessionConfiguration : IEntityTypeConfiguration<Session>
+    public class SessionConfiguration : IEntityTypeConfiguration<Session>
     {
         public void Configure(EntityTypeBuilder<Session> builder)
         {
@@ -16,7 +16,19 @@ namespace Infrastructure.Persistence.Configurations
                 .IsRequired(true);
 
             builder
-                .HasMany(x => x.Analytics)
+                .HasMany(x => x.ClickEvents)
+                .WithOne(x => x.Session)
+                .HasForeignKey(x => x.SessionId)
+                .IsRequired(true);
+
+            builder
+                .HasMany(x => x.NavigationEvents)
+                .WithOne(x => x.Session)
+                .HasForeignKey(x => x.SessionId)
+                .IsRequired(true);
+
+            builder
+                .HasMany(x => x.VideoEvents)
                 .WithOne(x => x.Session)
                 .HasForeignKey(x => x.SessionId)
                 .IsRequired(true);

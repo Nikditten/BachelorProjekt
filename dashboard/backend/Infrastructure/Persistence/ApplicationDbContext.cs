@@ -23,8 +23,10 @@ namespace Infrastructure.Persistence
         public DbSet<User> Users { get; set; }
         public DbSet<Shared> Shares { get; set; }
         public DbSet<Website> Websites { get; set; }
-        public DbSet<Analytic> Analytics { get; set; }
         public DbSet<Session> Sessions { get; set; }
+        public DbSet<ClickEvent> ClickEvents { get; set; }
+        public DbSet<NavigationEvent> NavigationEvents { get; set; }
+        public DbSet<VideoEvent> VideoEvents { get; set; }
     }
 }
 

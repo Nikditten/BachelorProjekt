@@ -7,13 +7,13 @@ namespace Domain.Entities
     {
         public required Guid WebsiteId { get; set; }
 
+        public required SessionState State { get; set; }
+
         public required int DeviceWidth { get; set; }
 
         public required string Browser { get; set; }
 
         public required string Language { get; set; }
-
-        public required string OS { get; set; }
 
         public required ScreenOrientation Orientation { get; set; }
 
@@ -21,6 +21,10 @@ namespace Domain.Entities
 
         public Website? Website { get; set; }
 
-        public ICollection<Analytic>? Analytics { get; set; }
+        public ICollection<ClickEvent>? ClickEvents { get; set; }
+
+        public ICollection<NavigationEvent>? NavigationEvents { get; set; }
+
+        public ICollection<VideoEvent>? VideoEvents { get; set; }
     }
 }

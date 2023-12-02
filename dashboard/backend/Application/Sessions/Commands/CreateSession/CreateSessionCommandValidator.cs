@@ -6,25 +6,22 @@ namespace Application.Sessions.Commands.CreateSession
     {
         public CreateSessionCommandValidator()
         {
-            RuleFor(v => v.Key)
+            RuleFor(x => x.WebsiteKey)
                 .NotEmpty();
 
-            RuleFor(v => v.DeviceWidth)
+            RuleFor(x => x.DeviceWidth)
                 .NotEmpty();
 
-            RuleFor(v => v.Browser)
+            RuleFor(x => x.Browser)
                 .NotEmpty();
 
-            RuleFor(v => v.Language)
+            RuleFor(x => x.Language)
                 .NotEmpty();
 
-            RuleFor(v => v.OS)
+            RuleFor(x => x.Orientation)
                 .NotEmpty();
 
-            RuleFor(v => v.Orientation)
-                .NotEmpty();
-
-            RuleFor(v => v.IsPWA)
+            RuleFor(x => x.IsPWA)
                 .NotNull();
         }
     }

@@ -3,6 +3,7 @@ using System;
 using Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20231202110615_WebsiteAttribute")]
+    partial class WebsiteAttribute
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -22,7 +25,7 @@ namespace Infrastructure.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
-            modelBuilder.Entity("Domain.Entities.ClickEvent", b =>
+            modelBuilder.Entity("Domain.Entities.Analytic", b =>
                 {
                     b.Property<Guid>("ID")
                         .ValueGeneratedOnAdd()
@@ -31,51 +34,12 @@ namespace Infrastructure.Migrations
                     b.Property<DateTimeOffset>("CreatedAt")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<string>("ElementID")
+                    b.Property<string>("Href")
+                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<Guid>("SessionId")
                         .HasColumnType("uuid");
-
-                    b.Property<string>("TagName")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<string>("Type")
-                        .HasColumnType("text");
-
-                    b.Property<string>("URL")
-                        .HasColumnType("text");
-
-                    b.Property<DateTimeOffset>("UpdatedAt")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<string>("Value")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.HasKey("ID");
-
-                    b.HasIndex("SessionId");
-
-                    b.ToTable("ClickEvents");
-                });
-
-            modelBuilder.Entity("Domain.Entities.NavigationEvent", b =>
-                {
-                    b.Property<Guid>("ID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
-
-                    b.Property<DateTimeOffset>("CreatedAt")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<Guid>("SessionId")
-                        .HasColumnType("uuid");
-
-                    b.Property<string>("URL")
-                        .IsRequired()
-                        .HasColumnType("text");
 
                     b.Property<DateTimeOffset>("UpdatedAt")
                         .HasColumnType("timestamp with time zone");
@@ -84,7 +48,7 @@ namespace Infrastructure.Migrations
 
                     b.HasIndex("SessionId");
 
-                    b.ToTable("NavigationEvents");
+                    b.ToTable("Analytics");
                 });
 
             modelBuilder.Entity("Domain.Entities.Session", b =>
@@ -111,9 +75,6 @@ namespace Infrastructure.Migrations
                         .HasColumnType("text");
 
                     b.Property<int>("Orientation")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("State")
                         .HasColumnType("integer");
 
                     b.Property<DateTimeOffset>("UpdatedAt")
@@ -189,44 +150,6 @@ namespace Infrastructure.Migrations
                     b.ToTable("Users");
                 });
 
-            modelBuilder.Entity("Domain.Entities.VideoEvent", b =>
-                {
-                    b.Property<Guid>("ID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
-
-                    b.Property<DateTimeOffset>("CreatedAt")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<int>("Duration")
-                        .HasColumnType("integer");
-
-                    b.Property<Guid>("SessionId")
-                        .HasColumnType("uuid");
-
-                    b.Property<string>("Source")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<int>("Type")
-                        .HasColumnType("integer");
-
-                    b.Property<DateTimeOffset>("UpdatedAt")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<string>("VideoId")
-                        .HasColumnType("text");
-
-                    b.Property<Guid>("WebsiteKey")
-                        .HasColumnType("uuid");
-
-                    b.HasKey("ID");
-
-                    b.HasIndex("SessionId");
-
-                    b.ToTable("VideoEvents");
-                });
-
             modelBuilder.Entity("Domain.Entities.Website", b =>
                 {
                     b.Property<Guid>("ID")
@@ -260,21 +183,10 @@ namespace Infrastructure.Migrations
                     b.ToTable("Websites");
                 });
 
-            modelBuilder.Entity("Domain.Entities.ClickEvent", b =>
+            modelBuilder.Entity("Domain.Entities.Analytic", b =>
                 {
                     b.HasOne("Domain.Entities.Session", "Session")
-                        .WithMany("ClickEvents")
-                        .HasForeignKey("SessionId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Session");
-                });
-
-            modelBuilder.Entity("Domain.Entities.NavigationEvent", b =>
-                {
-                    b.HasOne("Domain.Entities.Session", "Session")
-                        .WithMany("NavigationEvents")
+                        .WithMany("Analytics")
                         .HasForeignKey("SessionId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -312,17 +224,6 @@ namespace Infrastructure.Migrations
                     b.Navigation("Website");
                 });
 
-            modelBuilder.Entity("Domain.Entities.VideoEvent", b =>
-                {
-                    b.HasOne("Domain.Entities.Session", "Session")
-                        .WithMany("VideoEvents")
-                        .HasForeignKey("SessionId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Session");
-                });
-
             modelBuilder.Entity("Domain.Entities.Website", b =>
                 {
                     b.HasOne("Domain.Entities.User", "User")
@@ -336,11 +237,7 @@ namespace Infrastructure.Migrations
 
             modelBuilder.Entity("Domain.Entities.Session", b =>
                 {
-                    b.Navigation("ClickEvents");
-
-                    b.Navigation("NavigationEvents");
-
-                    b.Navigation("VideoEvents");
+                    b.Navigation("Analytics");
                 });
 
             modelBuilder.Entity("Domain.Entities.User", b =>

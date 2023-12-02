@@ -2,6 +2,7 @@
 
 using Application.Common.Interfaces;
 using Domain.Entities;
+using Domain.Enums;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
@@ -18,17 +19,17 @@ namespace Application.Sessions.Commands.CreateSession
 
         public async Task<Guid> Handle(CreateSessionCommand request, CancellationToken cancellationToken)
         {
-            Website? website = await _applicationDbContext.Websites.FirstOrDefaultAsync(x => x.Key == request.Key, cancellationToken);
+            Website? website = await _applicationDbContext.Websites.FirstOrDefaultAsync(x => x.Key == request.WebsiteKey, cancellationToken);
 
             if (website == null) throw new NullReferenceException("Website does not exists");
 
             var session = new Session
             {
                 WebsiteId = website.ID,
+                State = SessionState.Active,
                 DeviceWidth = request.DeviceWidth,
                 Browser = request.Browser,
                 Language = request.Language,
-                OS = request.OS,
                 Orientation = request.Orientation,
                 IsPWA = request.IsPWA
             };

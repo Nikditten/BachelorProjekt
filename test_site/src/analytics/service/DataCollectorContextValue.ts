@@ -1,105 +1,82 @@
-import { useEffect } from 'react';
-import reportData from '../functions/reportData';
+import { useEffect, useState } from 'react';
+import endSession from '../functions/endSession';
+import registerButtonClickEvent from '../functions/registerButtonClickEvent';
+import registerLinkClickEvent from '../functions/registerLinkClickEvent';
+import registerNavigationEvent from '../functions/registerNavigationEvent';
+import registerVideoEvent from '../functions/registerVideoEvent';
+import startSession from '../functions/startSession';
+import getBrowser from '../functions/utils/getBrowser';
 
 type DataCollectorProps = {};
 
 export const DataCollectorContextValue = (
   websiteKey: string
 ): DataCollectorProps => {
+  const [sessionid, setSessionid] = useState<string | null>(null);
+
   useEffect(() => {
-    reportData(
-      {
-        key: websiteKey,
-        deviceWidth: window.screen.width,
-        browser: navigator.userAgent,
-        language: navigator.language.split('-')[0],
-        os: navigator.platform,
-        orientation: window.screen.orientation.type.includes('portrait')
-          ? 0
-          : 1,
-        isPWA: window.matchMedia('(display-mode: standalone)').matches,
-      },
-      'Session'
-    );
+    const body = {
+      websiteKey: websiteKey,
+      deviceWidth: window.screen.width,
+      browser: getBrowser(),
+      language: navigator.language.split('-')[0],
+      orientation: window.screen.orientation.type.includes('portrait') ? 0 : 1,
+      isPWA: window.matchMedia('(display-mode: standalone)').matches,
+    };
+
+    startSession(body).then((res) => {
+      console.log('res', res);
+      if (res) {
+        setSessionid(res);
+      }
+    });
+
+    console.log('starting session', sessionid);
+
+    return () => {
+      endSession(websiteKey, sessionid ?? '');
+    };
   }, []);
 
   useEffect(() => {
+    if (window && sessionid)
+      registerNavigationEvent(
+        websiteKey,
+        sessionid ?? '',
+        window.location.href
+      ),
+        [window.location.href];
+  });
+
+  useEffect(() => {
+    console.log('registering events');
     const buttons = document.getElementsByTagName('button');
+    const links = document.getElementsByTagName('a');
+    const videos = document.getElementsByTagName('video');
 
     for (let i = 0; i < buttons.length; i++) {
       buttons[i].addEventListener('click', () => {
-        reportData(
-          {
-            key: websiteKey,
-            session: 'string',
-            buttonName: buttons[i].innerText,
-            buttonId: buttons[i].id,
-            buttonType: buttons[i].type,
-          },
-          'Analytic'
-        );
+        registerButtonClickEvent(websiteKey, sessionid ?? '', buttons[i]);
       });
     }
-  });
-
-  useEffect(() => {
-    const links = document.getElementsByTagName('a');
 
     for (let i = 0; i < links.length; i++) {
       links[i].addEventListener('click', () => {
-        reportData(
-          {
-            key: websiteKey,
-            linkName: links[i].innerText,
-            linkId: links[i].id,
-            linkValue: links[i].href,
-          },
-          'Analytic'
-        );
+        registerLinkClickEvent(websiteKey, sessionid ?? '', links[i]);
       });
     }
-  });
-
-  useEffect(() => {
-    const videos = document.getElementsByTagName('video');
 
     for (let i = 0; i < videos.length; i++) {
       videos[i].addEventListener('play', () => {
-        reportData(
-          {
-            key: websiteKey,
-            videoName: videos[i].innerText,
-            videoId: videos[i].id,
-            videoValue: videos[i].src,
-            length: videos[i].duration,
-          },
-          'Analytic'
-        );
+        registerVideoEvent(websiteKey, sessionid ?? '', videos[i], 0);
       });
 
       videos[i].addEventListener('pause', () => {
-        reportData(
-          {
-            key: websiteKey,
-            videoName: videos[i].innerText,
-            videoId: videos[i].id,
-            videoValue: videos[i].src,
-            progress: videos[i].currentTime,
-          },
-          'Analytic'
-        );
+        registerVideoEvent(websiteKey, sessionid ?? '', videos[i], 1);
       });
 
       videos[i].addEventListener('ended', () => {
-        reportData(
-          {
-            key: websiteKey,
-            videoName: videos[i].innerText,
-            videoId: videos[i].id,
-            videoValue: videos[i].src,
-          },
-          'Analytic'
-        );
+        registerVideoEvent(websiteKey, sessionid ?? '', videos[i], 2);
       });
     }
   });
