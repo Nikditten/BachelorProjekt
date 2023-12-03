@@ -7,6 +7,8 @@ namespace Application.Sessions.Commands.CreateSession
     {
         public required Guid WebsiteKey { get; set; }
 
+        public required string LandingPage { get; set; }
+
         public required int DeviceWidth { get; set; }
 
         public required string Browser { get; set; }

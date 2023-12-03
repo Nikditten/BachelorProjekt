@@ -27,6 +27,7 @@ namespace Application.Sessions.Commands.CreateSession
             {
                 WebsiteId = website.ID,
                 State = SessionState.Active,
+                LandingPage = request.LandingPage,
                 DeviceWidth = request.DeviceWidth,
                 Browser = request.Browser,
                 Language = request.Language,

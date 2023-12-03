@@ -7,6 +7,7 @@ namespace Application.ClickEvents.Commands.CreateClickEvent
     {
         public required Guid WebsiteKey { get; set; }
         public required Guid SessionID { get; set; }
+        public required string CurrentURL { get; set; }
         public string? ElementID { get; set; }
         public required string TagName { get; set; }
         public required string Value { get; set; }

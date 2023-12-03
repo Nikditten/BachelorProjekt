@@ -7,18 +7,23 @@ type navigation_data_item = {
 const navigation_data: navigation_data_item[] = [
   {
     id: 0,
-    name: "Home",
-    path: "/",
+    name: 'Home',
+    path: '/',
   },
   {
     id: 1,
-    name: "Form",
-    path: "/form",
+    name: 'Form',
+    path: '/form',
   },
   {
     id: 3,
-    name: "Deeplink",
-    path: "/deeplink",
+    name: 'Deeplink',
+    path: '/deeplink',
+  },
+  {
+    id: 4,
+    name: 'Video',
+    path: '/video',
   },
 ];
 

@@ -12,6 +12,7 @@ namespace Application.Common.Interfaces
 		DbSet<Session> Sessions { get; set; }
 		DbSet<ClickEvent> ClickEvents { get; set; }
 		DbSet<NavigationEvent> NavigationEvents { get; set; }
+		DbSet<VideoSession> VideoSessions { get; set; }
 		DbSet<VideoEvent> VideoEvents { get; set; }
 	}
 }

@@ -26,6 +26,7 @@ namespace Infrastructure.Persistence
         public DbSet<Session> Sessions { get; set; }
         public DbSet<ClickEvent> ClickEvents { get; set; }
         public DbSet<NavigationEvent> NavigationEvents { get; set; }
+        public DbSet<VideoSession> VideoSessions { get; set; }
         public DbSet<VideoEvent> VideoEvents { get; set; }
     }
 }

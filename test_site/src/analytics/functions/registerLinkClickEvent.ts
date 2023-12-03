@@ -3,13 +3,15 @@ import fetchData from './utils/fetchData';
 const registerLinkClickEvent = async (
   key: string,
   sessionId: string,
-  link: HTMLAnchorElement
+  link: HTMLAnchorElement,
+  currentUrl: string
 ) => {
   const body = {
     websiteKey: key,
     sessionID: sessionId,
+    currentUrl: currentUrl,
     elementID: link.id,
-    tagName: link.tagName,
+    tagName: link.tagName.toLowerCase(),
     value: link.innerText,
     url: link.href,
   };

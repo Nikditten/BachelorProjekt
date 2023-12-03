@@ -28,7 +28,7 @@ namespace Infrastructure.Persistence.Configurations
                 .IsRequired(true);
 
             builder
-                .HasMany(x => x.VideoEvents)
+                .HasMany(x => x.VideoSessions)
                 .WithOne(x => x.Session)
                 .HasForeignKey(x => x.SessionId)
                 .IsRequired(true);

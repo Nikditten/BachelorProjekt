@@ -9,6 +9,8 @@ namespace Domain.Entities
 
         public required SessionState State { get; set; }
 
+        public required string LandingPage { get; set; }
+
         public required int DeviceWidth { get; set; }
 
         public required string Browser { get; set; }
@@ -25,6 +27,6 @@ namespace Domain.Entities
 
         public ICollection<NavigationEvent>? NavigationEvents { get; set; }
 
-        public ICollection<VideoEvent>? VideoEvents { get; set; }
+        public ICollection<VideoSession>? VideoSessions { get; set; }
     }
 }

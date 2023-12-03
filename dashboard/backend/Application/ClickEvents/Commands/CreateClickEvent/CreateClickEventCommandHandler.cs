@@ -24,6 +24,7 @@ namespace Application.ClickEvents.Commands.CreateClickEvent
             var clickEvent = new ClickEvent
             {
                 SessionId = request.SessionID,
+                CurrentURL = request.CurrentURL,
                 ElementID = request.ElementID,
                 TagName = request.TagName,
                 Value = request.Value,

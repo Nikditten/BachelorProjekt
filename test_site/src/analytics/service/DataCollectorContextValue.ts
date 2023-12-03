@@ -1,11 +1,12 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import endSession from '../functions/endSession';
 import registerButtonClickEvent from '../functions/registerButtonClickEvent';
 import registerLinkClickEvent from '../functions/registerLinkClickEvent';
-import registerNavigationEvent from '../functions/registerNavigationEvent';
-import registerVideoEvent from '../functions/registerVideoEvent';
-import startSession from '../functions/startSession';
 import getBrowser from '../functions/utils/getBrowser';
+import endVideoSession from '../functions/video/endVideoSession';
+import pauseVideoSession from '../functions/video/pauseVideoSession';
+import startVideoSession from '../functions/video/startVideoSession';
+import fetchData from '../functions/utils/fetchData';
 
 type DataCollectorProps = {};
 
@@ -13,10 +14,23 @@ export const DataCollectorContextValue = (
   websiteKey: string
 ): DataCollectorProps => {
   const [sessionid, setSessionid] = useState<string | null>(null);
+  const [videoSessionID, setVideoSessionID] = useState<string | null>(null);
+
+  const startSession = useCallback(async (body: any) => {
+    const res = await fetchData('Session/Create', 'POST', body);
+
+    if (res.status !== 200) {
+      console.error('Error starting session');
+      return null;
+    } else {
+      return await res.json();
+    }
+  }, []);
 
   useEffect(() => {
     const body = {
       websiteKey: websiteKey,
+      landingPage: window.location.href,
       deviceWidth: window.screen.width,
       browser: getBrowser(),
       language: navigator.language.split('-')[0],
@@ -24,59 +38,76 @@ export const DataCollectorContextValue = (
       isPWA: window.matchMedia('(display-mode: standalone)').matches,
     };
 
-    startSession(body).then((res) => {
-      console.log('res', res);
-      if (res) {
-        setSessionid(res);
-      }
-    });
-
-    console.log('starting session', sessionid);
+    console.log('Starting session');
+    (async () => {
+      const id = await startSession(body);
+      console.log('Session started', id);
+      setSessionid(id);
+    })();
+    console.log('Session registered', sessionid);
 
     return () => {
-      endSession(websiteKey, sessionid ?? '');
+      endSession(websiteKey, sessionid!);
     };
   }, []);
 
   useEffect(() => {
-    if (window && sessionid)
-      registerNavigationEvent(
-        websiteKey,
-        sessionid ?? '',
-        window.location.href
-      ),
-        [window.location.href];
-  });
-
-  useEffect(() => {
-    console.log('registering events');
     const buttons = document.getElementsByTagName('button');
     const links = document.getElementsByTagName('a');
     const videos = document.getElementsByTagName('video');
 
     for (let i = 0; i < buttons.length; i++) {
       buttons[i].addEventListener('click', () => {
-        registerButtonClickEvent(websiteKey, sessionid ?? '', buttons[i]);
+        console.log('button clicked');
+        registerButtonClickEvent(
+          websiteKey,
+          sessionid ?? '',
+          buttons[i],
+          window.location.href
+        );
       });
     }
 
     for (let i = 0; i < links.length; i++) {
       links[i].addEventListener('click', () => {
-        registerLinkClickEvent(websiteKey, sessionid ?? '', links[i]);
+        console.log('link clicked');
+        registerLinkClickEvent(
+          websiteKey,
+          sessionid ?? '',
+          links[i],
+          window.location.href
+        );
       });
     }
 
     for (let i = 0; i < videos.length; i++) {
       videos[i].addEventListener('play', () => {
-        registerVideoEvent(websiteKey, sessionid ?? '', videos[i], 0);
+        console.log('video played');
+        startVideoSession(websiteKey, sessionid ?? '', videos[i]).then(
+          (videosession) => setVideoSessionID(videosession)
+        );
       });
 
       videos[i].addEventListener('pause', () => {
-        registerVideoEvent(websiteKey, sessionid ?? '', videos[i], 1);
+        console.log('video paused');
+        pauseVideoSession(
+          websiteKey,
+          sessionid ?? '',
+          videos[i],
+          videoSessionID ?? ''
+        );
       });
 
       videos[i].addEventListener('ended', () => {
-        registerVideoEvent(websiteKey, sessionid ?? '', videos[i], 2);
+        console.log('video ended');
+        endVideoSession(
+          websiteKey,
+          sessionid ?? '',
+          videos[i],
+          videoSessionID ?? ''
+        );
+
+        setVideoSessionID(null);
       });
     }
   });
