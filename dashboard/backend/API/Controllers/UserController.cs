@@ -13,7 +13,7 @@ using Application.Users.Commands.ChangeName;
 
 namespace API.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/dashboard/[controller]")]
     public class UserController : Controller
     {
 

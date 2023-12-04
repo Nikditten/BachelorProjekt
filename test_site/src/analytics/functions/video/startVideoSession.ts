@@ -5,6 +5,8 @@ const startVideoSession = async (
   sessionId: string,
   video: HTMLVideoElement
 ) => {
+  if (video.paused) return null;
+
   const play = {
     websiteKey: key,
     sessionID: sessionId,

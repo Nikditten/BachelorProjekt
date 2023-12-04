@@ -1,11 +1,11 @@
 
 using FluentValidation;
 
-namespace Application.VideoEvents.Commands.CreateVideoSession
+namespace Application.VideoSessions.Commands.PauseVideoSession
 {
-    public class CreateVideoSessionCommandValidator : AbstractValidator<CreateVideoSessionCommand>
+    public class PauseVideoSessionCommandValidator : AbstractValidator<PauseVideoSessionCommand>
     {
-        public CreateVideoSessionCommandValidator()
+        public PauseVideoSessionCommandValidator()
         {
             RuleFor(x => x.WebsiteKey)
                 .NotEmpty();
@@ -13,7 +13,7 @@ namespace Application.VideoEvents.Commands.CreateVideoSession
             RuleFor(x => x.SessionID)
                 .NotEmpty();
 
-            RuleFor(x => x.Source)
+            RuleFor(x => x.VideoSessionID)
                 .NotEmpty();
 
             RuleFor(x => x.Duration)

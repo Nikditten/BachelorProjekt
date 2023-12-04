@@ -3,7 +3,7 @@ using Domain.Entities;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
-namespace Application.VideoEvents.Commands.CreateVideoSession
+namespace Application.VideoSessions.Commands.CreateVideoSession
 {
     public class CreateVideoSessionCommandHandler : IRequestHandler<CreateVideoSessionCommand, Guid>
     {
@@ -16,7 +16,6 @@ namespace Application.VideoEvents.Commands.CreateVideoSession
 
         public async Task<Guid> Handle(CreateVideoSessionCommand request, CancellationToken cancellationToken)
         {
-
             Website? website = await _applicationDbContext.Websites.Include(x => x.Sessions).AsNoTracking().FirstOrDefaultAsync(x => x.Key == request.WebsiteKey && x.Sessions!.Any(x => x.ID == request.SessionID), cancellationToken);
 
             if (website == null) throw new NullReferenceException("Website not found");

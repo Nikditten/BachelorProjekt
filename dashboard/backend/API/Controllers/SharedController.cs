@@ -11,7 +11,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/dashboard/[controller]")]
     public class SharedController : Controller
     {
         private readonly IMediator _mediator;

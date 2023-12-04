@@ -1,7 +1,6 @@
-using Domain.Enums;
 using MediatR;
 
-namespace Application.VideoEvents.Commands.CreateVideoSession
+namespace Application.VideoSessions.Commands.CreateVideoSession
 {
     public class CreateVideoSessionCommand : IRequest<Guid>
     {

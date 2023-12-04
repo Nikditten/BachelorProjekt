@@ -1,11 +1,11 @@
 
 using FluentValidation;
 
-namespace Application.VideoEvents.Commands.PauseVideoSession
+namespace Application.VideoSessions.Commands.EndVideoSession
 {
-    public class PauseVideoSessionCommandValidator : AbstractValidator<PauseVideoSessionCommand>
+    public class EndVideoSessionCommandValidator : AbstractValidator<EndVideoSessionCommand>
     {
-        public PauseVideoSessionCommandValidator()
+        public EndVideoSessionCommandValidator()
         {
             RuleFor(x => x.WebsiteKey)
                 .NotEmpty();

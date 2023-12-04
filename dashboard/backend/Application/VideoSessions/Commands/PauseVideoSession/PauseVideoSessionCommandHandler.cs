@@ -4,7 +4,7 @@ using Domain.Enums;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
-namespace Application.VideoEvents.Commands.PauseVideoSession
+namespace Application.VideoSessions.Commands.PauseVideoSession
 {
     public class PauseVideoSessionCommandHandler : IRequestHandler<PauseVideoSessionCommand, Unit>
     {

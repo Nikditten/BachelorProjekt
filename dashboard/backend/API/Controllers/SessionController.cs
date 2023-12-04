@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/collector/[controller]")]
     public class SessionController : Controller
     {
         private readonly IMediator _mediator;

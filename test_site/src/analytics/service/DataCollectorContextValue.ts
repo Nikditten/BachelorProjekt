@@ -2,11 +2,11 @@ import { useCallback, useEffect, useState } from 'react';
 import endSession from '../functions/endSession';
 import registerButtonClickEvent from '../functions/registerButtonClickEvent';
 import registerLinkClickEvent from '../functions/registerLinkClickEvent';
+import fetchData from '../functions/utils/fetchData';
 import getBrowser from '../functions/utils/getBrowser';
 import endVideoSession from '../functions/video/endVideoSession';
 import pauseVideoSession from '../functions/video/pauseVideoSession';
 import startVideoSession from '../functions/video/startVideoSession';
-import fetchData from '../functions/utils/fetchData';
 
 type DataCollectorProps = {};
 
@@ -90,12 +90,13 @@ export const DataCollectorContextValue = (
 
       videos[i].addEventListener('pause', () => {
         console.log('video paused');
-        pauseVideoSession(
-          websiteKey,
-          sessionid ?? '',
-          videos[i],
-          videoSessionID ?? ''
-        );
+        if (videos[i].currentTime < videos[i].duration)
+          pauseVideoSession(
+            websiteKey,
+            sessionid ?? '',
+            videos[i],
+            videoSessionID ?? ''
+          );
       });
 
       videos[i].addEventListener('ended', () => {
@@ -110,7 +111,7 @@ export const DataCollectorContextValue = (
         setVideoSessionID(null);
       });
     }
-  });
+  }, []);
 
   return {};
 };

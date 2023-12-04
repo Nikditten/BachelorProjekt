@@ -3,7 +3,7 @@ const fetchData = async (
   method: 'POST' | 'PUT',
   body?: any
 ): Promise<Response> => {
-  const url = `https://localhost:7213/api/${endpoint}`;
+  const url = `https://localhost:7213/api/collector/${endpoint}`;
 
   const res = await fetch(url, {
     method: method,

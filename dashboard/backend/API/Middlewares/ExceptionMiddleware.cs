@@ -22,8 +22,6 @@ namespace API.Middlewares
             }
             catch (Exception exception)
             {
-                Console.WriteLine(exception);
-
                 var exceptionType = exception.GetType();
 
                 int statusCode;
