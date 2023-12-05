@@ -4,9 +4,9 @@ using MediatR;
 namespace Application.AnalyticsData.Queries.GetAnalyticsData
 {
 
-    public class GetAnalyticsDataQuery : IRequest<List<AnalyticsDataDTO>>
+    public class GetAnalyticsDataQuery : IRequest<AnalyticsDataDTO>
     {
-        public string websiteId { get; set; }
+        public Guid websiteId { get; set; }
     }
 
 }

@@ -16,6 +16,7 @@ interface Backend {
     websiteid: string,
     userid: string,
   ) => Promise<IApiResponse>;
+  getAnalyticsData: (id: string) => Promise<IApiResponse>;
 }
 
 export const useBackend = (): Backend => {
@@ -126,6 +127,29 @@ export const useBackend = (): Backend => {
     [],
   );
 
+  const getAnalyticsData = useCallback(
+    async (id: string): Promise<IApiResponse> => {
+      const res = await fetchCall(
+        `AnalyticsData/Get?websiteId=${id}`,
+        "GET",
+        null,
+      );
+
+      try {
+        return {
+          status: res.status,
+          content: await res.json(),
+        };
+      } catch {
+        return {
+          status: res.status,
+          content: null,
+        };
+      }
+    },
+    [],
+  );
+
   return {
     getWebsites,
     createWebsite,
@@ -133,5 +157,6 @@ export const useBackend = (): Backend => {
     updateWebsite,
     shareWebsite,
     deleteSharedWebsite,
+    getAnalyticsData,
   };
 };

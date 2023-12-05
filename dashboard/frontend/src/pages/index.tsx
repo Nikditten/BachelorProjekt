@@ -2,10 +2,13 @@ import HeaderContainer from "@/components/containers/headercontainer";
 import TableContainer from "@/components/containers/tablecontainer";
 import NavigationLayout from "@/components/layouts/navigation";
 import WebsiteConfigLayout from "@/components/layouts/websiteconfig";
+import { useWebsite } from "@/services/website/useWebsite";
 import { ReactElement } from "react";
 import { NextPageWithLayout } from "./_app";
 
 const Home: NextPageWithLayout = () => {
+  const { analyticsData } = useWebsite();
+
   return (
     <div className='grid h-full w-full gap-8 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4'>
       <HeaderContainer
@@ -15,12 +18,18 @@ const Home: NextPageWithLayout = () => {
         <TableContainer
           tableheaders={[
             "Total",
-            "Unique",
             "Avg. pages visited",
-            "Avg. time spent",
+            "Avg. time spent (min)",
             "Bounce rate",
           ]}
-          tableData={[["10.000", "2342", "12", "10:00", "1212"]]}
+          tableData={[
+            [
+              (analyticsData?.sessionCount ?? 0).toString(),
+              (analyticsData?.avgPageVisited ?? 0).toString(),
+              ((analyticsData?.avgSessionDuration ?? 0) / 60).toFixed(0),
+              (analyticsData?.bounceRate ?? 0).toString(),
+            ],
+          ]}
         />
       </HeaderContainer>
 
@@ -38,67 +47,77 @@ const Home: NextPageWithLayout = () => {
       </HeaderContainer>
 
       <HeaderContainer
-        className='col-span-2 row-span-2'
-        title='Bounce rate per page'
-      >
-        <TableContainer
-          tableheaders={["Page", "Total"]}
-          tableData={[
-            ["/Home", "2342"],
-            ["/dashboard", "1123"],
-          ]}
-        />
-      </HeaderContainer>
-
-      <HeaderContainer
-        className='col-span-2 row-span-2'
-        title='Referrer'
-      >
-        <TableContainer
-          tableheaders={["URL", "Total"]}
-          tableData={[
-            ["www.google.com", "10"],
-            ["www.youtube.com", "9"],
-            ["www.linkedin.com", "8"],
-          ]}
-        />
-      </HeaderContainer>
-
-      <HeaderContainer
         className='col-span-1 row-span-2'
         title='Browser'
       >
         <TableContainer
           tableheaders={["Browser", "Total"]}
-          tableData={[
-            ["Chrome", "23.232"],
-            ["Safari", "10.000"],
-            ["Firefox", "12.121"],
-          ]}
+          tableData={
+            analyticsData?.browserStats
+              ? analyticsData?.browserStats.map((browser) => [
+                  browser.name,
+                  browser.count.toString(),
+                ])
+              : [["", "0"]]
+          }
         />
       </HeaderContainer>
 
       <HeaderContainer
-        className='col-span-1 row-span-2'
-        title='Operating system'
-      >
-        <TableContainer
-          tableheaders={["System", "Total"]}
-          tableData={[
-            ["Windows", "1212"],
-            ["Mac", "2321"],
-            ["iOS", "1213"],
-          ]}
-        />
-      </HeaderContainer>
-
-      <HeaderContainer
-        className='col-span-2 row-span-2'
+        className='col-span-3 row-span-2'
         title='Screen size'
       >
         <TableContainer
-          tableheaders={["< 600", "< 768", "< 992", "< 1200", "> 1200"]}
-          tableData={[["12", "1212", "121", "232", "232"]]}
+          tableheaders={[
+            "< 640",
+            "> 640",
+            "> 768",
+            "> 1024",
+            "> 1280",
+            "> 1536",
+          ]}
+          tableData={[
+            analyticsData?.screenSizeStats
+              ? [
+                  analyticsData?.screenSizeStats
+                    .filter((screen) => screen.screenSize < 640)
+                    .reduce((acc, curr) => acc + curr.count, 0)
+                    .toString(),
+                  analyticsData?.screenSizeStats
+                    .filter(
+                      (screen) =>
+                        screen.screenSize >= 640 && screen.screenSize < 768,
+                    )
+                    .reduce((acc, curr) => acc + curr.count, 0)
+                    .toString(),
+                  analyticsData?.screenSizeStats
+                    .filter(
+                      (screen) =>
+                        screen.screenSize >= 768 && screen.screenSize < 1024,
+                    )
+                    .reduce((acc, curr) => acc + curr.count, 0)
+                    .toString(),
+                  analyticsData?.screenSizeStats
+                    .filter(
+                      (screen) =>
+                        screen.screenSize >= 1024 && screen.screenSize < 1280,
+                    )
+                    .reduce((acc, curr) => acc + curr.count, 0)
+                    .toString(),
+                  analyticsData?.screenSizeStats
+                    .filter(
+                      (screen) =>
+                        screen.screenSize >= 1280 && screen.screenSize < 1536,
+                    )
+                    .reduce((acc, curr) => acc + curr.count, 0)
+                    .toString(),
+                  analyticsData?.screenSizeStats
+                    .filter((screen) => screen.screenSize >= 1536)
+                    .reduce((acc, curr) => acc + curr.count, 0)
+                    .toString(),
+                ]
+              : ["0", "0", "0", "0", "0", "0"],
+          ]}
         />
       </HeaderContainer>
     </div>

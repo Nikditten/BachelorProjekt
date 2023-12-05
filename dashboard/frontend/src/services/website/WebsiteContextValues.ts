@@ -1,11 +1,12 @@
 import { useBackend } from "@/utils/hooks/useBackend";
-import { IWebsite } from "@/utils/types";
+import { IAnalyticsData, IWebsite } from "@/utils/types";
 import { useCallback, useEffect, useState } from "react";
 import { useAuth } from "../auth/useAuth";
 
 type WebsiteProps = {
   websites: IWebsite[];
   activeWebsite: IWebsite | null;
+  analyticsData: IAnalyticsData | null;
   setActiveWebsite: (website: IWebsite | null) => void;
   fetchWebsites: () => Promise<void>;
   createNewWebsite: (name: string, url: string) => Promise<void>;
@@ -13,6 +14,7 @@ type WebsiteProps = {
   updateWebsiteById: (id: string, name: string, url: string) => Promise<void>;
   createSharedWebsite: (websiteid: string, userid: string) => Promise<void>;
   removeSharedWebsite: (websiteid: string, userid: string) => Promise<void>;
+  fetchAnalyticsData: () => Promise<void>;
 };
 
 export const WebsiteContextValue = (): WebsiteProps => {
@@ -23,6 +25,7 @@ export const WebsiteContextValue = (): WebsiteProps => {
     updateWebsite,
     shareWebsite,
     deleteSharedWebsite,
+    getAnalyticsData,
   } = useBackend();
 
   const { user } = useAuth();
@@ -30,6 +33,10 @@ export const WebsiteContextValue = (): WebsiteProps => {
   const [websites, SetWebsites] = useState<IWebsite[]>([]);
 
   const [activeWebsite, setActiveWebsite] = useState<IWebsite | null>(null);
+
+  const [analyticsData, setAnalyticsData] = useState<IAnalyticsData | null>(
+    null,
+  );
 
   const fetchWebsites = useCallback(async () => {
     const { content } = await getWebsites();
@@ -161,9 +168,21 @@ export const WebsiteContextValue = (): WebsiteProps => {
     [activeWebsite?.id, deleteSharedWebsite, user?.id, websites],
   );
 
+  const fetchAnalyticsData = useCallback(async () => {
+    if (!activeWebsite) return;
+
+    const { content } = await getAnalyticsData(activeWebsite.id);
+
+    setAnalyticsData(content);
+  }, [activeWebsite, getAnalyticsData]);
+
   useEffect(() => {
     fetchWebsites();
   }, []);
+
+  useEffect(() => {
+    fetchAnalyticsData();
+  }, [activeWebsite]);
 
   return {
     websites,
@@ -175,5 +194,7 @@ export const WebsiteContextValue = (): WebsiteProps => {
     updateWebsiteById,
     createSharedWebsite,
     removeSharedWebsite,
+    fetchAnalyticsData,
+    analyticsData,
   };
 };

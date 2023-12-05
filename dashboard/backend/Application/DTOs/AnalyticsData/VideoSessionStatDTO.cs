@@ -2,9 +2,12 @@ namespace Application.DTOs.AnalyticsData
 {
     public class VideoSessionStatDTO
     {
-        public required string ElementId { get; set; }
-        public required string ElementText { get; set; }
-        public required string ElementValue { get; set; }
-        public required int ClickCount { get; set; }
+        public required string Id { get; set; }
+        public required string Source { get; set; }
+        public required int StartedCount { get; set; }
+        public required int SeenQuarterPercentage { get; set; }
+        public required int SeenHalfPercentage { get; set; }
+        public required int SeenThreeQuarterPercentage { get; set; }
+        public required int SeenFullPercentage { get; set; }
     }
 }
