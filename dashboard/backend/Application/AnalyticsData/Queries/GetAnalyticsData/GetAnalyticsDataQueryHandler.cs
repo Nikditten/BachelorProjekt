@@ -36,14 +36,13 @@ namespace Application.AnalyticsData.Queries.GetAnalyticsData
                 .AsNoTracking()
                 .ToListAsync(cancellationToken);
 
-
             AnalyticsDataDTO analyticsDataDTO = new AnalyticsDataDTO
             {
                 SessionCount = sessions.Count,
-                AvgPageVisited = sessions.Average(x => x.NavigationEvents?.Count ?? 0),
+                AvgPageVisited = sessions.Average(x => x.NavigationEvents?.Count ?? 0) + 1,
                 AvgSessionDuration = sessions.Average(x => x.CreatedAt.Subtract(x.NavigationEvents.OrderBy(x => x.CreatedAt).First().CreatedAt).TotalSeconds) * -1,
-                BounceRate = sessions.Count(x => x.NavigationEvents.Count == 1) / sessions.Count,
-                IsPWA = sessions.Count(x => x.IsPWA) / sessions.Count,
+                BounceRate = (sessions.Count(x => x.NavigationEvents.Count == 0) / sessions.Count) * 100,
+                IsPWAPercentage = (sessions.Count(x => x.IsPWA) / sessions.Count) * 100,
                 browserStats = sessions.GroupBy(x => x.Browser).Select(x => new BrowserStatDTO { Name = x.Key, Count = x.Count() }).ToList(),
                 screenSizeStats = sessions.GroupBy(x => x.DeviceWidth).Select(x => new ScreenSizeStatDTO { ScreenSize = x.Key, Count = x.Count() }).ToList(),
                 clickEvents = sessions.SelectMany(x => x.ClickEvents).GroupBy(x => x.ElementID ?? x.Value).Select(x => new ClickEventDTO { Id = x.Key, Text = x.First().Value, Value = x.First().Type ?? x.First().URL, Count = x.Count() }).ToList(),

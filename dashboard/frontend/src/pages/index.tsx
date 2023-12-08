@@ -9,6 +9,18 @@ import { NextPageWithLayout } from "./_app";
 const Home: NextPageWithLayout = () => {
   const { analyticsData } = useWebsite();
 
+  const getCountByScreenSize = (
+    validation: (screen: number) => boolean,
+  ): string => {
+    if (!analyticsData?.screenSizeStats) return "0";
+    return (
+      analyticsData?.screenSizeStats
+        .filter((screen) => validation(screen.screenSize))
+        .reduce((acc, curr) => acc + curr.count, 0)
+        .toString() ?? "0"
+    );
+  };
+
   return (
     <div className='grid h-full w-full gap-8 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4'>
       <HeaderContainer
@@ -19,15 +31,19 @@ const Home: NextPageWithLayout = () => {
           tableheaders={[
             "Total",
             "Avg. pages visited",
-            "Avg. time spent (min)",
+            "Avg. time spent",
             "Bounce rate",
+            "PWA visits",
           ]}
           tableData={[
             [
               (analyticsData?.sessionCount ?? 0).toString(),
               (analyticsData?.avgPageVisited ?? 0).toString(),
-              ((analyticsData?.avgSessionDuration ?? 0) / 60).toFixed(0),
-              (analyticsData?.bounceRate ?? 0).toString(),
+              `${((analyticsData?.avgSessionDuration ?? 0) / 60).toFixed(
+                0,
+              )} min.`,
+              `${analyticsData?.bounceRate ?? 0}%`,
+              `${analyticsData?.isPWAPercentage ?? 0}%`,
             ],
           ]}
         />
@@ -77,46 +93,14 @@ const Home: NextPageWithLayout = () => {
             "> 1536",
           ]}
           tableData={[
-            analyticsData?.screenSizeStats
-              ? [
-                  analyticsData?.screenSizeStats
-                    .filter((screen) => screen.screenSize < 640)
-                    .reduce((acc, curr) => acc + curr.count, 0)
-                    .toString(),
-                  analyticsData?.screenSizeStats
-                    .filter(
-                      (screen) =>
-                        screen.screenSize >= 640 && screen.screenSize < 768,
-                    )
-                    .reduce((acc, curr) => acc + curr.count, 0)
-                    .toString(),
-                  analyticsData?.screenSizeStats
-                    .filter(
-                      (screen) =>
-                        screen.screenSize >= 768 && screen.screenSize < 1024,
-                    )
-                    .reduce((acc, curr) => acc + curr.count, 0)
-                    .toString(),
-                  analyticsData?.screenSizeStats
-                    .filter(
-                      (screen) =>
-                        screen.screenSize >= 1024 && screen.screenSize < 1280,
-                    )
-                    .reduce((acc, curr) => acc + curr.count, 0)
-                    .toString(),
-                  analyticsData?.screenSizeStats
-                    .filter(
-                      (screen) =>
-                        screen.screenSize >= 1280 && screen.screenSize < 1536,
-                    )
-                    .reduce((acc, curr) => acc + curr.count, 0)
-                    .toString(),
-                  analyticsData?.screenSizeStats
-                    .filter((screen) => screen.screenSize >= 1536)
-                    .reduce((acc, curr) => acc + curr.count, 0)
-                    .toString(),
-                ]
-              : ["0", "0", "0", "0", "0", "0"],
+            [
+              getCountByScreenSize((screen) => screen < 640),
+              getCountByScreenSize((screen) => screen >= 640 && screen < 768),
+              getCountByScreenSize((screen) => screen >= 768 && screen < 1024),
+              getCountByScreenSize((screen) => screen >= 1024 && screen < 1280),
+              getCountByScreenSize((screen) => screen >= 1280 && screen < 1536),
+              getCountByScreenSize((screen) => screen >= 1536),
+            ],
           ]}
         />
       </HeaderContainer>

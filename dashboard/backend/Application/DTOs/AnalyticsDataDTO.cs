@@ -8,7 +8,7 @@ namespace Application.DTOs
         public required double AvgPageVisited { get; set; }
         public required double AvgSessionDuration { get; set; }
         public required double BounceRate { get; set; }
-        public required double IsPWA { get; set; }
+        public required double IsPWAPercentage { get; set; }
         public required List<BrowserStatDTO> browserStats { get; set; }
         public required List<ScreenSizeStatDTO> screenSizeStats { get; set; }
         public required List<PageViewStatDTO> pageViewStats { get; set; }

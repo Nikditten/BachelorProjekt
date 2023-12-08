@@ -36,7 +36,7 @@ export interface IAnalyticsData {
   avgPageVisited: number;
   avgSessionDuration: number;
   bounceRate: number;
-  isPWA: number;
+  isPWAPercentage: number;
   browserStats: BrowserStat[];
   screenSizeStats: ScreenSizeStat[];
   pageViewStats: PageViewStat[];
