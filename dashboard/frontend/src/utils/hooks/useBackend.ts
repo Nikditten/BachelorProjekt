@@ -62,7 +62,7 @@ export const useBackend = (): Backend => {
       try {
         return {
           status: res.status,
-          content: await res.text(),
+          content: await res.json(),
         };
       } catch {
         return {

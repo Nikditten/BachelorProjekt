@@ -68,18 +68,15 @@ export const WebsiteContextValue = (): WebsiteProps => {
 
   const createNewWebsite = useCallback(
     async (name: string, url: string) => {
+      const { status, content } = await createWebsite(name, url);
+
       const website: IWebsite = {
-        id: "",
-        key: "",
+        id: content.id,
+        key: content.key,
         isAdmin: true,
         name,
         url,
       };
-
-      const { status, content } = await createWebsite(name, url);
-
-      website.id = content.id;
-      website.key = content.key;
 
       if (status === 200) {
         SetWebsites((prev) => [...prev, website]);

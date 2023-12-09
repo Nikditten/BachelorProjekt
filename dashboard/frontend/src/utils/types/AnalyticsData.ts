@@ -11,6 +11,7 @@ interface ScreenSizeStat {
 interface PageViewStat {
   url: string;
   count: number;
+  landingCount: number;
   avgTimeSpent: number;
 }
 

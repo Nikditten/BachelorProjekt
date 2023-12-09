@@ -21,6 +21,16 @@ namespace Application.AnalyticsData.Queries.GetAnalyticsData
             _mapper = mapper;
         }
 
+        private static int CalcAvgPageVisited(List<Session> sessions)
+        {
+            int totalPageVisited = 0;
+            foreach (Session session in sessions)
+            {
+                totalPageVisited += session.NavigationEvents.Count;
+            }
+            return (totalPageVisited + sessions.Count) / sessions.Count;
+        }
+
         public async Task<AnalyticsDataDTO> Handle(GetAnalyticsDataQuery request, CancellationToken cancellationToken)
         {
             Website? website = await _applicationDbContext.Websites.AsNoTracking().FirstOrDefaultAsync(x => x.ID == request.websiteId && x.UserId == _userService.Id, cancellationToken);
@@ -39,14 +49,14 @@ namespace Application.AnalyticsData.Queries.GetAnalyticsData
             AnalyticsDataDTO analyticsDataDTO = new AnalyticsDataDTO
             {
                 SessionCount = sessions.Count,
-                AvgPageVisited = sessions.Average(x => x.NavigationEvents?.Count ?? 0) + 1,
+                AvgPageVisited = CalcAvgPageVisited(sessions),
                 AvgSessionDuration = sessions.Average(x => x.CreatedAt.Subtract(x.NavigationEvents.OrderBy(x => x.CreatedAt).First().CreatedAt).TotalSeconds) * -1,
                 BounceRate = (sessions.Count(x => x.NavigationEvents.Count == 0) / sessions.Count) * 100,
                 IsPWAPercentage = (sessions.Count(x => x.IsPWA) / sessions.Count) * 100,
                 browserStats = sessions.GroupBy(x => x.Browser).Select(x => new BrowserStatDTO { Name = x.Key, Count = x.Count() }).ToList(),
                 screenSizeStats = sessions.GroupBy(x => x.DeviceWidth).Select(x => new ScreenSizeStatDTO { ScreenSize = x.Key, Count = x.Count() }).ToList(),
                 clickEvents = sessions.SelectMany(x => x.ClickEvents).GroupBy(x => x.ElementID ?? x.Value).Select(x => new ClickEventDTO { Id = x.Key, Text = x.First().Value, Value = x.First().Type ?? x.First().URL, Count = x.Count() }).ToList(),
-                pageViewStats = sessions.SelectMany(x => x.NavigationEvents).GroupBy(x => x.URL).Select(x => new PageViewStatDTO { Url = x.Key, Count = x.Count(), AvgTimeSpent = 0 }).ToList(),
+                pageViewStats = sessions.SelectMany(x => x.NavigationEvents).GroupBy(x => x.URL).Select(x => new PageViewStatDTO { Url = x.Key, Count = x.Count(), landingCount = sessions.Count(y => y.LandingPage == x.Key), AvgTimeSpent = 0 }).ToList(),
                 videoSessionStats = sessions.SelectMany(x => x.VideoSessions).GroupBy(x => x.VideoId).Select(x =>
                 {
                     VideoSession videoSession = x.First();

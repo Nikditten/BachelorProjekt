@@ -72,7 +72,7 @@ const Login = () => {
 
       <Link
         className='text-center font-light text-gray-400 hover:text-gray-900'
-        href='/signup'
+        href='/auth/signup'
       >
         {"Don't have an account?"}
       </Link>

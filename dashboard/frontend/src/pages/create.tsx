@@ -76,7 +76,7 @@ const Create: NextPageWithLayout = () => {
               website={website}
               onUpdate={(name, url) => updateWebsiteById(website.id, name, url)}
               onShare={() => onShare(website)}
-              onCopy={() => copyToClipboard(website.id)}
+              onCopy={() => copyToClipboard(website.key)}
               onDelete={() => handleDeleteWebsite(website)}
             />
           ))}

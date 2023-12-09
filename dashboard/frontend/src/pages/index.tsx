@@ -9,16 +9,37 @@ import { NextPageWithLayout } from "./_app";
 const Home: NextPageWithLayout = () => {
   const { analyticsData } = useWebsite();
 
+  const formatTime = (seconds: number): string => {
+    var hours = Math.floor(seconds / 3600).toString();
+    var minutes = Math.floor((seconds % 3600) / 60).toString();
+    var sec = Math.floor(seconds % 60).toString();
+
+    if (hours.length === 1) hours = `0${hours}`;
+    if (minutes.length === 1) minutes = `0${minutes}`;
+    if (sec.length === 1) sec = `0${sec}`;
+
+    return `${hours}:${minutes}:${sec}`;
+  };
+
   const getCountByScreenSize = (
     validation: (screen: number) => boolean,
-  ): string => {
-    if (!analyticsData?.screenSizeStats) return "0";
-    return (
-      analyticsData?.screenSizeStats
-        .filter((screen) => validation(screen.screenSize))
-        .reduce((acc, curr) => acc + curr.count, 0)
-        .toString() ?? "0"
+  ): number => {
+    if (!analyticsData?.screenSizeStats) return 0;
+    const total = analyticsData?.screenSizeStats.reduce(
+      (acc, curr) => acc + curr.count,
+      0,
     );
+
+    const count = analyticsData?.screenSizeStats
+      .filter((screen) => validation(screen.screenSize))
+      .reduce((acc, curr) => acc + curr.count, 0);
+
+    return (count / total) * 100;
+  };
+
+  const cleanUrl = (url: string) => {
+    const urlObject = new URL(url);
+    return urlObject.pathname;
   };
 
   return (
@@ -39,9 +60,7 @@ const Home: NextPageWithLayout = () => {
             [
               (analyticsData?.sessionCount ?? 0).toString(),
               (analyticsData?.avgPageVisited ?? 0).toString(),
-              `${((analyticsData?.avgSessionDuration ?? 0) / 60).toFixed(
-                0,
-              )} min.`,
+              formatTime(analyticsData?.avgSessionDuration ?? 0),
               `${analyticsData?.bounceRate ?? 0}%`,
               `${analyticsData?.isPWAPercentage ?? 0}%`,
             ],
@@ -54,11 +73,15 @@ const Home: NextPageWithLayout = () => {
         title='Page statistics'
       >
         <TableContainer
-          tableheaders={["Page", "Landing", "Leaving", "Visits", "Time spent"]}
-          tableData={[
-            ["/Home", "2000", "120", "5000", "10:21"],
-            ["/dashboard", "1101", "1093", "2320", "00:30"],
-          ]}
+          tableheaders={["Page", "Landing", "Visits", "Time spent"]}
+          tableData={
+            analyticsData?.pageViewStats?.map((page) => [
+              cleanUrl(page.url),
+              `${page.landingCount}`,
+              `${page.count}`,
+              formatTime(page.avgTimeSpent),
+            ]) ?? [["", "0", "0", "0"]]
+          }
         />
       </HeaderContainer>
 
@@ -94,12 +117,20 @@ const Home: NextPageWithLayout = () => {
           ]}
           tableData={[
             [
-              getCountByScreenSize((screen) => screen < 640),
-              getCountByScreenSize((screen) => screen >= 640 && screen < 768),
-              getCountByScreenSize((screen) => screen >= 768 && screen < 1024),
-              getCountByScreenSize((screen) => screen >= 1024 && screen < 1280),
-              getCountByScreenSize((screen) => screen >= 1280 && screen < 1536),
-              getCountByScreenSize((screen) => screen >= 1536),
+              `${getCountByScreenSize((screen) => screen < 640)}%`,
+              `${getCountByScreenSize(
+                (screen) => screen >= 640 && screen < 768,
+              )}%`,
+              `${getCountByScreenSize(
+                (screen) => screen >= 768 && screen < 1024,
+              )}`,
+              `${getCountByScreenSize(
+                (screen) => screen >= 1024 && screen < 1280,
+              )}%`,
+              `${getCountByScreenSize(
+                (screen) => screen >= 1280 && screen < 1536,
+              )}%`,
+              `${getCountByScreenSize((screen) => screen >= 1536)}%`,
             ],
           ]}
         />
