@@ -1,3 +1,4 @@
+using System.Security.Cryptography.X509Certificates;
 using Application.DTOs.AnalyticsData;
 using Domain.Entities;
 using Domain.Enums;
@@ -22,6 +23,7 @@ namespace Application.DTOs
         {
             get
             {
+                if (_sessions.Count == 0) return 0;
                 return (_sessions.Sum(x => x.NavigationEvents?.Count ?? 0) + _sessions.Count) / _sessions.Count;
             }
         }
@@ -29,9 +31,8 @@ namespace Application.DTOs
         {
             get
             {
-                NavigationEvent? lastNavigationEvent = _sessions.OrderByDescending(x => x.CreatedAt).First().NavigationEvents?.OrderByDescending(x => x.CreatedAt).First() ?? null;
-                if (lastNavigationEvent == null) return 0;
-                return _sessions.Average(x => x.CreatedAt.Subtract(lastNavigationEvent.CreatedAt).TotalSeconds) * -1;
+                if (_sessions.Count == 0) return 0;
+                return _sessions.Sum(x => (x.CreatedAt - x.NavigationEvents.LastOrDefault().CreatedAt).TotalSeconds) / _sessions.Count * (-1);
             }
         }
         public double BounceRate
@@ -88,16 +89,17 @@ namespace Application.DTOs
                 ICollection<ClickEvent>? clickEvents = _sessions.SelectMany(x => x.ClickEvents).ToList();
                 if (clickEvents == null) return new List<ClickEventDTO>();
                 return clickEvents
-                .GroupBy(x => x.ElementID ?? x.Value)
+                .GroupBy(x => x.ElementID ?? x.ElementText)
                 .Select(
                     x =>
                     {
                         ClickEvent clickEvent = x.First();
                         return new ClickEventDTO
                         {
-                            Id = x.Key,
-                            Text = clickEvent.Value,
-                            Value = clickEvent.TagName == "button" ? clickEvent.Type : clickEvent.URL,
+                            ElementId = clickEvent.ElementID,
+                            ElementText = clickEvent.ElementText,
+                            ElementType = clickEvent.ElementType,
+                            Url = clickEvent.URL,
                             Count = x.Count()
                         };
                     }

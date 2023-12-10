@@ -24,12 +24,10 @@ namespace Application.ClickEvents.Commands.CreateClickEvent
             var clickEvent = new ClickEvent
             {
                 SessionId = request.SessionID,
-                CurrentURL = request.CurrentURL,
                 ElementID = request.ElementID,
-                TagName = request.TagName,
-                Value = request.Value,
-                Type = request.Type,
-                URL = request.URL
+                ElementText = request.ElementText,
+                ElementType = request.ElementType == "button" ? "button" : "link",
+                URL = request.URL ?? "",
             };
 
             _applicationDbContext.ClickEvents.Add(clickEvent);

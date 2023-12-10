@@ -102,15 +102,37 @@ const Home: NextPageWithLayout = () => {
             "100%",
           ]}
           tableData={
-            analyticsData?.videoSessionStats.map((video) => [
-              video.id,
-              video.source,
-              `${video.startedCount}`,
-              `${video.seenQuarterPercentage}%`,
-              `${video.seenHalfPercentage}%`,
-              `${video.seenThreeQuarterPercentage}%`,
-              `${video.seenFullPercentage}%`,
-            ]) ?? [["", "", "0", "0", "0", "0", "0"]]
+            analyticsData?.videoSessionStats
+              .sort((a, b) => b.startedCount - a.startedCount)
+              .map((video) => [
+                video.id,
+                video.source,
+                `${video.startedCount}`,
+                `${video.seenQuarterPercentage}%`,
+                `${video.seenHalfPercentage}%`,
+                `${video.seenThreeQuarterPercentage}%`,
+                `${video.seenFullPercentage}%`,
+              ]) ?? [["", "", "0", "0", "0", "0", "0"]]
+          }
+        />
+      </HeaderContainer>
+
+      <HeaderContainer
+        className='col-span-4 row-span-4'
+        title='Click events'
+      >
+        <TableContainer
+          tableheaders={["ButtonId", "Text", "Type", "URL", "Click"]}
+          tableData={
+            analyticsData?.clickEvents
+              .sort((a, b) => b.count - a.count)
+              .map((click) => [
+                click.elementId,
+                click.elementText,
+                click.elementType,
+                click.url,
+                `${click.count}`,
+              ]) ?? [["", "", "", "", "0"]]
           }
         />
       </HeaderContainer>
@@ -153,7 +175,7 @@ const Home: NextPageWithLayout = () => {
               )}%`,
               `${getCountByScreenSize(
                 (screen) => screen >= 768 && screen < 1024,
-              )}`,
+              )}%`,
               `${getCountByScreenSize(
                 (screen) => screen >= 1024 && screen < 1280,
               )}%`,

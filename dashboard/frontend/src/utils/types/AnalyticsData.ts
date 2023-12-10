@@ -16,9 +16,10 @@ interface PageViewStat {
 }
 
 interface ClickEvent {
-  id: string;
-  text: string;
-  value: string;
+  elementId: string;
+  elementText: string;
+  elementType: string;
+  url: string;
   count: number;
 }
 

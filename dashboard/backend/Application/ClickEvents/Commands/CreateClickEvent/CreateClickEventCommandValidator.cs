@@ -13,10 +13,10 @@ namespace Application.Sessions.Commands.CreateSession
             RuleFor(x => x.SessionID)
                 .NotEmpty();
 
-            RuleFor(x => x.TagName)
+            RuleFor(x => x.ElementType)
                 .NotEmpty();
 
-            RuleFor(x => x.Value)
+            RuleFor(x => x.ElementText)
                 .NotEmpty();
 
         }
