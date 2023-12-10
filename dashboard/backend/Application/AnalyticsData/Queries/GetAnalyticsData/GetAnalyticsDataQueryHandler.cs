@@ -46,42 +46,7 @@ namespace Application.AnalyticsData.Queries.GetAnalyticsData
                 .AsNoTracking()
                 .ToListAsync(cancellationToken);
 
-            AnalyticsDataDTO analyticsDataDTO = new AnalyticsDataDTO
-            {
-                SessionCount = sessions.Count,
-                AvgPageVisited = CalcAvgPageVisited(sessions),
-                AvgSessionDuration = sessions.Average(x => x.CreatedAt.Subtract(x.NavigationEvents.OrderBy(x => x.CreatedAt).First().CreatedAt).TotalSeconds) * -1,
-                BounceRate = (sessions.Count(x => x.NavigationEvents.Count == 0) / sessions.Count) * 100,
-                IsPWAPercentage = (sessions.Count(x => x.IsPWA) / sessions.Count) * 100,
-                browserStats = sessions.GroupBy(x => x.Browser).Select(x => new BrowserStatDTO { Name = x.Key, Count = x.Count() }).ToList(),
-                screenSizeStats = sessions.GroupBy(x => x.DeviceWidth).Select(x => new ScreenSizeStatDTO { ScreenSize = x.Key, Count = x.Count() }).ToList(),
-                clickEvents = sessions.SelectMany(x => x.ClickEvents).GroupBy(x => x.ElementID ?? x.Value).Select(x => new ClickEventDTO { Id = x.Key, Text = x.First().Value, Value = x.First().Type ?? x.First().URL, Count = x.Count() }).ToList(),
-                pageViewStats = sessions.SelectMany(x => x.NavigationEvents).GroupBy(x => x.URL).Select(x => new PageViewStatDTO { Url = x.Key, Count = x.Count(), landingCount = sessions.Count(y => y.LandingPage == x.Key), AvgTimeSpent = 0 }).ToList(),
-                videoSessionStats = sessions.SelectMany(x => x.VideoSessions).GroupBy(x => x.VideoId).Select(x =>
-                {
-                    VideoSession videoSession = x.First();
-
-                    int startedCount = x.Count();
-                    int seenQuarter = videoSession.VideoEvents.Count(x => x.Duration > videoSession.Duration * 0.25 && x.Duration < videoSession.Duration * 0.5);
-                    int seenHalf = videoSession.VideoEvents.Count(x => x.Duration > videoSession.Duration * 0.5 && x.Duration < videoSession.Duration * 0.75);
-                    int seenThreeQuarter = videoSession.VideoEvents.Count(x => x.Duration > videoSession.Duration * 0.75 && x.Duration < videoSession.Duration);
-                    int seenFull = videoSession.VideoEvents.Count(x => x.Duration == videoSession.Duration);
-
-
-                    VideoSessionStatDTO videoSessionStatDTO = new VideoSessionStatDTO
-                    {
-                        Id = videoSession.VideoId ?? "Not specified",
-                        Source = videoSession.Source,
-                        StartedCount = startedCount,
-                        SeenQuarterPercentage = (seenQuarter / startedCount) * 100,
-                        SeenHalfPercentage = (seenHalf / startedCount) * 100,
-                        SeenThreeQuarterPercentage = (seenThreeQuarter / startedCount) * 100,
-                        SeenFullPercentage = (seenFull / startedCount) * 100
-                    };
-                    return videoSessionStatDTO;
-                }
-                ).ToList()
-            };
+            AnalyticsDataDTO analyticsDataDTO = new AnalyticsDataDTO(sessions);
 
             return analyticsDataDTO;
         }

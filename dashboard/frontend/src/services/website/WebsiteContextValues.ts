@@ -170,6 +170,8 @@ export const WebsiteContextValue = (): WebsiteProps => {
 
     const { content } = await getAnalyticsData(activeWebsite.id);
 
+    console.log(content);
+
     setAnalyticsData(content);
   }, [activeWebsite, getAnalyticsData]);
 

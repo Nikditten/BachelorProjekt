@@ -26,9 +26,9 @@ interface VideoSessionStat {
   id: string;
   source: string;
   startedCount: number;
-  seenQuaterPercentage: number;
+  seenQuarterPercentage: number;
   seenHalfPercentage: number;
-  seenThreeQuaterPercentage: number;
+  seenThreeQuarterPercentage: number;
   seenFullPercentage: number;
 }
 

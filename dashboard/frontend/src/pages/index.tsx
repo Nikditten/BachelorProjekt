@@ -75,12 +75,42 @@ const Home: NextPageWithLayout = () => {
         <TableContainer
           tableheaders={["Page", "Landing", "Visits", "Time spent"]}
           tableData={
-            analyticsData?.pageViewStats?.map((page) => [
-              cleanUrl(page.url),
-              `${page.landingCount}`,
-              `${page.count}`,
-              formatTime(page.avgTimeSpent),
-            ]) ?? [["", "0", "0", "0"]]
+            analyticsData?.pageViewStats
+              .sort((a, b) => a.count - b.count)
+              .map((page) => [
+                cleanUrl(page.url),
+                `${page.landingCount}`,
+                `${page.count}`,
+                formatTime(page.avgTimeSpent),
+              ]) ?? [["", "0", "0", "0"]]
+          }
+        />
+      </HeaderContainer>
+
+      <HeaderContainer
+        className='col-span-4 row-span-4'
+        title='Video statistics'
+      >
+        <TableContainer
+          tableheaders={[
+            "Video",
+            "Source",
+            "Started",
+            "25%",
+            "50%",
+            "75%",
+            "100%",
+          ]}
+          tableData={
+            analyticsData?.videoSessionStats.map((video) => [
+              video.id,
+              video.source,
+              `${video.startedCount}`,
+              `${video.seenQuarterPercentage}%`,
+              `${video.seenHalfPercentage}%`,
+              `${video.seenThreeQuarterPercentage}%`,
+              `${video.seenFullPercentage}%`,
+            ]) ?? [["", "", "0", "0", "0", "0", "0"]]
           }
         />
       </HeaderContainer>
