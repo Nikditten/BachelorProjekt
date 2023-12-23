@@ -44,23 +44,26 @@ namespace API.Controllers
 
         [Authorize]
         [HttpPut("[action]")]
-        public async Task<ActionResult<Unit>> Username([FromBody] ChangeUsernameCommand command)
+        public async Task<ActionResult> Username([FromBody] ChangeUsernameCommand command)
         {
-            return await _mediator.Send(command);
+            await _mediator.Send(command);
+            return Ok();
         }
 
         [Authorize]
         [HttpPut("[action]")]
-        public async Task<ActionResult<Unit>> Password([FromBody] ChangePasswordCommand command)
+        public async Task<ActionResult> Password([FromBody] ChangePasswordCommand command)
         {
-            return await _mediator.Send(command);
+            await _mediator.Send(command);
+            return Ok();
         }
 
         [Authorize]
         [HttpPut("[action]")]
-        public async Task<ActionResult<Unit>> Name([FromBody] ChangeNameCommand command)
+        public async Task<ActionResult> Name([FromBody] ChangeNameCommand command)
         {
-            return await _mediator.Send(command);
+            await _mediator.Send(command);
+            return Ok();
         }
     }
 }

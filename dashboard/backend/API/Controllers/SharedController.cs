@@ -26,9 +26,10 @@ namespace API.Controllers
 
         [Authorize]
         [HttpDelete("[action]")]
-        public async Task<ActionResult<Unit>> Delete([FromBody] DeleteSharedWebsiteCommand command)
+        public async Task<ActionResult> Delete([FromBody] DeleteSharedWebsiteCommand command)
         {
-            return await _mediator.Send(command);
+            await _mediator.Send(command);
+            return Ok();
         }
 
         [Authorize]

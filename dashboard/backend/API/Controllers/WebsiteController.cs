@@ -26,9 +26,10 @@ namespace API.Controllers
 
         [Authorize]
         [HttpDelete("[action]")]
-        public async Task<ActionResult<Unit>> Delete([FromQuery] DeleteWebsiteCommand command)
+        public async Task<ActionResult> Delete([FromQuery] DeleteWebsiteCommand command)
         {
-            return await _mediator.Send(command);
+            await _mediator.Send(command);
+            return Ok();
         }
 
         [Authorize]
@@ -40,9 +41,10 @@ namespace API.Controllers
 
         [Authorize]
         [HttpPut("[action]")]
-        public async Task<ActionResult<Unit>> Update([FromBody] UpdateWebsiteCommand command)
+        public async Task<ActionResult> Update([FromBody] UpdateWebsiteCommand command)
         {
-            return await _mediator.Send(command);
+            await _mediator.Send(command);
+            return Ok();
         }
 
     }
