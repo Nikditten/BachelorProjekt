@@ -9,6 +9,9 @@ namespace Application.Sessions.Commands.CreateSession
             RuleFor(x => x.WebsiteKey)
                 .NotEmpty();
 
+            RuleFor(x => x.LandingPage)
+                .NotEmpty();
+
             RuleFor(x => x.DeviceWidth)
                 .NotEmpty();
 
