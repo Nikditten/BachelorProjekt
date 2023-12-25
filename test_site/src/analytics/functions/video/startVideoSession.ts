@@ -3,7 +3,7 @@ import fetchData from '../utils/fetchData';
 const startVideoSession = async (key: string, video: HTMLVideoElement) => {
   if (video.paused || video.duration > 0) return null;
 
-  const sessionId = localStorage.getItem('sessionid');
+  const sessionId = localStorage.getItem('session');
 
   if (!sessionId) return null;
 

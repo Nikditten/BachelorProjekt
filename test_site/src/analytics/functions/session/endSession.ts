@@ -1,7 +1,7 @@
 import fetchData from '../utils/fetchData';
 
 const endSession = async (websiteKey: string) => {
-  const sessionID = localStorage.getItem('sessionid');
+  const sessionID = localStorage.getItem('session');
 
   if (!sessionID) return null;
 
@@ -10,11 +10,7 @@ const endSession = async (websiteKey: string) => {
     sessionID: sessionID,
   });
 
-  if (res.status !== 200) {
-    console.error('Error ending session');
-  }
-
-  console.log('Session ended');
+  localStorage.removeItem('session');
 };
 
 export default endSession;

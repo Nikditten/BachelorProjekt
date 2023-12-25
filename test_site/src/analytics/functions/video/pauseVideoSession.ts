@@ -1,10 +1,11 @@
 import fetchData from '../utils/fetchData';
 
 const pauseVideoSession = async (key: string, video: HTMLVideoElement) => {
-  const sessionId = localStorage.getItem('sessionid');
+  const sessionId = localStorage.getItem('session');
   const videoSessionID = localStorage.getItem('videosession');
 
   if (!sessionId || !videoSessionID) return null;
+  if (video.duration === video.currentTime) return null;
 
   const play = {
     websiteKey: key,

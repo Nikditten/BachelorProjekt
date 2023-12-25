@@ -7,7 +7,8 @@ const startSession = async (body: any) => {
     console.error('Error starting session');
     return null;
   } else {
-    return await res.json();
+    const session = await res.text();
+    localStorage.setItem('session', session);
   }
 };
 

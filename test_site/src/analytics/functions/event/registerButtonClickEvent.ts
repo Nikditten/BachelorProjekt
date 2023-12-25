@@ -4,7 +4,7 @@ const registerButtonClickEvent = async (
   key: string,
   button: HTMLButtonElement
 ) => {
-  const sessionId = localStorage.getItem('sessionid');
+  const sessionId = localStorage.getItem('session');
 
   if (!sessionId) return null;
 

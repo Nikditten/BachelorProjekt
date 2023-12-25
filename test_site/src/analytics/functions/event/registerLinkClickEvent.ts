@@ -1,7 +1,7 @@
 import fetchData from '../utils/fetchData';
 
 const registerLinkClickEvent = async (key: string, link: HTMLAnchorElement) => {
-  const sessionId = localStorage.getItem('sessionid');
+  const sessionId = localStorage.getItem('session');
 
   if (!sessionId) return null;
 

@@ -18,7 +18,6 @@ export const DataCollectorContextValue = (
 ): DataCollectorProps => {
   const [permision, setPermission] = useState<boolean>(true);
   const router = useRouter();
-  const [videoSessionID, setVideoSessionID] = useState<string | null>(null);
 
   useEffect(() => {
     const body = {
@@ -31,18 +30,9 @@ export const DataCollectorContextValue = (
       isPWA: window.matchMedia('(display-mode: standalone)').matches,
     };
 
-    if (permision) {
-      startSession(body).then((session) => {
-        localStorage.setItem('sessionid', session);
-        console.log('Session started', session);
-      });
-    }
+    if (permision) startSession(body);
 
-    window.addEventListener('beforeunload', () => {
-      console.log('Session ended', localStorage.getItem('sessionid') ?? '');
-      endSession(websiteKey);
-      localStorage.removeItem('sessionid');
-    });
+    window.addEventListener('beforeunload', () => endSession(websiteKey));
   }, []);
 
   useEffect(() => {
@@ -51,39 +41,31 @@ export const DataCollectorContextValue = (
     const videos = document.getElementsByTagName('video');
 
     for (let i = 0; i < buttons.length; i++) {
-      buttons[i].addEventListener('click', () => {
-        console.log('button clicked');
-        registerButtonClickEvent(websiteKey, buttons[i]);
-      });
+      buttons[i].addEventListener('click', () =>
+        registerButtonClickEvent(websiteKey, buttons[i])
+      );
     }
 
     for (let i = 0; i < links.length; i++) {
-      links[i].addEventListener('click', () => {
-        console.log('link clicked');
-        registerLinkClickEvent(websiteKey, links[i]);
-      });
+      links[i].addEventListener('click', () =>
+        registerLinkClickEvent(websiteKey, links[i])
+      );
     }
 
     for (let i = 0; i < videos.length; i++) {
-      videos[i].addEventListener('play', () => {
-        console.log('video played');
+      videos[i].addEventListener('play', () =>
         startVideoSession(websiteKey, videos[i]).then((videosession) =>
           localStorage.setItem('videosession', videosession)
-        );
-      });
+        )
+      );
 
-      videos[i].addEventListener('pause', () => {
-        console.log('video paused', videoSessionID);
-        if (videos[i].currentTime < videos[i].duration)
-          pauseVideoSession(websiteKey, videos[i]);
-      });
+      videos[i].addEventListener('pause', () =>
+        pauseVideoSession(websiteKey, videos[i])
+      );
 
-      videos[i].addEventListener('ended', () => {
-        console.log('video ended', videoSessionID);
-        endVideoSession(websiteKey, videos[i]);
-
-        setVideoSessionID(null);
-      });
+      videos[i].addEventListener('ended', () =>
+        endVideoSession(websiteKey, videos[i])
+      );
     }
   }, [router.pathname]);
 

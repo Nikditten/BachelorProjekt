@@ -1,7 +1,7 @@
 import fetchData from '../utils/fetchData';
 
 const endVideoSession = async (key: string, video: HTMLVideoElement) => {
-  const sessionId = localStorage.getItem('sessionid');
+  const sessionId = localStorage.getItem('session');
   const videoSessionID = localStorage.getItem('videosession');
 
   if (!sessionId || !videoSessionID) return null;
@@ -13,9 +13,9 @@ const endVideoSession = async (key: string, video: HTMLVideoElement) => {
     duration: video.currentTime,
   };
 
-  const res = await fetchData('Event/EndVideoSession', 'POST', play);
+  await fetchData('Event/EndVideoSession', 'POST', play);
 
-  return res.status === 200;
+  localStorage.removeItem('videosession');
 };
 
 export default endVideoSession;
