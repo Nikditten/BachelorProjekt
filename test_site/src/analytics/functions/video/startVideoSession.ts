@@ -1,7 +1,7 @@
 import fetchData from '../utils/fetchData';
 
 const startVideoSession = async (key: string, video: HTMLVideoElement) => {
-  if (video.paused || video.duration > 0) return null;
+  if (video.currentTime > 0) return null;
 
   const sessionId = localStorage.getItem('session');
 
@@ -17,8 +17,13 @@ const startVideoSession = async (key: string, video: HTMLVideoElement) => {
 
   const res = await fetchData('Event/CreateVideoSession', 'POST', play);
 
-  if (res.status === 200) return await res.json();
-  else return null;
+  if (res.status !== 200) {
+    console.error('Error starting video session');
+    return null;
+  } else {
+    const videosession = await res.json();
+    localStorage.setItem('videosession', videosession);
+  }
 };
 
 export default startVideoSession;

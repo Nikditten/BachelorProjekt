@@ -54,9 +54,7 @@ export const DataCollectorContextValue = (
 
     for (let i = 0; i < videos.length; i++) {
       videos[i].addEventListener('play', () =>
-        startVideoSession(websiteKey, videos[i]).then((videosession) =>
-          localStorage.setItem('videosession', videosession)
-        )
+        startVideoSession(websiteKey, videos[i])
       );
 
       videos[i].addEventListener('pause', () =>

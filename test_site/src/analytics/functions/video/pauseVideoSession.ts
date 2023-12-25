@@ -5,7 +5,8 @@ const pauseVideoSession = async (key: string, video: HTMLVideoElement) => {
   const videoSessionID = localStorage.getItem('videosession');
 
   if (!sessionId || !videoSessionID) return null;
-  if (video.duration === video.currentTime) return null;
+  if (video.currentTime === 0 || video.duration === video.currentTime)
+    return null;
 
   const play = {
     websiteKey: key,
