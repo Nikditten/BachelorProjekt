@@ -23,7 +23,7 @@ namespace Application.Sessions.Commands.EndSession
 
             if (website == null) throw new NullReferenceException("Website does not exists");
 
-            Session? session = await _applicationDbContext.Sessions.AsNoTracking().FirstOrDefaultAsync(x => x.ID == request.SessionID, cancellationToken);
+            Session? session = await _applicationDbContext.Sessions.AsNoTracking().FirstOrDefaultAsync(x => x.ID == request.SessionID && x.WebsiteId == website.ID, cancellationToken);
 
             if (session == null) throw new NullReferenceException("Session does not exists");
 

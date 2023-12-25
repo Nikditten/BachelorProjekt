@@ -38,8 +38,12 @@ const Home: NextPageWithLayout = () => {
   };
 
   const cleanUrl = (url: string) => {
-    const urlObject = new URL(url);
-    return urlObject.pathname;
+    try {
+      const urlObject = new URL(url);
+      return urlObject.pathname;
+    } catch (error) {
+      return url;
+    }
   };
 
   return (

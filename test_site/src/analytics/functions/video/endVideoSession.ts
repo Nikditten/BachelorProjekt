@@ -1,11 +1,11 @@
 import fetchData from '../utils/fetchData';
 
-const endVideoSession = async (
-  key: string,
-  sessionId: string,
-  video: HTMLVideoElement,
-  videoSessionID: string
-) => {
+const endVideoSession = async (key: string, video: HTMLVideoElement) => {
+  const sessionId = localStorage.getItem('sessionid');
+  const videoSessionID = localStorage.getItem('videosession');
+
+  if (!sessionId || !videoSessionID) return null;
+
   const play = {
     websiteKey: key,
     sessionID: sessionId,

@@ -1,19 +1,19 @@
-import fetchData from './utils/fetchData';
+import fetchData from '../utils/fetchData';
 
 const registerButtonClickEvent = async (
   key: string,
-  sessionId: string,
-  button: HTMLButtonElement,
-  currentUrl: string
+  button: HTMLButtonElement
 ) => {
+  const sessionId = localStorage.getItem('sessionid');
+
+  if (!sessionId) return null;
+
   const body = {
     websiteKey: key,
     sessionID: sessionId,
-    currentUrl: currentUrl,
     elementID: button.id,
-    tagName: button.tagName.toLowerCase(),
-    value: button.innerText,
-    type: button.type,
+    elementText: button.innerText,
+    elementType: button.type.toLowerCase(),
   };
 
   await fetchData('Event/CreateClickEvent', 'POST', body);

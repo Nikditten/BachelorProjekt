@@ -23,7 +23,7 @@ namespace Application.VideoSessions.Commands.CreateVideoSession
             var videoSession = new VideoSession
             {
                 SessionId = request.SessionID,
-                VideoId = request.VideoID,
+                VideoId = request.VideoID != null ? request.VideoID! : "Not specified",
                 Duration = request.Duration,
                 Source = request.Source
             };

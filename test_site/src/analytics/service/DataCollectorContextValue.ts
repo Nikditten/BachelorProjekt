@@ -1,31 +1,24 @@
-import { useCallback, useEffect, useState } from 'react';
-import endSession from '../functions/endSession';
-import registerButtonClickEvent from '../functions/registerButtonClickEvent';
-import registerLinkClickEvent from '../functions/registerLinkClickEvent';
-import fetchData from '../functions/utils/fetchData';
-import getBrowser from '../functions/utils/getBrowser';
-import endVideoSession from '../functions/video/endVideoSession';
-import pauseVideoSession from '../functions/video/pauseVideoSession';
-import startVideoSession from '../functions/video/startVideoSession';
+import { useRouter } from 'next/router';
+import { useEffect, useState } from 'react';
+import {
+  endSession,
+  endVideoSession,
+  getBrowser,
+  pauseVideoSession,
+  registerButtonClickEvent,
+  registerLinkClickEvent,
+  startSession,
+  startVideoSession,
+} from '../functions';
 
 type DataCollectorProps = {};
 
 export const DataCollectorContextValue = (
   websiteKey: string
 ): DataCollectorProps => {
-  const [sessionid, setSessionid] = useState<string | null>(null);
+  const [permision, setPermission] = useState<boolean>(true);
+  const router = useRouter();
   const [videoSessionID, setVideoSessionID] = useState<string | null>(null);
-
-  const startSession = useCallback(async (body: any) => {
-    const res = await fetchData('Session/Create', 'POST', body);
-
-    if (res.status !== 200) {
-      console.error('Error starting session');
-      return null;
-    } else {
-      return await res.json();
-    }
-  }, []);
 
   useEffect(() => {
     const body = {
@@ -38,17 +31,18 @@ export const DataCollectorContextValue = (
       isPWA: window.matchMedia('(display-mode: standalone)').matches,
     };
 
-    console.log('Starting session');
-    (async () => {
-      const id = await startSession(body);
-      console.log('Session started', id);
-      setSessionid(id);
-    })();
-    console.log('Session registered', sessionid);
+    if (permision) {
+      startSession(body).then((session) => {
+        localStorage.setItem('sessionid', session);
+        console.log('Session started', session);
+      });
+    }
 
-    return () => {
-      endSession(websiteKey, sessionid!);
-    };
+    window.addEventListener('beforeunload', () => {
+      console.log('Session ended', localStorage.getItem('sessionid') ?? '');
+      endSession(websiteKey);
+      localStorage.removeItem('sessionid');
+    });
   }, []);
 
   useEffect(() => {
@@ -59,59 +53,39 @@ export const DataCollectorContextValue = (
     for (let i = 0; i < buttons.length; i++) {
       buttons[i].addEventListener('click', () => {
         console.log('button clicked');
-        registerButtonClickEvent(
-          websiteKey,
-          sessionid ?? '',
-          buttons[i],
-          window.location.href
-        );
+        registerButtonClickEvent(websiteKey, buttons[i]);
       });
     }
 
     for (let i = 0; i < links.length; i++) {
       links[i].addEventListener('click', () => {
         console.log('link clicked');
-        registerLinkClickEvent(
-          websiteKey,
-          sessionid ?? '',
-          links[i],
-          window.location.href
-        );
+        registerLinkClickEvent(websiteKey, links[i]);
       });
     }
 
     for (let i = 0; i < videos.length; i++) {
       videos[i].addEventListener('play', () => {
         console.log('video played');
-        startVideoSession(websiteKey, sessionid ?? '', videos[i]).then(
-          (videosession) => setVideoSessionID(videosession)
+        startVideoSession(websiteKey, videos[i]).then((videosession) =>
+          localStorage.setItem('videosession', videosession)
         );
       });
 
       videos[i].addEventListener('pause', () => {
-        console.log('video paused');
+        console.log('video paused', videoSessionID);
         if (videos[i].currentTime < videos[i].duration)
-          pauseVideoSession(
-            websiteKey,
-            sessionid ?? '',
-            videos[i],
-            videoSessionID ?? ''
-          );
+          pauseVideoSession(websiteKey, videos[i]);
       });
 
       videos[i].addEventListener('ended', () => {
-        console.log('video ended');
-        endVideoSession(
-          websiteKey,
-          sessionid ?? '',
-          videos[i],
-          videoSessionID ?? ''
-        );
+        console.log('video ended', videoSessionID);
+        endVideoSession(websiteKey, videos[i]);
 
         setVideoSessionID(null);
       });
     }
-  }, []);
+  }, [router.pathname]);
 
   return {};
 };
