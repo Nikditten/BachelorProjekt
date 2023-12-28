@@ -7,6 +7,7 @@ import {
   pauseVideoSession,
   registerButtonClickEvent,
   registerLinkClickEvent,
+  registerNavigationEvent,
   startSession,
   startVideoSession,
 } from '../functions';
@@ -36,6 +37,10 @@ export const DataCollectorContextValue = (
   }, []);
 
   useEffect(() => {
+    registerNavigationEvent(websiteKey, window.location.href);
+  }, [router.pathname]);
+
+  useEffect(() => {
     const buttons = document.getElementsByTagName('button');
     const links = document.getElementsByTagName('a');
     const videos = document.getElementsByTagName('video');
@@ -53,16 +58,18 @@ export const DataCollectorContextValue = (
     }
 
     for (let i = 0; i < videos.length; i++) {
-      videos[i].addEventListener('play', () =>
-        startVideoSession(websiteKey, videos[i])
+      const video = videos[i];
+
+      video.addEventListener('play', () =>
+        startVideoSession(websiteKey, video)
       );
 
-      videos[i].addEventListener('pause', () =>
-        pauseVideoSession(websiteKey, videos[i])
+      video.addEventListener('pause', () =>
+        pauseVideoSession(websiteKey, video)
       );
 
-      videos[i].addEventListener('ended', () =>
-        endVideoSession(websiteKey, videos[i])
+      video.addEventListener('ended', () =>
+        endVideoSession(websiteKey, video.currentTime)
       );
     }
   }, [router.pathname]);

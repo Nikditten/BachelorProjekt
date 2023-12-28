@@ -26,7 +26,7 @@ namespace Application.ClickEvents.Commands.CreateClickEvent
                 SessionId = request.SessionID,
                 ElementID = request.ElementID,
                 ElementText = request.ElementText,
-                ElementType = request.ElementType == "button" ? "button" : "link",
+                ElementType = request.ElementType,
                 URL = request.URL ?? "",
             };
 

@@ -9,7 +9,7 @@ const registerLinkClickEvent = async (key: string, link: HTMLAnchorElement) => {
     websiteKey: key,
     sessionID: sessionId,
     elementID: link.id,
-    elementType: link.tagName.toLowerCase(),
+    elementType: 'link',
     elementText: link.innerText,
     url: link.href,
   };

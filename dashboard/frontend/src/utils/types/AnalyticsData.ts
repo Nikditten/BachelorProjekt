@@ -3,9 +3,13 @@ interface BrowserStat {
   count: number;
 }
 
-interface ScreenSizeStat {
-  screenSize: number;
-  count: number;
+interface ScreenSizeStats {
+  lessThan640: number;
+  greaterThan640: number;
+  greaterThan768: number;
+  greaterThan1024: number;
+  greaterThan1280: number;
+  greaterThan1536: number;
 }
 
 interface PageViewStat {
@@ -27,6 +31,7 @@ interface VideoSessionStat {
   id: string;
   source: string;
   startedCount: number;
+  seenFirstQuarterCount: number;
   seenQuarterPercentage: number;
   seenHalfPercentage: number;
   seenThreeQuarterPercentage: number;
@@ -40,7 +45,7 @@ export interface IAnalyticsData {
   bounceRate: number;
   isPWAPercentage: number;
   browserStats: BrowserStat[];
-  screenSizeStats: ScreenSizeStat[];
+  screenSizeStats: ScreenSizeStats;
   pageViewStats: PageViewStat[];
   clickEvents: ClickEvent[];
   videoSessionStats: VideoSessionStat[];

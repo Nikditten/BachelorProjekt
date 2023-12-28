@@ -17,9 +17,13 @@ namespace Application.NavigationEvents.Commands.CreateNavigationEvent
         public async Task<Unit> Handle(CreateNavigationEventCommand request, CancellationToken cancellationToken)
         {
 
-            Website? website = await _applicationDbContext.Websites.Include(x => x.Sessions).AsNoTracking().FirstOrDefaultAsync(x => x.Key == request.WebsiteKey && x.Sessions!.Any(x => x.ID == request.SessionID), cancellationToken);
+            Website? website = await _applicationDbContext.Websites.AsNoTracking().FirstOrDefaultAsync(x => x.Key == request.WebsiteKey, cancellationToken);
 
             if (website == null) throw new NullReferenceException("Website not found");
+
+            Session? session = await _applicationDbContext.Sessions.AsNoTracking().FirstOrDefaultAsync(x => x.WebsiteId == website.ID && x.ID == request.SessionID, cancellationToken);
+
+            if (session == null) throw new NullReferenceException("Session not found");
 
             var navigationEvent = new NavigationEvent
             {

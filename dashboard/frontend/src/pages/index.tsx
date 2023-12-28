@@ -21,22 +21,6 @@ const Home: NextPageWithLayout = () => {
     return `${hours}:${minutes}:${sec}`;
   };
 
-  const getCountByScreenSize = (
-    validation: (screen: number) => boolean,
-  ): number => {
-    if (!analyticsData?.screenSizeStats) return 0;
-    const total = analyticsData?.screenSizeStats.reduce(
-      (acc, curr) => acc + curr.count,
-      0,
-    );
-
-    const count = analyticsData?.screenSizeStats
-      .filter((screen) => validation(screen.screenSize))
-      .reduce((acc, curr) => acc + curr.count, 0);
-
-    return (count / total) * 100;
-  };
-
   const cleanUrl = (url: string) => {
     try {
       const urlObject = new URL(url);
@@ -63,10 +47,10 @@ const Home: NextPageWithLayout = () => {
           tableData={[
             [
               (analyticsData?.sessionCount ?? 0).toString(),
-              (analyticsData?.avgPageVisited ?? 0).toString(),
+              (analyticsData?.avgPageVisited.toFixed(2) ?? 0).toString(),
               formatTime(analyticsData?.avgSessionDuration ?? 0),
-              `${analyticsData?.bounceRate ?? 0}%`,
-              `${analyticsData?.isPWAPercentage ?? 0}%`,
+              `${analyticsData?.bounceRate.toFixed(2) ?? 0}%`,
+              `${analyticsData?.isPWAPercentage.toFixed(2) ?? 0}%`,
             ],
           ]}
         />
@@ -80,7 +64,7 @@ const Home: NextPageWithLayout = () => {
           tableheaders={["Page", "Landing", "Visits", "Time spent"]}
           tableData={
             analyticsData?.pageViewStats
-              .sort((a, b) => a.count - b.count)
+              .sort((a, b) => b.count - a.count)
               .map((page) => [
                 cleanUrl(page.url),
                 `${page.landingCount}`,
@@ -100,9 +84,10 @@ const Home: NextPageWithLayout = () => {
             "Video",
             "Source",
             "Started",
-            "25%",
-            "50%",
-            "75%",
+            "< 25%",
+            "> 25%",
+            "> 50%",
+            "> 75%",
             "100%",
           ]}
           tableData={
@@ -112,10 +97,11 @@ const Home: NextPageWithLayout = () => {
                 video.id,
                 video.source,
                 `${video.startedCount}`,
-                `${video.seenQuarterPercentage}%`,
-                `${video.seenHalfPercentage}%`,
-                `${video.seenThreeQuarterPercentage}%`,
-                `${video.seenFullPercentage}%`,
+                `${video.seenFirstQuarterCount.toFixed(2)}%`,
+                `${video.seenQuarterPercentage.toFixed(2)}%`,
+                `${video.seenHalfPercentage.toFixed(2)}%`,
+                `${video.seenThreeQuarterPercentage.toFixed(2)}%`,
+                `${video.seenFullPercentage.toFixed(2)}%`,
               ]) ?? [["", "", "0", "0", "0", "0", "0"]]
           }
         />
@@ -149,10 +135,9 @@ const Home: NextPageWithLayout = () => {
           tableheaders={["Browser", "Total"]}
           tableData={
             analyticsData?.browserStats
-              ? analyticsData?.browserStats.map((browser) => [
-                  browser.name,
-                  browser.count.toString(),
-                ])
+              ? analyticsData?.browserStats
+                  .sort((a, b) => b.count - a.count)
+                  .map((browser) => [browser.name, browser.count.toString()])
               : [["", "0"]]
           }
         />
@@ -164,29 +149,21 @@ const Home: NextPageWithLayout = () => {
       >
         <TableContainer
           tableheaders={[
-            "< 640",
-            "> 640",
-            "> 768",
-            "> 1024",
-            "> 1280",
-            "> 1536",
+            "< 640px",
+            "> 640px",
+            "> 768px",
+            "> 1024px",
+            "> 1280px",
+            "> 1536px",
           ]}
           tableData={[
             [
-              `${getCountByScreenSize((screen) => screen < 640)}%`,
-              `${getCountByScreenSize(
-                (screen) => screen >= 640 && screen < 768,
-              )}%`,
-              `${getCountByScreenSize(
-                (screen) => screen >= 768 && screen < 1024,
-              )}%`,
-              `${getCountByScreenSize(
-                (screen) => screen >= 1024 && screen < 1280,
-              )}%`,
-              `${getCountByScreenSize(
-                (screen) => screen >= 1280 && screen < 1536,
-              )}%`,
-              `${getCountByScreenSize((screen) => screen >= 1536)}%`,
+              `${analyticsData?.screenSizeStats.lessThan640.toFixed(2)}%`,
+              `${analyticsData?.screenSizeStats.greaterThan640.toFixed(2)}%`,
+              `${analyticsData?.screenSizeStats.greaterThan768.toFixed(2)}%`,
+              `${analyticsData?.screenSizeStats.greaterThan1024.toFixed(2)}%`,
+              `${analyticsData?.screenSizeStats.greaterThan1280.toFixed(2)}%`,
+              `${analyticsData?.screenSizeStats.greaterThan1536.toFixed(2)}%`,
             ],
           ]}
         />

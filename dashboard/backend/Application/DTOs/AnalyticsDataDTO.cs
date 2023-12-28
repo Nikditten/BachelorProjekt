@@ -1,3 +1,4 @@
+using System.IO.Compression;
 using System.Security.Cryptography.X509Certificates;
 using Application.DTOs.AnalyticsData;
 using Domain.Entities;
@@ -11,7 +12,7 @@ namespace Application.DTOs
         {
             _sessions = sessions;
         }
-        private ICollection<Session> _sessions { get; set; }
+        private ICollection<Session> _sessions { init; get; }
         public int SessionCount
         {
             get
@@ -24,7 +25,7 @@ namespace Application.DTOs
             get
             {
                 if (_sessions.Count == 0) return 0;
-                return (_sessions.Sum(x => x.NavigationEvents?.Count ?? 0) + _sessions.Count) / _sessions.Count;
+                return _sessions.Average(x => x.NavigationEvents?.Select(y => y.URL).Union(new List<string>() { x.LandingPage }).Distinct().Count() ?? 0);
             }
         }
         public double AvgSessionDuration
@@ -32,21 +33,28 @@ namespace Application.DTOs
             get
             {
                 if (_sessions.Count == 0) return 0;
-                return _sessions.Sum(x => (x.CreatedAt - x.NavigationEvents.LastOrDefault().CreatedAt).TotalSeconds) / _sessions.Count * (-1);
+                return _sessions.Average(x =>
+                {
+                    if (x.UpdatedAt == x.CreatedAt) return x.NavigationEvents?.LastOrDefault()?.CreatedAt.Subtract(x.CreatedAt).TotalSeconds ?? 0;
+                    else return x.UpdatedAt.Subtract(x.CreatedAt).TotalSeconds;
+
+                });
             }
         }
         public double BounceRate
         {
             get
             {
-                return _sessions.Count(x => x.NavigationEvents?.Count == 0) / SessionCount * 100;
+                if (_sessions.Count == 0) return 0;
+                return _sessions.Average(x => x.NavigationEvents?.Count == 0 ? 1 : 0) * 100;
             }
         }
         public double IsPWAPercentage
         {
             get
             {
-                return _sessions.Count(x => x.IsPWA) / SessionCount * 100;
+                if (_sessions.Count == 0) return 0;
+                return _sessions.Average(x => x.IsPWA ? 1 : 0) * 100;
             }
         }
         public List<BrowserStatDTO> browserStats
@@ -56,11 +64,29 @@ namespace Application.DTOs
                 return _sessions.GroupBy(x => x.Browser).Select(x => new BrowserStatDTO { Name = x.Key, Count = x.Count() }).ToList();
             }
         }
-        public List<ScreenSizeStatDTO> screenSizeStats
+        public ScreenSizeStatsDTO screenSizeStats
         {
             get
             {
-                return _sessions.GroupBy(x => x.DeviceWidth).Select(x => new ScreenSizeStatDTO { ScreenSize = x.Key, Count = x.Count() }).ToList();
+                if (_sessions.Count == 0) return new ScreenSizeStatsDTO()
+                {
+                    lessThan640 = 0,
+                    greaterThan640 = 0,
+                    greaterThan768 = 0,
+                    greaterThan1024 = 0,
+                    greaterThan1280 = 0,
+                    greaterThan1536 = 0,
+
+                };
+                return new ScreenSizeStatsDTO
+                {
+                    lessThan640 = _sessions.Average(x => x.DeviceWidth < 640 ? 1 : 0) * 100,
+                    greaterThan640 = _sessions.Average(x => x.DeviceWidth >= 640 && x.DeviceWidth < 768 ? 1 : 0) * 100,
+                    greaterThan768 = _sessions.Average(x => x.DeviceWidth >= 768 && x.DeviceWidth < 1024 ? 1 : 0) * 100,
+                    greaterThan1024 = _sessions.Average(x => x.DeviceWidth >= 1024 && x.DeviceWidth < 1280 ? 1 : 0) * 100,
+                    greaterThan1280 = _sessions.Average(x => x.DeviceWidth >= 1280 && x.DeviceWidth < 1536 ? 1 : 0) * 100,
+                    greaterThan1536 = _sessions.Average(x => x.DeviceWidth >= 1536 ? 1 : 0) * 100,
+                };
             }
         }
         public List<PageViewStatDTO> pageViewStats
@@ -77,7 +103,7 @@ namespace Application.DTOs
                         Url = x.Key,
                         Count = x.Count(),
                         landingCount = _sessions.Count(y => y.LandingPage == x.Key),
-                        AvgTimeSpent = 0
+                        AvgTimeSpent = Math.Abs(x.Average(y => y.CreatedAt.Subtract(navigationEvents.Where(z => z.CreatedAt > y.CreatedAt).OrderBy(z => z.CreatedAt).FirstOrDefault()?.CreatedAt ?? y.Session.UpdatedAt).TotalSeconds)),
                     }
                 ).ToList();
             }
@@ -89,7 +115,7 @@ namespace Application.DTOs
                 ICollection<ClickEvent>? clickEvents = _sessions.SelectMany(x => x.ClickEvents).ToList();
                 if (clickEvents == null) return new List<ClickEventDTO>();
                 return clickEvents
-                .GroupBy(x => x.ElementID ?? x.ElementText)
+                .GroupBy(x => (x.ElementID, x.ElementText, x.ElementType))
                 .Select(
                     x =>
                     {
@@ -113,28 +139,26 @@ namespace Application.DTOs
                 ICollection<VideoSession>? videoSessions = _sessions.SelectMany(x => x.VideoSessions).ToList();
                 if (videoSessions == null) return new List<VideoSessionStatDTO>();
                 return videoSessions
-                .GroupBy(x => x.VideoId)
+                .GroupBy(x => (x.VideoId, x.Source))
                 .Select(
                     x =>
                     {
-                        VideoSession videoSession = x.First();
-                        int startedCount = x.Count();
-                        int seenQuarter = videoSession.VideoEvents.Count(x => x.Duration > videoSession.Duration * 0.25 && x.Duration < videoSession.Duration * 0.5);
-                        int seenHalf = videoSession.VideoEvents.Count(x => x.Duration > videoSession.Duration * 0.5 && x.Duration < videoSession.Duration * 0.75);
-                        int seenThreeQuarter = videoSession.VideoEvents.Count(x => x.Duration > videoSession.Duration * 0.75 && x.Duration < videoSession.Duration);
-                        int seenFull = videoSession.VideoEvents.Count(x => x.Duration == videoSession.Duration || x.Type == VideoEventType.End);
+                        ICollection<VideoSession> vsessions = videoSessions.Where(y => x.Key.VideoId == y.VideoId && x.Key.Source == y.Source).ToList();
                         return new VideoSessionStatDTO
                         {
-                            Id = videoSession.VideoId,
-                            Source = videoSession.Source,
-                            StartedCount = startedCount,
-                            SeenQuarterPercentage = (seenQuarter / startedCount) * 100,
-                            SeenHalfPercentage = (seenHalf / startedCount) * 100,
-                            SeenThreeQuarterPercentage = (seenThreeQuarter / startedCount) * 100,
-                            SeenFullPercentage = (seenFull / startedCount) * 100
+                            Id = x.Key.VideoId,
+                            Source = x.Key.Source,
+                            StartedCount = vsessions.Count,
+                            SeenFirstQuarterCount = vsessions.Average(y => (y.VideoEvents?.OrderBy(z => z.Type).LastOrDefault()?.Duration ?? 0) < y.Duration * 0.25 ? 1 : 0) * 100,
+                            SeenQuarterPercentage = vsessions.Average(y => (y.VideoEvents?.OrderBy(z => z.Type).LastOrDefault()?.Duration ?? 0) >= y.Duration * 0.25 && (y.VideoEvents?.OrderBy(z => z.Type).LastOrDefault()?.Duration ?? 0) < y.Duration * 0.5 ? 1 : 0) * 100,
+                            SeenHalfPercentage = vsessions.Average(y => (y.VideoEvents?.OrderBy(z => z.Type).LastOrDefault()?.Duration ?? 0) >= y.Duration * 0.5 && (y.VideoEvents?.OrderBy(z => z.Type).LastOrDefault()?.Duration ?? 0) < y.Duration * 0.75 ? 1 : 0) * 100,
+                            SeenThreeQuarterPercentage = vsessions.Average(y => (y.VideoEvents?.OrderBy(z => z.Type).LastOrDefault()?.Duration ?? 0) >= y.Duration * 0.75 && (y.VideoEvents?.OrderBy(z => z.Type).LastOrDefault()?.Duration ?? 0) < y.Duration ? 1 : 0) * 100,
+                            SeenFullPercentage = vsessions.Average(y => (y.VideoEvents?.OrderBy(z => z.Type).LastOrDefault()?.Duration ?? 0) == y.Duration || (y.VideoEvents?.OrderBy(z => z.Type).LastOrDefault()?.Type ?? 0) == VideoEventType.End ? 1 : 0) * 100,
                         };
+
                     }
                 ).ToList();
+
             }
         }
     }

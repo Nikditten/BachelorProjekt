@@ -1,6 +1,6 @@
 import fetchData from '../utils/fetchData';
 
-const endVideoSession = async (key: string, video: HTMLVideoElement) => {
+const endVideoSession = async (key: string, duration: number) => {
   const sessionId = localStorage.getItem('session');
   const videoSessionID = localStorage.getItem('videosession');
 
@@ -10,7 +10,7 @@ const endVideoSession = async (key: string, video: HTMLVideoElement) => {
     websiteKey: key,
     sessionID: sessionId,
     videoSessionID: videoSessionID,
-    duration: video.currentTime,
+    duration: duration,
   };
 
   await fetchData('Event/EndVideoSession', 'POST', play);

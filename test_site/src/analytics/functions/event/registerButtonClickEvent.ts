@@ -12,8 +12,8 @@ const registerButtonClickEvent = async (
     websiteKey: key,
     sessionID: sessionId,
     elementID: button.id,
+    elementType: 'button',
     elementText: button.innerText,
-    elementType: button.type.toLowerCase(),
   };
 
   await fetchData('Event/CreateClickEvent', 'POST', body);

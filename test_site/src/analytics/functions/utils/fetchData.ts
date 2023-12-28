@@ -5,15 +5,21 @@ const fetchData = async (
 ): Promise<Response> => {
   const url = `https://localhost:7213/api/collector/${endpoint}`;
 
-  const res = await fetch(url, {
-    method: method,
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify(body),
-  });
+  try {
+    const res = await fetch(url, {
+      method: method,
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(body),
+    });
 
-  return res;
+    return res;
+  } catch (error) {
+    console.error(error);
+  }
+
+  return new Response();
 };
 
 export default fetchData;
