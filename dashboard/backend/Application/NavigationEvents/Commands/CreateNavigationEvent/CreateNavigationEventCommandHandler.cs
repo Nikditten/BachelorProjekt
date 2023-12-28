@@ -1,5 +1,6 @@
 using Application.Common.Interfaces;
 using Domain.Entities;
+using Domain.Enums;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
@@ -28,6 +29,8 @@ namespace Application.NavigationEvents.Commands.CreateNavigationEvent
             var navigationEvent = new NavigationEvent
             {
                 SessionId = request.SessionID,
+                Index = session.NavigationEvents?.Count ?? 0,
+                Type = NavigationType.Routing,
                 URL = request.URL,
             };
 

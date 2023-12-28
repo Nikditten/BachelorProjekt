@@ -16,6 +16,7 @@ interface PageViewStat {
   url: string;
   count: number;
   landingCount: number;
+  exitCount: number;
   avgTimeSpent: number;
 }
 
@@ -40,6 +41,7 @@ interface VideoSessionStat {
 
 export interface IAnalyticsData {
   sessionCount: number;
+  activeSessionCount: number;
   avgPageVisited: number;
   avgSessionDuration: number;
   bounceRate: number;

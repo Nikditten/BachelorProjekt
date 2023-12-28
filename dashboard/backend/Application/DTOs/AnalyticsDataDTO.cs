@@ -1,5 +1,3 @@
-using System.IO.Compression;
-using System.Security.Cryptography.X509Certificates;
 using Application.DTOs.AnalyticsData;
 using Domain.Entities;
 using Domain.Enums;
@@ -10,22 +8,27 @@ namespace Application.DTOs
     {
         public AnalyticsDataDTO(List<Session> sessions)
         {
-            _sessions = sessions;
+            _sessions = sessions.Where(x => x.EndedAt != null).ToList();
+            ActiveSessionCount = sessions.Count(x => x.EndedAt == null);
         }
         private ICollection<Session> _sessions { init; get; }
         public int SessionCount
         {
             get
             {
-                return _sessions.Count;
+                return _sessions.Count(x => x.EndedAt != null);
             }
+        }
+        public int ActiveSessionCount
+        {
+            init; get;
         }
         public double AvgPageVisited
         {
             get
             {
                 if (_sessions.Count == 0) return 0;
-                return _sessions.Average(x => x.NavigationEvents?.Select(y => y.URL).Union(new List<string>() { x.LandingPage }).Distinct().Count() ?? 0);
+                return _sessions.Average(x => x.NavigationEvents?.Select(y => y.URL).Distinct().Count() ?? 0);
             }
         }
         public double AvgSessionDuration
@@ -33,12 +36,7 @@ namespace Application.DTOs
             get
             {
                 if (_sessions.Count == 0) return 0;
-                return _sessions.Average(x =>
-                {
-                    if (x.UpdatedAt == x.CreatedAt) return x.NavigationEvents?.LastOrDefault()?.CreatedAt.Subtract(x.CreatedAt).TotalSeconds ?? 0;
-                    else return x.UpdatedAt.Subtract(x.CreatedAt).TotalSeconds;
-
-                });
+                return _sessions.Average(x => (x.EndedAt - x.CreatedAt)?.TotalSeconds ?? 0);
             }
         }
         public double BounceRate
@@ -93,24 +91,25 @@ namespace Application.DTOs
         {
             get
             {
-                ICollection<NavigationEvent>? navigationEvents = _sessions.SelectMany(x => x.NavigationEvents).ToList();
-                if (navigationEvents == null) return new List<PageViewStatDTO>();
-                return navigationEvents
+                return _sessions
+                .SelectMany(x => x.NavigationEvents)
                 .GroupBy(x => x.URL)
-                .Select(
-                    x => new PageViewStatDTO
+                .Select(x => new PageViewStatDTO
+                {
+                    Url = x.Key,
+                    Count = x.Count(),
+                    LandingCount = x.Count(y => y.Type == NavigationType.Landing),
+                    ExitCount = x.Count(y => y.Type == NavigationType.Leaving),
+                    BounceCount = x.Count(y => y.Type == NavigationType.Landing && y.Session.NavigationEvents.Count == 1),
+                    AvgTimeSpent = x.Average(y =>
                     {
-                        Url = x.Key,
-                        Count = x.Count(),
-                        landingCount = _sessions.Count(y =>
-                        {
-                            Uri landingPageUri = new Uri(y.LandingPage);
-                            Uri urlUri = new Uri(x.Key);
-                            return landingPageUri.AbsolutePath == urlUri.AbsolutePath;
-                        }),
-                        AvgTimeSpent = Math.Abs(x.Average(y => y.CreatedAt.Subtract(navigationEvents.Where(z => z.CreatedAt > y.CreatedAt).OrderBy(z => z.CreatedAt).FirstOrDefault()?.CreatedAt ?? y.Session.UpdatedAt).TotalSeconds)),
-                    }
-                ).ToList();
+                        NavigationEvent? nextNavigationEvent = y.Session.NavigationEvents.OrderBy(z => z.Index).FirstOrDefault(z => z.Index > y.Index);
+                        if (nextNavigationEvent == null) return (y.Session.EndedAt - y.CreatedAt)?.TotalSeconds ?? 0;
+                        return (nextNavigationEvent.CreatedAt - y.CreatedAt).TotalSeconds;
+
+                    })
+                })
+                .ToList();
             }
         }
         public List<ClickEventDTO> clickEvents

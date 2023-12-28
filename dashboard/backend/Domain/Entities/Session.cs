@@ -7,10 +7,6 @@ namespace Domain.Entities
     {
         public required Guid WebsiteId { get; set; }
 
-        public required SessionState State { get; set; }
-
-        public required string LandingPage { get; set; }
-
         public required int DeviceWidth { get; set; }
 
         public required string Browser { get; set; }
@@ -20,6 +16,8 @@ namespace Domain.Entities
         public required ScreenOrientation Orientation { get; set; }
 
         public required bool IsPWA { get; set; }
+
+        public DateTimeOffset? EndedAt { get; set; }
 
         public Website? Website { get; set; }
 

@@ -5,6 +5,7 @@ using Domain.Entities;
 using Domain.Enums;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Query;
 
 namespace Application.Sessions.Commands.EndSession
 {
@@ -27,7 +28,19 @@ namespace Application.Sessions.Commands.EndSession
 
             if (session == null) throw new NullReferenceException("Session does not exists");
 
-            session.State = SessionState.Ended;
+            session.EndedAt = DateTimeOffset.UtcNow;
+
+            _applicationDbContext.Sessions.Update(session);
+
+            NavigationEvent? navigationEvent = await _applicationDbContext.NavigationEvents.AsNoTracking().LastOrDefaultAsync(x => x.SessionId == session.ID, cancellationToken);
+
+            if (navigationEvent != null || navigationEvent?.Type != NavigationType.Leaving)
+            {
+                navigationEvent.Type = NavigationType.Leaving;
+                navigationEvent.UpdatedAt = DateTimeOffset.UtcNow;
+
+                _applicationDbContext.NavigationEvents.Update(navigationEvent);
+            }
 
             await _applicationDbContext.SaveChangesAsync(cancellationToken);
 

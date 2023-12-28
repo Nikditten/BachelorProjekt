@@ -39,6 +39,7 @@ const Home: NextPageWithLayout = () => {
         <TableContainer
           tableheaders={[
             "Total",
+            "Active sessions",
             "Avg. pages visited",
             "Avg. time spent",
             "Bounce rate",
@@ -47,6 +48,7 @@ const Home: NextPageWithLayout = () => {
           tableData={[
             [
               (analyticsData?.sessionCount ?? 0).toString(),
+              (analyticsData?.activeSessionCount ?? 0).toString(),
               (analyticsData?.avgPageVisited.toFixed(2) ?? 0).toString(),
               formatTime(analyticsData?.avgSessionDuration ?? 0),
               `${analyticsData?.bounceRate.toFixed(2) ?? 0}%`,

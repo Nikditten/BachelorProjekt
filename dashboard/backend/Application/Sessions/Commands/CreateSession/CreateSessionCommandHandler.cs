@@ -26,8 +26,6 @@ namespace Application.Sessions.Commands.CreateSession
             var session = new Session
             {
                 WebsiteId = website.ID,
-                State = SessionState.Active,
-                LandingPage = request.LandingPage,
                 DeviceWidth = request.DeviceWidth,
                 Browser = request.Browser,
                 Language = request.Language,
@@ -36,6 +34,16 @@ namespace Application.Sessions.Commands.CreateSession
             };
 
             _applicationDbContext.Sessions.Add(session);
+
+            var navigationEvent = new NavigationEvent
+            {
+                SessionId = session.ID,
+                Index = 0,
+                Type = NavigationType.Landing,
+                URL = request.LandingPage,
+            };
+
+            _applicationDbContext.NavigationEvents.Add(navigationEvent);
 
             await _applicationDbContext.SaveChangesAsync(cancellationToken);
 
