@@ -102,7 +102,12 @@ namespace Application.DTOs
                     {
                         Url = x.Key,
                         Count = x.Count(),
-                        landingCount = _sessions.Count(y => y.LandingPage == x.Key),
+                        landingCount = _sessions.Count(y =>
+                        {
+                            Uri landingPageUri = new Uri(y.LandingPage);
+                            Uri urlUri = new Uri(x.Key);
+                            return landingPageUri.AbsolutePath == urlUri.AbsolutePath;
+                        }),
                         AvgTimeSpent = Math.Abs(x.Average(y => y.CreatedAt.Subtract(navigationEvents.Where(z => z.CreatedAt > y.CreatedAt).OrderBy(z => z.CreatedAt).FirstOrDefault()?.CreatedAt ?? y.Session.UpdatedAt).TotalSeconds)),
                     }
                 ).ToList();
