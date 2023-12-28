@@ -17,6 +17,7 @@ interface PageViewStat {
   count: number;
   landingCount: number;
   exitCount: number;
+  bounceCount: number;
   avgTimeSpent: number;
 }
 

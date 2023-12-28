@@ -63,13 +63,22 @@ const Home: NextPageWithLayout = () => {
         title='Page statistics'
       >
         <TableContainer
-          tableheaders={["Page", "Landing", "Visits", "Time spent"]}
+          tableheaders={[
+            "Page",
+            "Landing",
+            "Exit",
+            "Bounce",
+            "Visits",
+            "Time spent",
+          ]}
           tableData={
             analyticsData?.pageViewStats
               .sort((a, b) => b.count - a.count)
               .map((page) => [
                 cleanUrl(page.url),
                 `${page.landingCount}`,
+                `${page.exitCount}`,
+                `${page.bounceCount}`,
                 `${page.count}`,
                 formatTime(page.avgTimeSpent),
               ]) ?? [["", "0", "0", "0"]]
