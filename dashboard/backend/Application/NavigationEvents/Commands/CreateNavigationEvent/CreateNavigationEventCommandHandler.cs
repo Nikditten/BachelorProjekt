@@ -26,10 +26,17 @@ namespace Application.NavigationEvents.Commands.CreateNavigationEvent
 
             if (session == null) throw new NullReferenceException("Session not found");
 
+            int navigationEventIndex = 0;
+
+            if (session.NavigationEvents != null)
+            {
+                navigationEventIndex = session.NavigationEvents.Count;
+            }
+
             var navigationEvent = new NavigationEvent
             {
                 SessionId = request.SessionID,
-                Index = session.NavigationEvents?.Count ?? 0,
+                Index = navigationEventIndex,
                 Type = NavigationType.Routing,
                 URL = request.URL,
             };

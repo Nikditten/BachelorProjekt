@@ -32,7 +32,7 @@ namespace Application.Sessions.Commands.EndSession
 
             _applicationDbContext.Sessions.Update(session);
 
-            NavigationEvent? navigationEvent = await _applicationDbContext.NavigationEvents.AsNoTracking().LastOrDefaultAsync(x => x.SessionId == session.ID, cancellationToken);
+            NavigationEvent? navigationEvent = await _applicationDbContext.NavigationEvents.AsNoTracking().OrderBy(x => x.CreatedAt).LastOrDefaultAsync(x => x.SessionId == session.ID, cancellationToken);
 
             if (navigationEvent != null || navigationEvent?.Type != NavigationType.Leaving)
             {
@@ -41,6 +41,8 @@ namespace Application.Sessions.Commands.EndSession
 
                 _applicationDbContext.NavigationEvents.Update(navigationEvent);
             }
+
+            Console.WriteLine("Session ended " + session.ID + " " + session.EndedAt);
 
             await _applicationDbContext.SaveChangesAsync(cancellationToken);
 

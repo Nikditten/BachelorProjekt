@@ -17,7 +17,7 @@ type DataCollectorProps = {};
 export const DataCollectorContextValue = (
   websiteKey: string
 ): DataCollectorProps => {
-  const [permision, setPermission] = useState<boolean>(true);
+  const [sessionStarted, setSessionStarted] = useState(false);
   const router = useRouter();
 
   useEffect(() => {
@@ -31,47 +31,53 @@ export const DataCollectorContextValue = (
       isPWA: window.matchMedia('(display-mode: standalone)').matches,
     };
 
-    if (permision) startSession(body);
+    (async () => {
+      const started = await startSession(body);
+      setSessionStarted(started);
+    })();
 
     window.addEventListener('beforeunload', () => endSession(websiteKey));
   }, []);
 
   useEffect(() => {
-    registerNavigationEvent(websiteKey, window.location.href);
+    if (sessionStarted)
+      registerNavigationEvent(websiteKey, window.location.href);
   }, [router.pathname]);
 
   useEffect(() => {
-    const buttons = document.getElementsByTagName('button');
-    const links = document.getElementsByTagName('a');
-    const videos = document.getElementsByTagName('video');
+    window.addEventListener('click', (e) => {
+      console.log(e.target);
+      if (e.target instanceof HTMLButtonElement) {
+        if (sessionStarted) registerButtonClickEvent(websiteKey, e.target);
+      } else if (e.target instanceof HTMLAnchorElement) {
+        if (sessionStarted) registerLinkClickEvent(websiteKey, e.target);
+      }
+    });
 
-    for (let i = 0; i < buttons.length; i++) {
-      buttons[i].addEventListener('click', () =>
-        registerButtonClickEvent(websiteKey, buttons[i])
-      );
-    }
+    window.addEventListener('play', (e) => {
+      if (e.target instanceof HTMLVideoElement) {
+        if (sessionStarted) startVideoSession(websiteKey, e.target);
+      }
+    });
 
-    for (let i = 0; i < links.length; i++) {
-      links[i].addEventListener('click', () =>
-        registerLinkClickEvent(websiteKey, links[i])
-      );
-    }
+    window.addEventListener('pause', (e) => {
+      if (e.target instanceof HTMLVideoElement) {
+        if (sessionStarted) pauseVideoSession(websiteKey, e.target);
+      }
+    });
 
-    for (let i = 0; i < videos.length; i++) {
-      const video = videos[i];
+    window.addEventListener('ended', (e) => {
+      if (e.target instanceof HTMLVideoElement) {
+        if (sessionStarted) endVideoSession(websiteKey, e.target.currentTime);
+      }
+    });
 
-      video.addEventListener('play', () =>
-        startVideoSession(websiteKey, video)
-      );
-
-      video.addEventListener('pause', () =>
-        pauseVideoSession(websiteKey, video)
-      );
-
-      video.addEventListener('ended', () =>
-        endVideoSession(websiteKey, video.currentTime)
-      );
-    }
+    return () => {
+      window.removeEventListener('click', () => {});
+      window.removeEventListener('play', () => {});
+      window.removeEventListener('pause', () => {});
+      window.removeEventListener('ended', () => {});
+    };
   }, [router.pathname]);
 
   return {};

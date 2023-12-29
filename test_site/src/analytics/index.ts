@@ -1,6 +1,8 @@
 import {
-  useDataCollector,
   DataCollectorContextProvider,
-} from "./service/useDataCollector";
+  useDataCollector,
+} from './service/useDataCollector';
 
-export { useDataCollector, DataCollectorContextProvider };
+import TrackingDialog from './components/tracking_dialog';
+
+export { DataCollectorContextProvider, TrackingDialog, useDataCollector };

@@ -69,20 +69,18 @@ const Home: NextPageWithLayout = () => {
             "Exit",
             "Bounce",
             "Visits",
-            "Time spent",
+            "AVG. Time spent",
           ]}
-          tableData={
-            analyticsData?.pageViewStats
-              .sort((a, b) => b.count - a.count)
-              .map((page) => [
-                cleanUrl(page.url),
-                `${page.landingCount}`,
-                `${page.exitCount}`,
-                `${page.bounceCount}`,
-                `${page.count}`,
-                formatTime(page.avgTimeSpent),
-              ]) ?? [["", "0", "0", "0"]]
-          }
+          tableData={analyticsData?.pageViewStats
+            .sort((a, b) => b.count - a.count)
+            .map((page) => [
+              cleanUrl(page.url),
+              `${page.landingCount}`,
+              `${page.exitCount}`,
+              `${page.bounceCount}`,
+              `${page.count}`,
+              formatTime(page.avgTimeSpent),
+            ])}
         />
       </HeaderContainer>
 
@@ -101,20 +99,18 @@ const Home: NextPageWithLayout = () => {
             "> 75%",
             "100%",
           ]}
-          tableData={
-            analyticsData?.videoSessionStats
-              .sort((a, b) => b.startedCount - a.startedCount)
-              .map((video) => [
-                video.id,
-                video.source,
-                `${video.startedCount}`,
-                `${video.seenFirstQuarterCount.toFixed(2)}%`,
-                `${video.seenQuarterPercentage.toFixed(2)}%`,
-                `${video.seenHalfPercentage.toFixed(2)}%`,
-                `${video.seenThreeQuarterPercentage.toFixed(2)}%`,
-                `${video.seenFullPercentage.toFixed(2)}%`,
-              ]) ?? [["", "", "0", "0", "0", "0", "0"]]
-          }
+          tableData={analyticsData?.videoSessionStats
+            .sort((a, b) => b.startedCount - a.startedCount)
+            .map((video) => [
+              video.id,
+              video.source,
+              `${video.startedCount}`,
+              `${video.seenFirstQuarterCount.toFixed(2)}%`,
+              `${video.seenQuarterPercentage.toFixed(2)}%`,
+              `${video.seenHalfPercentage.toFixed(2)}%`,
+              `${video.seenThreeQuarterPercentage.toFixed(2)}%`,
+              `${video.seenFullPercentage.toFixed(2)}%`,
+            ])}
         />
       </HeaderContainer>
 
@@ -124,17 +120,15 @@ const Home: NextPageWithLayout = () => {
       >
         <TableContainer
           tableheaders={["ButtonId", "Text", "Type", "URL", "Click"]}
-          tableData={
-            analyticsData?.clickEvents
-              .sort((a, b) => b.count - a.count)
-              .map((click) => [
-                click.elementId,
-                click.elementText,
-                click.elementType,
-                click.url,
-                `${click.count}`,
-              ]) ?? [["", "", "", "", "0"]]
-          }
+          tableData={analyticsData?.clickEvents
+            .sort((a, b) => b.count - a.count)
+            .map((click) => [
+              click.elementId,
+              click.elementText,
+              click.elementType,
+              click.url,
+              `${click.count}`,
+            ])}
         />
       </HeaderContainer>
 
@@ -144,13 +138,9 @@ const Home: NextPageWithLayout = () => {
       >
         <TableContainer
           tableheaders={["Browser", "Total"]}
-          tableData={
-            analyticsData?.browserStats
-              ? analyticsData?.browserStats
-                  .sort((a, b) => b.count - a.count)
-                  .map((browser) => [browser.name, browser.count.toString()])
-              : [["", "0"]]
-          }
+          tableData={analyticsData?.browserStats
+            .sort((a, b) => b.count - a.count)
+            .map((browser) => [browser.name, browser.count.toString()])}
         />
       </HeaderContainer>
 
@@ -169,12 +159,24 @@ const Home: NextPageWithLayout = () => {
           ]}
           tableData={[
             [
-              `${analyticsData?.screenSizeStats.lessThan640.toFixed(2)}%`,
-              `${analyticsData?.screenSizeStats.greaterThan640.toFixed(2)}%`,
-              `${analyticsData?.screenSizeStats.greaterThan768.toFixed(2)}%`,
-              `${analyticsData?.screenSizeStats.greaterThan1024.toFixed(2)}%`,
-              `${analyticsData?.screenSizeStats.greaterThan1280.toFixed(2)}%`,
-              `${analyticsData?.screenSizeStats.greaterThan1536.toFixed(2)}%`,
+              `${
+                analyticsData?.screenSizeStats.lessThan640.toFixed(2) ?? 0.0
+              }%`,
+              `${
+                analyticsData?.screenSizeStats.greaterThan640.toFixed(2) ?? 0.0
+              }%`,
+              `${
+                analyticsData?.screenSizeStats.greaterThan768.toFixed(2) ?? 0.0
+              }%`,
+              `${
+                analyticsData?.screenSizeStats.greaterThan1024.toFixed(2) ?? 0.0
+              }%`,
+              `${
+                analyticsData?.screenSizeStats.greaterThan1280.toFixed(2) ?? 0.0
+              }%`,
+              `${
+                analyticsData?.screenSizeStats.greaterThan1536.toFixed(2) ?? 0.0
+              }%`,
             ],
           ]}
         />
