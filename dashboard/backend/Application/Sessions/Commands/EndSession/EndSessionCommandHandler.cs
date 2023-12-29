@@ -20,6 +20,8 @@ namespace Application.Sessions.Commands.EndSession
 
         public async Task<Unit> Handle(EndSessionCommand request, CancellationToken cancellationToken)
         {
+            Console.WriteLine("Session ended");
+
             Website? website = await _applicationDbContext.Websites.AsNoTracking().FirstOrDefaultAsync(x => x.Key == request.WebsiteKey, cancellationToken);
 
             if (website == null) throw new NullReferenceException("Website does not exists");

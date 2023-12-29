@@ -1,5 +1,5 @@
 import { useRouter } from 'next/router';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import {
   endSession,
   endVideoSession,
@@ -17,7 +17,6 @@ type DataCollectorProps = {};
 export const DataCollectorContextValue = (
   websiteKey: string
 ): DataCollectorProps => {
-  const [sessionStarted, setSessionStarted] = useState(false);
   const router = useRouter();
 
   useEffect(() => {
@@ -31,44 +30,41 @@ export const DataCollectorContextValue = (
       isPWA: window.matchMedia('(display-mode: standalone)').matches,
     };
 
-    (async () => {
-      const started = await startSession(body);
-      setSessionStarted(started);
-    })();
+    startSession(body);
 
-    window.addEventListener('beforeunload', () => endSession(websiteKey));
+    window.addEventListener('unload', () => endSession(websiteKey));
   }, []);
 
   useEffect(() => {
-    if (sessionStarted)
-      registerNavigationEvent(websiteKey, window.location.href);
+    registerNavigationEvent(websiteKey, window.location.href);
   }, [router.pathname]);
 
   useEffect(() => {
     window.addEventListener('click', (e) => {
-      console.log(e.target);
+      const target = e.target as HTMLElement;
+      console.log('target', target.innerText);
       if (e.target instanceof HTMLButtonElement) {
-        if (sessionStarted) registerButtonClickEvent(websiteKey, e.target);
+        registerButtonClickEvent(websiteKey, e.target);
       } else if (e.target instanceof HTMLAnchorElement) {
-        if (sessionStarted) registerLinkClickEvent(websiteKey, e.target);
+        registerLinkClickEvent(websiteKey, e.target);
       }
     });
 
     window.addEventListener('play', (e) => {
       if (e.target instanceof HTMLVideoElement) {
-        if (sessionStarted) startVideoSession(websiteKey, e.target);
+        startVideoSession(websiteKey, e.target);
       }
     });
 
     window.addEventListener('pause', (e) => {
       if (e.target instanceof HTMLVideoElement) {
-        if (sessionStarted) pauseVideoSession(websiteKey, e.target);
+        pauseVideoSession(websiteKey, e.target);
       }
     });
 
     window.addEventListener('ended', (e) => {
       if (e.target instanceof HTMLVideoElement) {
-        if (sessionStarted) endVideoSession(websiteKey, e.target.currentTime);
+        endVideoSession(websiteKey, e.target.currentTime);
       }
     });
 
@@ -78,7 +74,7 @@ export const DataCollectorContextValue = (
       window.removeEventListener('pause', () => {});
       window.removeEventListener('ended', () => {});
     };
-  }, [router.pathname]);
+  }, []);
 
   return {};
 };

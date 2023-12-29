@@ -6,6 +6,8 @@ const registerButtonClickEvent = async (
 ) => {
   const sessionId = localStorage.getItem('session');
 
+  console.log('button', button);
+
   if (!sessionId) return null;
 
   const body = {
