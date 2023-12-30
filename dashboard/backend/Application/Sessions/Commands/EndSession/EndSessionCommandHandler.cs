@@ -20,8 +20,6 @@ namespace Application.Sessions.Commands.EndSession
 
         public async Task<Unit> Handle(EndSessionCommand request, CancellationToken cancellationToken)
         {
-            Console.WriteLine("Session ended");
-
             Website? website = await _applicationDbContext.Websites.AsNoTracking().FirstOrDefaultAsync(x => x.Key == request.WebsiteKey, cancellationToken);
 
             if (website == null) throw new NullReferenceException("Website does not exists");
@@ -36,15 +34,13 @@ namespace Application.Sessions.Commands.EndSession
 
             NavigationEvent? navigationEvent = await _applicationDbContext.NavigationEvents.AsNoTracking().OrderBy(x => x.CreatedAt).LastOrDefaultAsync(x => x.SessionId == session.ID, cancellationToken);
 
-            if (navigationEvent != null || navigationEvent?.Type != NavigationType.Leaving)
+            if (navigationEvent != null || navigationEvent?.Type != NavigationType.Leaving || navigationEvent?.Type != NavigationType.Landing)
             {
                 navigationEvent.Type = NavigationType.Leaving;
                 navigationEvent.UpdatedAt = DateTimeOffset.UtcNow;
 
                 _applicationDbContext.NavigationEvents.Update(navigationEvent);
             }
-
-            Console.WriteLine("Session ended " + session.ID + " " + session.EndedAt);
 
             await _applicationDbContext.SaveChangesAsync(cancellationToken);
 

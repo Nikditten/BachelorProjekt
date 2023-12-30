@@ -22,7 +22,7 @@ namespace Application.NavigationEvents.Commands.CreateNavigationEvent
 
             if (website == null) throw new NullReferenceException("Website not found");
 
-            Session? session = await _applicationDbContext.Sessions.AsNoTracking().FirstOrDefaultAsync(x => x.WebsiteId == website.ID && x.ID == request.SessionID, cancellationToken);
+            Session? session = await _applicationDbContext.Sessions.Include(x => x.NavigationEvents).AsNoTracking().FirstOrDefaultAsync(x => x.WebsiteId == website.ID && x.ID == request.SessionID, cancellationToken);
 
             if (session == null) throw new NullReferenceException("Session not found");
 

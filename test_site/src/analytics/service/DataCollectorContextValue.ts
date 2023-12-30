@@ -32,7 +32,7 @@ export const DataCollectorContextValue = (
 
     startSession(body);
 
-    window.addEventListener('unload', () => endSession(websiteKey));
+    window.addEventListener('beforeunload', () => endSession(websiteKey));
   }, []);
 
   useEffect(() => {
@@ -41,8 +41,6 @@ export const DataCollectorContextValue = (
 
   useEffect(() => {
     window.addEventListener('click', (e) => {
-      const target = e.target as HTMLElement;
-      console.log('target', target.innerText);
       if (e.target instanceof HTMLButtonElement) {
         registerButtonClickEvent(websiteKey, e.target);
       } else if (e.target instanceof HTMLAnchorElement) {

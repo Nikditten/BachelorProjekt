@@ -99,7 +99,7 @@ namespace Application.DTOs
                     Url = x.Key,
                     Count = x.Count(),
                     LandingCount = x.Count(y => y.Type == NavigationType.Landing),
-                    ExitCount = x.Count(y => y.Type == NavigationType.Leaving),
+                    ExitCount = x.Count(y => y.Type == NavigationType.Leaving || (y.Type == NavigationType.Landing && y.Session.NavigationEvents.Count == 1)),
                     BounceCount = x.Count(y => y.Type == NavigationType.Landing && y.Session.NavigationEvents.Count == 1),
                     AvgTimeSpent = x.Average(y =>
                     {
