@@ -18,8 +18,6 @@ type AppPropsWithLayout = AppProps & {
 export default function App({ Component, pageProps }: AppPropsWithLayout) {
   const getLayout = Component.getLayout ?? ((page) => page);
 
-  console.log("BACKEND_URL", process.env.NEXT_PUBLIC_BACKEND_URL);
-
   return (
     <AuthContextProvider>
       <AuthGuard>
