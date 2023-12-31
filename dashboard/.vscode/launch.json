@@ -17,7 +17,7 @@
       "request": "launch",
       "preLaunchTask": "build",
       "program": "${workspaceFolder}/backend/API/bin/Debug/net7.0/API.dll",
-      "args": [],
+      "args": ["--launch-profile", "Production"],
       "cwd": "${workspaceFolder}/backend/API",
       "stopAtEntry": false,
       "launchBrowser": {
