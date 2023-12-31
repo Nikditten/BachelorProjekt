@@ -4,6 +4,7 @@ namespace Domain.Enums
     {
         Landing = 0,
         Routing = 1,
-        Leaving = 2
+        Leaving = 2,
+        Bouncing = 3
     }
 }

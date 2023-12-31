@@ -32,7 +32,11 @@ export const DataCollectorContextValue = (
 
     startSession(body);
 
-    window.addEventListener('beforeunload', () => endSession(websiteKey));
+    window.addEventListener('beforeunload', (e) => {
+      endSession(websiteKey);
+      e.preventDefault();
+      e.returnValue = '';
+    });
   }, []);
 
   useEffect(() => {

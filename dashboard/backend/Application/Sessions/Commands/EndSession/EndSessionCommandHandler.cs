@@ -34,12 +34,27 @@ namespace Application.Sessions.Commands.EndSession
 
             NavigationEvent? navigationEvent = await _applicationDbContext.NavigationEvents.AsNoTracking().OrderBy(x => x.CreatedAt).LastOrDefaultAsync(x => x.SessionId == session.ID, cancellationToken);
 
-            if (navigationEvent != null || navigationEvent?.Type != NavigationType.Leaving || navigationEvent?.Type != NavigationType.Landing)
-            {
-                navigationEvent.Type = NavigationType.Leaving;
-                navigationEvent.UpdatedAt = DateTimeOffset.UtcNow;
+            Console.WriteLine("TYPE: " + navigationEvent?.Type);
 
-                _applicationDbContext.NavigationEvents.Update(navigationEvent);
+            if (navigationEvent != null)
+            {
+                switch (navigationEvent.Type)
+                {
+                    case NavigationType.Landing:
+                        navigationEvent.Type = NavigationType.Bouncing;
+                        navigationEvent.UpdatedAt = DateTimeOffset.UtcNow;
+                        _applicationDbContext.NavigationEvents.Update(navigationEvent);
+                        break;
+                    case NavigationType.Routing:
+                        navigationEvent.Type = NavigationType.Leaving;
+                        navigationEvent.UpdatedAt = DateTimeOffset.UtcNow;
+                        _applicationDbContext.NavigationEvents.Update(navigationEvent);
+                        break;
+                    default:
+                        break;
+                }
+
+
             }
 
             await _applicationDbContext.SaveChangesAsync(cancellationToken);
