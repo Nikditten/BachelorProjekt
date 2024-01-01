@@ -47,7 +47,10 @@ const WebsiteCard: FC<Props> = ({
   }
 
   return (
-    <div className='flex h-56 w-full flex-col items-center justify-between rounded-lg p-6 shadow-md shadow-gray-400'>
+    <div
+      data-testid='website-card'
+      className='flex h-56 w-full flex-col items-center justify-between rounded-lg p-6 shadow-md shadow-gray-400'
+    >
       <div className='w-full text-start'>
         <div className='flex w-full flex-row items-center justify-between text-xl'>
           <h1 className='w-full font-bold'>{website.name}</h1>

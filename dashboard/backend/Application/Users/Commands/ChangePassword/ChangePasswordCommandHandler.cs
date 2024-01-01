@@ -35,6 +35,10 @@ namespace Application.Users.Commands.ChangePassword
             user.HashedPassword = _passwordService.HashPassword(request.NewPassword, salt);
             user.Salt = salt;
 
+            user.UpdatedAt = DateTime.UtcNow;
+
+            _applicationDbContext.Users.Update(user);
+
             await _applicationDbContext.SaveChangesAsync(cancellationToken);
 
             return Unit.Value;

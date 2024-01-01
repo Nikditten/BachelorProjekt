@@ -73,6 +73,7 @@ const Login = () => {
       <Link
         className='text-center font-light text-gray-400 hover:text-gray-900'
         href='/auth/signup'
+        data-testid='signup-link'
       >
         {"Don't have an account?"}
       </Link>

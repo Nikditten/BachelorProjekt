@@ -4,15 +4,22 @@ import { FC, PropsWithChildren } from "react";
 interface Props {
   href: string;
   label?: string;
+  testid?: string;
 }
 
-const IconLink: FC<PropsWithChildren<Props>> = ({ children, href, label }) => {
+const IconLink: FC<PropsWithChildren<Props>> = ({
+  children,
+  href,
+  label,
+  testid,
+}) => {
   return (
     <Link
       href={href}
-      className="flex flex-col items-center justify-center text-xs gap-1"
+      data-testid={testid}
+      className='flex flex-col items-center justify-center gap-1 text-xs'
     >
-      <div className="text-3xl">{children}</div>
+      <div className='text-3xl'>{children}</div>
       {label ?? <p>{label}</p>}
     </Link>
   );

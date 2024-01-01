@@ -26,6 +26,10 @@ namespace Application.Users.Commands.ChangeUsername
 
             user.Username = request.Username;
 
+            user.UpdatedAt = DateTime.UtcNow;
+
+            _applicationDbContext.Users.Update(user);
+
             await _applicationDbContext.SaveChangesAsync(cancellationToken);
 
             return Unit.Value;

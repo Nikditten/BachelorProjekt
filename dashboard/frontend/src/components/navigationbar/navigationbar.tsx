@@ -36,6 +36,7 @@ const NavigationBar: FC = () => {
             <IconLink
               href='/create'
               label='Website'
+              testid='manage-website-link'
             >
               <MdAdd />
             </IconLink>
