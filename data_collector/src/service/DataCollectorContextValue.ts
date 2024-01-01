@@ -1,4 +1,3 @@
-import { useRouter } from 'next/router';
 import { useEffect } from 'react';
 import {
   endSession,
@@ -17,8 +16,6 @@ type DataCollectorProps = {};
 export const DataCollectorContextValue = (
   websiteKey: string
 ): DataCollectorProps => {
-  const router = useRouter();
-
   useEffect(() => {
     const body = {
       websiteKey: websiteKey,
@@ -35,13 +32,13 @@ export const DataCollectorContextValue = (
     window.addEventListener('beforeunload', (e) => {
       endSession(websiteKey);
       e.preventDefault();
-      e.returnValue;
+      e.returnValue = '';
     });
   }, []);
 
   useEffect(() => {
     registerNavigationEvent(websiteKey, window.location.href);
-  }, [router.pathname]);
+  }, [window.location.href]);
 
   useEffect(() => {
     window.addEventListener('click', (e) => {
@@ -53,7 +50,6 @@ export const DataCollectorContextValue = (
     });
 
     window.addEventListener('play', (e) => {
-      console.log('play', e.target);
       if (e.target instanceof HTMLVideoElement) {
         startVideoSession(websiteKey, e.target);
       }

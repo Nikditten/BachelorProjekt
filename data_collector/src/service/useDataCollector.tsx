@@ -1,17 +1,27 @@
-import { FC, PropsWithChildren, createContext, useContext } from "react";
-import { DataCollectorContextValue } from "./DataCollectorContextValue";
+import { FC, PropsWithChildren, createContext, useContext } from 'react';
+import { TrackingDialog } from '..';
+import { DataCollectorContextValue } from './DataCollectorContextValue';
+
+interface Props {
+  websiteKey: string;
+}
 
 const DataCollectorContext = createContext<
   ReturnType<typeof DataCollectorContextValue>
->({ action: (any) => {} });
+>({} as any);
 
-export const DataCollectorContextProvider: FC<PropsWithChildren> = ({
+export const DataCollectorContextProvider: FC<PropsWithChildren<Props>> = ({
   children,
+  websiteKey,
 }) => {
-  const value = DataCollectorContextValue();
+  const value = DataCollectorContextValue(websiteKey);
+
   return (
     <DataCollectorContext.Provider value={value}>
-      {children}
+      <>
+        {children}
+        <TrackingDialog />
+      </>
     </DataCollectorContext.Provider>
   );
 };
