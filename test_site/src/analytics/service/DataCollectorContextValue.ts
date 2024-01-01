@@ -78,7 +78,7 @@ export const DataCollectorContextValue = (
       window.removeEventListener('pause', () => {});
       window.removeEventListener('ended', () => {});
     };
-  }, [websiteKey]);
+  }, []);
 
   return {};
 };
