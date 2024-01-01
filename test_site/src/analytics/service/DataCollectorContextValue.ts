@@ -34,10 +34,10 @@ export const DataCollectorContextValue = (
 
     window.addEventListener('beforeunload', (e) => {
       endSession(websiteKey);
-      e.preventDefault();
-      e.returnValue;
+      // e.preventDefault();
+      e.returnValue = '';
     });
-  }, []);
+  }, [websiteKey]);
 
   useEffect(() => {
     registerNavigationEvent(websiteKey, window.location.href);
@@ -60,12 +60,14 @@ export const DataCollectorContextValue = (
     });
 
     window.addEventListener('pause', (e) => {
+      console.log('pause', e.target);
       if (e.target instanceof HTMLVideoElement) {
         pauseVideoSession(websiteKey, e.target);
       }
     });
 
     window.addEventListener('ended', (e) => {
+      console.log('ended', e.target);
       if (e.target instanceof HTMLVideoElement) {
         endVideoSession(websiteKey, e.target.currentTime);
       }
@@ -77,7 +79,7 @@ export const DataCollectorContextValue = (
       window.removeEventListener('pause', () => {});
       window.removeEventListener('ended', () => {});
     };
-  }, []);
+  }, [websiteKey]);
 
   return {};
 };
