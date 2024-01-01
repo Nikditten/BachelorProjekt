@@ -21,7 +21,7 @@ interface Props {
 }
 
 const Account: FC<Props> = ({ isOpen, onClose }) => {
-  const { user, checkAuth } = useAuth();
+  const { user, checkAuth, logout } = useAuth();
   const { changeName, changeUsername, changePassword } = useBackendAuth();
 
   const changeNameInitialValue: ChangeNameType = {
@@ -69,12 +69,17 @@ const Account: FC<Props> = ({ isOpen, onClose }) => {
     [changePassword],
   );
 
+  const handleLogout = useCallback(async () => {
+    await logout();
+    await checkAuth();
+  }, [logout, checkAuth]);
+
   return (
     <Modal
       isShown={isOpen}
       onClose={onClose}
     >
-      <div className='flex h-full w-full flex-col gap-6'>
+      <div className='flex h-5/6 w-full flex-col gap-6 overflow-auto lg:h-full'>
         <h1 className='w-full text-center text-4xl'>Account settings</h1>
         <div className='flex h-full w-full flex-col items-center justify-start gap-4 md:flex-row md:items-start md:justify-evenly md:gap-0'>
           <div className='flex h-full flex-col items-center justify-start gap-6'>
@@ -127,42 +132,52 @@ const Account: FC<Props> = ({ isOpen, onClose }) => {
             </Formik>
           </div>
 
-          <Formik
-            initialValues={changePasswordInitialValue}
-            validationSchema={ChangePasswordSchema}
-            onSubmit={(values, actions) =>
-              handlePasswordChange(values, actions)
-            }
-          >
-            {(props) => (
-              <Form className='flex flex-col gap-2'>
-                <InputField
-                  name='password'
-                  label='Old password'
-                  type='password'
-                />
+          <div className='flex h-full flex-col items-center justify-start gap-6'>
+            <Formik
+              initialValues={changePasswordInitialValue}
+              validationSchema={ChangePasswordSchema}
+              onSubmit={(values, actions) =>
+                handlePasswordChange(values, actions)
+              }
+            >
+              {(props) => (
+                <Form className='flex flex-col gap-2'>
+                  <InputField
+                    name='password'
+                    label='Old password'
+                    type='password'
+                  />
 
-                <InputField
-                  name='newpassword'
-                  label='New password'
-                  type='password'
-                />
+                  <InputField
+                    name='newpassword'
+                    label='New password'
+                    type='password'
+                  />
 
-                <InputField
-                  name='repeatpassword'
-                  label='Repeat password'
-                  type='password'
-                />
+                  <InputField
+                    name='repeatpassword'
+                    label='Repeat password'
+                    type='password'
+                  />
 
-                <ActionButton
-                  type='submit'
-                  disabled={props.isSubmitting}
-                >
-                  Change password
-                </ActionButton>
-              </Form>
-            )}
-          </Formik>
+                  <ActionButton
+                    type='submit'
+                    disabled={props.isSubmitting}
+                  >
+                    Change password
+                  </ActionButton>
+                </Form>
+              )}
+            </Formik>
+
+            <ActionButton
+              type='button'
+              filled={false}
+              onClick={handleLogout}
+            >
+              Logout
+            </ActionButton>
+          </div>
         </div>
       </div>
     </Modal>

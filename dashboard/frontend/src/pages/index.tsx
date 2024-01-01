@@ -31,7 +31,7 @@ const Home: NextPageWithLayout = () => {
   };
 
   return (
-    <div className='grid h-full w-full gap-8 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4'>
+    <div className='grid h-5/6 w-full gap-8 md:grid-cols-2 lg:h-full xl:grid-cols-3 2xl:grid-cols-4'>
       <HeaderContainer
         className='col-span-4 row-span-2'
         title='Sessions'

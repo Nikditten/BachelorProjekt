@@ -34,7 +34,6 @@ export const DataCollectorContextValue = (
 
     window.addEventListener('beforeunload', (e) => {
       endSession(websiteKey);
-      // e.preventDefault();
       e.returnValue = '';
     });
   }, [websiteKey]);
