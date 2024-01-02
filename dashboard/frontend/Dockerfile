@@ -19,6 +19,7 @@ WORKDIR /app
 
 ENV NODE_ENV=production
 RUN npm ci
+RUN npm i -D @playwright/test
 
 RUN addgroup -g 1001 -S nodejs
 RUN adduser -S nextjs -u 1001
@@ -35,5 +36,6 @@ CMD npm start
 FROM base as dev
 ENV NODE_ENV=development
 RUN npm install 
+RUN npm i -D @playwright/test
 COPY . .
 CMD npm run dev
