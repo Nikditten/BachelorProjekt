@@ -1,8 +1,9 @@
+import { deleteCookie, getCookie } from '../utils/cookie';
 import fetchData from '../utils/fetchData';
 
 const endVideoSession = async (key: string, duration: number) => {
-  const sessionId = localStorage.getItem('session');
-  const videoSessionID = localStorage.getItem('videosession');
+  const sessionId = getCookie('sessionID');
+  const videoSessionID = getCookie('videoSessionID');
 
   if (!sessionId || !videoSessionID) return null;
 
@@ -15,7 +16,7 @@ const endVideoSession = async (key: string, duration: number) => {
 
   await fetchData('Event/EndVideoSession', 'POST', play);
 
-  localStorage.removeItem('videosession');
+  deleteCookie('videoSessionID');
 };
 
 export default endVideoSession;

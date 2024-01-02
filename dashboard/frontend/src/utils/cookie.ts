@@ -6,9 +6,7 @@ export const setCookie = (name: string, value: string, exp?: Date) => {
 
 export const getCookie = (name: string) => {
   const cookies = document.cookie.split(";");
-  const cookie = cookies
-    .find((cookie) => cookie.split("=")[0] === name)
-    ?.split("=")[1];
+  const cookie = cookies.find((cookie) => cookie.includes(name))?.split("=")[1];
 
   return cookie;
 };

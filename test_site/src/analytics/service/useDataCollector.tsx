@@ -1,5 +1,4 @@
 import { FC, PropsWithChildren, createContext, useContext } from 'react';
-import { TrackingDialog } from '..';
 import { DataCollectorContextValue } from './DataCollectorContextValue';
 
 interface Props {
@@ -18,10 +17,7 @@ export const DataCollectorContextProvider: FC<PropsWithChildren<Props>> = ({
 
   return (
     <DataCollectorContext.Provider value={value}>
-      <>
-        {children}
-        <TrackingDialog />
-      </>
+      {children}
     </DataCollectorContext.Provider>
   );
 };
