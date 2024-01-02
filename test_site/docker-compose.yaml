@@ -1,0 +1,16 @@
+version: '3.8'
+
+services:
+  # SOURCE https://github.com/khezen/compose-postgres/blob/master/docker-compose.yml
+
+  test-site:
+    container_name: test-site
+    build:
+      context: .
+      target: production
+      dockerfile: Dockerfile
+      args:
+        - NEXT_PUBLIC_BACKEND_URL=http://localhost:5001/api/collector
+    restart: always
+    ports:
+      - 3001:3000

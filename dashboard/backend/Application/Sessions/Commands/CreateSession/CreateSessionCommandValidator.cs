@@ -22,7 +22,7 @@ namespace Application.Sessions.Commands.CreateSession
                 .NotEmpty();
 
             RuleFor(x => x.Orientation)
-                .NotEmpty();
+                .NotNull();
 
             RuleFor(x => x.IsPWA)
                 .NotNull();

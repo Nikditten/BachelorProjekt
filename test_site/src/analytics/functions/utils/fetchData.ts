@@ -3,7 +3,7 @@ const fetchData = async (
   method: 'POST' | 'PUT',
   body?: any
 ): Promise<Response> => {
-  const url = `http://localhost:5001/api/collector/${endpoint}`;
+  const url = `${process.env.NEXT_PUBLIC_BACKEND_URL}/${endpoint}`;
 
   try {
     const res = await fetch(url, {
