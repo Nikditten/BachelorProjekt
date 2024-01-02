@@ -8,20 +8,30 @@ namespace Application.DTOs
     {
         public AnalyticsDataDTO(List<Session> sessions)
         {
-            _sessions = sessions.Where(x => x.EndedAt != null).ToList();
-            ActiveSessionCount = sessions.Count(x => x.EndedAt == null);
+            _sessions = sessions;
         }
         private ICollection<Session> _sessions { init; get; }
         public int SessionCount
         {
             get
             {
-                return _sessions.Count(x => x.EndedAt != null);
+                return _sessions.Count;
             }
         }
         public int ActiveSessionCount
         {
-            init; get;
+            get
+            {
+                return _sessions.Count(x => x.UpdatedAt <= x.UpdatedAt.AddMinutes(5));
+            }
+        }
+        public double AvgUniquePageVisited
+        {
+            get
+            {
+                if (_sessions.Count == 0) return 0;
+                return _sessions.Average(x => x.NavigationEvents?.Select(y => y.URL).Distinct().Count() ?? 0);
+            }
         }
         public double AvgPageVisited
         {
@@ -31,20 +41,12 @@ namespace Application.DTOs
                 return _sessions.Average(x => x.NavigationEvents?.Select(y => y.URL).Count() ?? 0);
             }
         }
-        public double AvgSessionDuration
-        {
-            get
-            {
-                if (_sessions.Count == 0) return 0;
-                return _sessions.Average(x => (x.EndedAt - x.CreatedAt)?.TotalSeconds ?? 0);
-            }
-        }
         public double BounceRate
         {
             get
             {
                 if (_sessions.Count == 0) return 0;
-                return _sessions.Average(x => x.NavigationEvents?.Count == 0 ? 1 : 0) * 100;
+                return _sessions.Average(x => x.NavigationEvents?.Count == 1 ? 1 : 0) * 100;
             }
         }
         public double IsPWAPercentage
@@ -99,15 +101,9 @@ namespace Application.DTOs
                     Url = x.Key,
                     Count = x.Count(),
                     LandingCount = x.Count(y => y.Type == NavigationType.Landing),
-                    ExitCount = x.Count(y => y.Type == NavigationType.Leaving),
-                    BounceCount = x.Count(y => y.Type == NavigationType.Bouncing),
-                    AvgTimeSpent = x.Average(y =>
-                    {
-                        NavigationEvent? nextNavigationEvent = y.Session.NavigationEvents.OrderBy(z => z.Index).FirstOrDefault(z => z.Index > y.Index);
-                        if (nextNavigationEvent == null) return (y.Session.EndedAt - y.CreatedAt)?.TotalSeconds ?? 0;
-                        return (nextNavigationEvent.CreatedAt - y.CreatedAt).TotalSeconds;
-
-                    })
+                    ExitCount = x.Count(y => y.Session.NavigationEvents.Max(z => z.Index) == y.Index),
+                    BounceCount = x.Count(y => y.Session.NavigationEvents.Count == 1 && y.Session.NavigationEvents.First().URL == y.URL),
+                    AvgInteractionCount = x.Average(y => y.Session.ClickEvents.Count(z => z.URL == y.URL && z.ElementType == ElementType.Button) + y.Session.VideoSessions.Count(z => z.URL == y.URL)),
                 })
                 .ToList();
             }
@@ -128,7 +124,7 @@ namespace Application.DTOs
                         {
                             ElementId = clickEvent.ElementID,
                             ElementText = clickEvent.ElementText,
-                            ElementType = clickEvent.ElementType,
+                            ElementType = clickEvent.ElementType == ElementType.Button ? "Button" : "Link",
                             Url = clickEvent.URL,
                             Count = x.Count()
                         };

@@ -17,8 +17,6 @@ namespace Domain.Entities
 
         public required bool IsPWA { get; set; }
 
-        public DateTimeOffset? EndedAt { get; set; }
-
         public Website? Website { get; set; }
 
         public ICollection<ClickEvent>? ClickEvents { get; set; }

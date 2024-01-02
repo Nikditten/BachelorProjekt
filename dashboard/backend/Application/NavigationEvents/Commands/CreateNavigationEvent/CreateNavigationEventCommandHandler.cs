@@ -41,7 +41,11 @@ namespace Application.NavigationEvents.Commands.CreateNavigationEvent
                 URL = request.URL,
             };
 
+            session.UpdatedAt = DateTime.UtcNow;
+
             _applicationDbContext.NavigationEvents.Add(navigationEvent);
+
+            _applicationDbContext.Sessions.Update(session);
 
             await _applicationDbContext.SaveChangesAsync(cancellationToken);
 

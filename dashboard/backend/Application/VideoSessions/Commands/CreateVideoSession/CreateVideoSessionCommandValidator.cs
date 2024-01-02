@@ -19,6 +19,9 @@ namespace Application.VideoSessions.Commands.CreateVideoSession
             RuleFor(x => x.Duration)
                 .NotEmpty();
 
+            RuleFor(x => x.URL)
+                .NotEmpty();
+
         }
     }
 }

@@ -1,7 +1,6 @@
 import { useRouter } from 'next/router';
 import { useEffect } from 'react';
 import {
-  endSession,
   endVideoSession,
   getBrowser,
   pauseVideoSession,
@@ -31,11 +30,6 @@ export const DataCollectorContextValue = (
     };
 
     startSession(body);
-
-    window.addEventListener('beforeunload', (e) => {
-      endSession(websiteKey);
-      e.returnValue = '';
-    });
   }, [websiteKey]);
 
   useEffect(() => {
@@ -51,34 +45,36 @@ export const DataCollectorContextValue = (
       }
     });
 
-    window.addEventListener('play', (e) => {
-      console.log('play', e.target);
-      if (e.target instanceof HTMLVideoElement) {
-        startVideoSession(websiteKey, e.target);
-      }
-    });
+    return () => {
+      window.removeEventListener('click', () => {});
+    };
+  }, []);
 
-    window.addEventListener('pause', (e) => {
-      console.log('pause', e.target);
-      if (e.target instanceof HTMLVideoElement) {
-        pauseVideoSession(websiteKey, e.target);
-      }
-    });
+  useEffect(() => {
+    const videos = document.querySelectorAll('video');
 
-    window.addEventListener('ended', (e) => {
-      console.log('ended', e.target);
-      if (e.target instanceof HTMLVideoElement) {
-        endVideoSession(websiteKey, e.target.currentTime);
-      }
+    videos.forEach((video) => {
+      video.addEventListener('play', () => {
+        startVideoSession(websiteKey, video);
+      });
+
+      video.addEventListener('pause', () => {
+        pauseVideoSession(websiteKey, video);
+      });
+
+      video.addEventListener('ended', () => {
+        endVideoSession(websiteKey, video.currentTime);
+      });
     });
 
     return () => {
-      window.removeEventListener('click', () => {});
-      window.removeEventListener('play', () => {});
-      window.removeEventListener('pause', () => {});
-      window.removeEventListener('ended', () => {});
+      videos.forEach((video) => {
+        video.removeEventListener('play', () => {});
+        video.removeEventListener('pause', () => {});
+        video.removeEventListener('ended', () => {});
+      });
     };
-  }, []);
+  }, [router.pathname]);
 
   return {};
 };

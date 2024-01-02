@@ -17,9 +17,13 @@ namespace Application.ClickEvents.Commands.CreateClickEvent
         public async Task<Unit> Handle(CreateClickEventCommand request, CancellationToken cancellationToken)
         {
 
-            Website? website = await _applicationDbContext.Websites.Include(x => x.Sessions).AsNoTracking().FirstOrDefaultAsync(x => x.Key == request.WebsiteKey && x.Sessions!.Any(x => x.ID == request.SessionID), cancellationToken);
+            Website? website = await _applicationDbContext.Websites.AsNoTracking().FirstOrDefaultAsync(x => x.Key == request.WebsiteKey, cancellationToken);
 
             if (website == null) throw new NullReferenceException("Website not found");
+
+            Session? session = await _applicationDbContext.Sessions.AsNoTracking().FirstOrDefaultAsync(x => x.ID == request.SessionID, cancellationToken);
+
+            if (session == null) throw new NullReferenceException("Session not found");
 
             var clickEvent = new ClickEvent
             {
@@ -27,10 +31,14 @@ namespace Application.ClickEvents.Commands.CreateClickEvent
                 ElementID = request.ElementID,
                 ElementText = request.ElementText,
                 ElementType = request.ElementType,
-                URL = request.URL ?? "",
+                URL = request.URL,
             };
 
+            session.UpdatedAt = DateTime.UtcNow;
+
             _applicationDbContext.ClickEvents.Add(clickEvent);
+
+            _applicationDbContext.Sessions.Update(session);
 
             await _applicationDbContext.SaveChangesAsync(cancellationToken);
 

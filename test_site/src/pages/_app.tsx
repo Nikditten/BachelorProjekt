@@ -5,7 +5,7 @@ import type { AppProps } from 'next/app';
 
 export default function App({ Component, pageProps }: AppProps) {
   return (
-    <DataCollectorContextProvider websiteKey='3eabad78-aa24-4319-880b-8de36f26824b'>
+    <DataCollectorContextProvider websiteKey='3778c7b5-a10c-411c-9cfe-682b4e2e9e81'>
       <Navigation>
         <Component {...pageProps} />
       </Navigation>

@@ -18,9 +18,13 @@ namespace Application.VideoSessions.Commands.PauseVideoSession
         public async Task<Unit> Handle(PauseVideoSessionCommand request, CancellationToken cancellationToken)
         {
 
-            Website? website = await _applicationDbContext.Websites.Include(x => x.Sessions).AsNoTracking().FirstOrDefaultAsync(x => x.Key == request.WebsiteKey && x.Sessions!.Any(x => x.ID == request.SessionID), cancellationToken);
+            Website? website = await _applicationDbContext.Websites.AsNoTracking().FirstOrDefaultAsync(x => x.Key == request.WebsiteKey, cancellationToken);
 
             if (website == null) throw new NullReferenceException("Website not found");
+
+            Session? session = await _applicationDbContext.Sessions.AsNoTracking().FirstOrDefaultAsync(x => x.ID == request.SessionID, cancellationToken);
+
+            if (session == null) throw new NullReferenceException("Session not found");
 
             VideoSession? videoSession = await _applicationDbContext.VideoSessions.Include(x => x.VideoEvents).AsNoTracking().FirstOrDefaultAsync(x => x.ID == request.VideoSessionID, cancellationToken);
 
@@ -33,7 +37,11 @@ namespace Application.VideoSessions.Commands.PauseVideoSession
                 Type = VideoEventType.Pause
             };
 
+            session.UpdatedAt = DateTime.UtcNow;
+
             _applicationDbContext.VideoEvents.Add(videoEvent);
+
+            _applicationDbContext.Sessions.Update(session);
 
             await _applicationDbContext.SaveChangesAsync(cancellationToken);
 

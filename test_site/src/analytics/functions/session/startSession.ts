@@ -1,3 +1,4 @@
+import { setCookie } from '../utils/cookie';
 import fetchData from '../utils/fetchData';
 
 const startSession = async (body: any): Promise<boolean> => {
@@ -8,7 +9,8 @@ const startSession = async (body: any): Promise<boolean> => {
     return false;
   } else {
     const session = await res.json();
-    localStorage.setItem('session', session);
+    console.log(session);
+    setCookie('sessionID', session);
     return true;
   }
 };

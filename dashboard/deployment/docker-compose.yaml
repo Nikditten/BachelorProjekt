@@ -12,49 +12,48 @@ services:
       - POSTGRES_DB=${POSTGRES_DB}
       - POSTGRES_USER=${POSTGRES_USER}
       - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
-    networks:
-      - backend_network
+    # networks:
+    #   - backend_network
     volumes:
       - db_data:/var/lib/postgresql/data
 
-  backend:
-    container_name: backend
-    build: ../backend
-    restart: always
-    ports:
-      - ${BACKEND_PORT}:${BACKEND_PORT}
-    environment:
-      - ASPNETCORE_ENVIRONMENT=Production
-      - ASPNETCORE_URLS=http://+:${BACKEND_PORT}
-      - ConnectionStrings__DefaultConnection=Server=db;PORT=${DATABASE_PORT};Database=${POSTGRES_DB};Username=${POSTGRES_USER};Password=${POSTGRES_PASSWORD};
-      - JwtSettings__Key=${JWT_SECRET}
-    networks:
-      - backend_network
-      - frontend_network
-    depends_on:
-      - db
+  # backend:
+  #   container_name: backend
+  #   build: ../backend
+  #   restart: always
+  #   ports:
+  #     - ${BACKEND_PORT}:${BACKEND_PORT}
+  #   environment:
+  #     - ASPNETCORE_ENVIRONMENT=Production
+  #     - ASPNETCORE_URLS=http://+:${BACKEND_PORT}
+  #     - ConnectionStrings__DefaultConnection=Server=db;PORT=${DATABASE_PORT};Database=${POSTGRES_DB};Username=${POSTGRES_USER};Password=${POSTGRES_PASSWORD};
+  #     - JwtSettings__Key=${JWT_SECRET}
+  #   networks:
+  #     - backend_network
+  #     - frontend_network
+  #   depends_on:
+  #     - db
 
-  frontend:
-    container_name: frontend
-    build:
-      context: ../frontend
-      target: production
-      dockerfile: Dockerfile
-      args:
-        - NEXT_PUBLIC_BACKEND_URL=http://${BACKEND_HOST}:${BACKEND_PORT}/api/dashboard
-    restart: always
-    ports:
-      - ${FRONTEND_PORT}:${FRONTEND_PORT}
-    networks:
-      - frontend_network
-    depends_on:
-      - backend
+  # frontend:
+  #   container_name: frontend
+  #   build:
+  #     context: ../frontend
+  #     target: production
+  #     dockerfile: Dockerfile
+  #     args:
+  #       - NEXT_PUBLIC_BACKEND_URL=http://${BACKEND_HOST}:${BACKEND_PORT}/api/dashboard
+  #   restart: always
+  #   ports:
+  #     - ${FRONTEND_PORT}:${FRONTEND_PORT}
+  #   networks:
+  #     - frontend_network
+  #   depends_on:
+  #     - backend
 
 volumes:
   db_data:
-
-networks:
-  backend_network:
-    driver: bridge
-  frontend_network:
-    driver: bridge
+# networks:
+#   backend_network:
+#     driver: bridge
+#   frontend_network:
+#     driver: bridge

@@ -9,5 +9,6 @@ namespace Application.VideoSessions.Commands.CreateVideoSession
         public string? VideoID { get; set; }
         public required string Source { get; set; }
         public required double Duration { get; set; }
+        public required string URL { get; set; }
     }
 }
