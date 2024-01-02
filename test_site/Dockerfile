@@ -10,6 +10,7 @@ COPY package*.json ./
 FROM base as builder
 WORKDIR /app
 COPY . .
+RUN npm i -D @playwright/test
 RUN npm run build
 
 
