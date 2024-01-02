@@ -1,9 +1,10 @@
+import { getCookie, setCookie } from '../utils/cookie';
 import fetchData from '../utils/fetchData';
 
 const startVideoSession = async (key: string, video: HTMLVideoElement) => {
   if (video.currentTime > 0) return null;
 
-  const sessionId = localStorage.getItem('session');
+  const sessionId = getCookie('sessionID');
 
   if (!sessionId) return null;
 
@@ -13,6 +14,7 @@ const startVideoSession = async (key: string, video: HTMLVideoElement) => {
     videoID: video.id,
     source: video.src,
     duration: video.duration,
+    url: window.location.href,
   };
 
   const res = await fetchData('Event/CreateVideoSession', 'POST', play);
@@ -22,7 +24,7 @@ const startVideoSession = async (key: string, video: HTMLVideoElement) => {
     return null;
   } else {
     const videosession = await res.json();
-    localStorage.setItem('videosession', videosession);
+    setCookie('videoSessionID', videosession);
   }
 };
 

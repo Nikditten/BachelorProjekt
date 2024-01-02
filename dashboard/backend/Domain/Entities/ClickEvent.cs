@@ -1,4 +1,5 @@
 using Domain.Common;
+using Domain.Enums;
 
 namespace Domain.Entities
 {
@@ -7,8 +8,8 @@ namespace Domain.Entities
         public required Guid SessionId { get; set; }
         public string? ElementID { get; set; }
         public required string ElementText { get; set; }
-        public required string ElementType { get; set; }
-        public string? URL { get; set; }
+        public required ElementType ElementType { get; set; }
+        public required string URL { get; set; }
         public Session? Session { get; set; }
     }
 }

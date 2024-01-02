@@ -1,10 +1,12 @@
+import ElementType from '@/analytics/types/ElementType';
+import { getCookie } from '../utils/cookie';
 import fetchData from '../utils/fetchData';
 
 const registerButtonClickEvent = async (
   key: string,
   button: HTMLButtonElement
 ) => {
-  const sessionId = localStorage.getItem('session');
+  const sessionId = getCookie('sessionID');
 
   console.log('button', button);
 
@@ -14,8 +16,9 @@ const registerButtonClickEvent = async (
     websiteKey: key,
     sessionID: sessionId,
     elementID: button.id,
-    elementType: 'button',
+    elementType: ElementType.Button,
     elementText: button.innerText,
+    url: window.location.href,
   };
 
   await fetchData('Event/CreateClickEvent', 'POST', body);

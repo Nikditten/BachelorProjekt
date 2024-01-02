@@ -1,7 +1,8 @@
+import { getCookie } from '../utils/cookie';
 import fetchData from '../utils/fetchData';
 
 const registerNavigationEvent = async (key: string, url: string) => {
-  const sessionId = localStorage.getItem('session');
+  const sessionId = getCookie('sessionID');
 
   if (!sessionId) return null;
 

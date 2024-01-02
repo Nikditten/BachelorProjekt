@@ -1,6 +1,6 @@
+import { useRouter } from 'next/router';
 import { useEffect } from 'react';
 import {
-  endSession,
   endVideoSession,
   getBrowser,
   pauseVideoSession,
@@ -16,6 +16,8 @@ type DataCollectorProps = {};
 export const DataCollectorContextValue = (
   websiteKey: string
 ): DataCollectorProps => {
+  const router = useRouter();
+
   useEffect(() => {
     const body = {
       websiteKey: websiteKey,
@@ -28,17 +30,11 @@ export const DataCollectorContextValue = (
     };
 
     startSession(body);
-
-    window.addEventListener('beforeunload', (e) => {
-      endSession(websiteKey);
-      e.preventDefault();
-      e.returnValue = '';
-    });
-  }, []);
+  }, [websiteKey]);
 
   useEffect(() => {
     registerNavigationEvent(websiteKey, window.location.href);
-  }, [window.location.href]);
+  }, [router.pathname]);
 
   useEffect(() => {
     window.addEventListener('click', (e) => {
@@ -49,31 +45,36 @@ export const DataCollectorContextValue = (
       }
     });
 
-    window.addEventListener('play', (e) => {
-      if (e.target instanceof HTMLVideoElement) {
-        startVideoSession(websiteKey, e.target);
-      }
-    });
+    return () => {
+      window.removeEventListener('click', () => {});
+    };
+  }, []);
 
-    window.addEventListener('pause', (e) => {
-      if (e.target instanceof HTMLVideoElement) {
-        pauseVideoSession(websiteKey, e.target);
-      }
-    });
+  useEffect(() => {
+    const videos = document.querySelectorAll('video');
 
-    window.addEventListener('ended', (e) => {
-      if (e.target instanceof HTMLVideoElement) {
-        endVideoSession(websiteKey, e.target.currentTime);
-      }
+    videos.forEach((video) => {
+      video.addEventListener('play', () => {
+        startVideoSession(websiteKey, video);
+      });
+
+      video.addEventListener('pause', () => {
+        pauseVideoSession(websiteKey, video);
+      });
+
+      video.addEventListener('ended', () => {
+        endVideoSession(websiteKey, video.currentTime);
+      });
     });
 
     return () => {
-      window.removeEventListener('click', () => {});
-      window.removeEventListener('play', () => {});
-      window.removeEventListener('pause', () => {});
-      window.removeEventListener('ended', () => {});
+      videos.forEach((video) => {
+        video.removeEventListener('play', () => {});
+        video.removeEventListener('pause', () => {});
+        video.removeEventListener('ended', () => {});
+      });
     };
-  }, []);
+  }, [router.pathname]);
 
   return {};
 };

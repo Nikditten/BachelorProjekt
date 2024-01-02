@@ -18,7 +18,7 @@ interface PageViewStat {
   landingCount: number;
   exitCount: number;
   bounceCount: number;
-  avgTimeSpent: number;
+  avgInteractionCount: number;
 }
 
 interface ClickEvent {
@@ -43,8 +43,8 @@ interface VideoSessionStat {
 export interface IAnalyticsData {
   sessionCount: number;
   activeSessionCount: number;
+  avgUniquePageVisited: number;
   avgPageVisited: number;
-  avgSessionDuration: number;
   bounceRate: number;
   isPWAPercentage: number;
   browserStats: BrowserStat[];

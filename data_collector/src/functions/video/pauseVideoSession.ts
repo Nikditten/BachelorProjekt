@@ -1,8 +1,9 @@
+import { getCookie } from '../utils/cookie';
 import fetchData from '../utils/fetchData';
 
 const pauseVideoSession = async (key: string, video: HTMLVideoElement) => {
-  const sessionId = localStorage.getItem('session');
-  const videoSessionID = localStorage.getItem('videosession');
+  const sessionId = getCookie('sessionID');
+  const videoSessionID = getCookie('videoSessionID');
 
   if (!sessionId || !videoSessionID) return null;
   if (video.currentTime === 0 || video.duration === video.currentTime)

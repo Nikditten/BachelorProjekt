@@ -14,9 +14,12 @@ namespace Application.Sessions.Commands.CreateSession
                 .NotEmpty();
 
             RuleFor(x => x.ElementType)
-                .NotEmpty();
+                .NotNull();
 
             RuleFor(x => x.ElementText)
+                .NotEmpty();
+
+            RuleFor(x => x.URL)
                 .NotEmpty();
 
         }

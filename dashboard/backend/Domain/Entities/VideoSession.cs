@@ -9,6 +9,7 @@ namespace Domain.Entities
         public string VideoId { get; set; } = "Not specified";
         public required string Source { get; set; }
         public required double Duration { get; set; }
+        public required string URL { get; set; }
         public Session? Session { get; set; }
         public ICollection<VideoEvent>? VideoEvents { get; set; }
     }

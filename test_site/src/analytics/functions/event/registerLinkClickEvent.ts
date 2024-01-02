@@ -1,7 +1,9 @@
+import ElementType from '@/analytics/types/ElementType';
 import fetchData from '../utils/fetchData';
+import { getCookie } from '../utils/cookie';
 
 const registerLinkClickEvent = async (key: string, link: HTMLAnchorElement) => {
-  const sessionId = localStorage.getItem('session');
+  const sessionId = getCookie('sessionID');
 
   if (!sessionId) return null;
 
@@ -9,7 +11,7 @@ const registerLinkClickEvent = async (key: string, link: HTMLAnchorElement) => {
     websiteKey: key,
     sessionID: sessionId,
     elementID: link.id,
-    elementType: 'link',
+    elementType: ElementType.Link,
     elementText: link.innerText,
     url: link.href,
   };

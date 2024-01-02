@@ -9,7 +9,7 @@ namespace Application.ClickEvents.Commands.CreateClickEvent
         public required Guid SessionID { get; set; }
         public string? ElementID { get; set; }
         public required string ElementText { get; set; }
-        public required string ElementType { get; set; }
-        public string? URL { get; set; }
+        public required ElementType ElementType { get; set; }
+        public required string URL { get; set; }
     }
 }

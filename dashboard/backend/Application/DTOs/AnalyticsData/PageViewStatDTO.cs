@@ -7,6 +7,6 @@ namespace Application.DTOs.AnalyticsData
         public required int ExitCount { get; set; }
         public required int BounceCount { get; set; }
         public required int Count { get; set; }
-        public required double AvgTimeSpent { get; set; }
+        public required double AvgInteractionCount { get; set; }
     }
 }

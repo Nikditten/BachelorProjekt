@@ -9,18 +9,6 @@ import { NextPageWithLayout } from "./_app";
 const Home: NextPageWithLayout = () => {
   const { analyticsData } = useWebsite();
 
-  const formatTime = (seconds: number): string => {
-    var hours = Math.floor(seconds / 3600).toString();
-    var minutes = Math.floor((seconds % 3600) / 60).toString();
-    var sec = Math.floor(seconds % 60).toString();
-
-    if (hours.length === 1) hours = `0${hours}`;
-    if (minutes.length === 1) minutes = `0${minutes}`;
-    if (sec.length === 1) sec = `0${sec}`;
-
-    return `${hours}:${minutes}:${sec}`;
-  };
-
   const cleanUrl = (url: string) => {
     try {
       const urlObject = new URL(url);
@@ -40,8 +28,8 @@ const Home: NextPageWithLayout = () => {
           tableheaders={[
             "Total",
             "Active sessions",
+            "Avg. unique pages visited",
             "Avg. pages visited",
-            "Avg. time spent",
             "Bounce rate",
             "PWA visits",
           ]}
@@ -50,7 +38,7 @@ const Home: NextPageWithLayout = () => {
               (analyticsData?.sessionCount ?? 0).toString(),
               (analyticsData?.activeSessionCount ?? 0).toString(),
               (analyticsData?.avgPageVisited?.toFixed(2) ?? 0).toString(),
-              formatTime(analyticsData?.avgSessionDuration ?? 0),
+              (analyticsData?.avgUniquePageVisited?.toFixed(2) ?? 0).toString(),
               `${analyticsData?.bounceRate?.toFixed(2) ?? 0}%`,
               `${analyticsData?.isPWAPercentage?.toFixed(2) ?? 0}%`,
             ],
@@ -69,7 +57,7 @@ const Home: NextPageWithLayout = () => {
             "Exit",
             "Bounce",
             "Visits",
-            "AVG. Time spent",
+            "Interactions",
           ]}
           tableData={analyticsData?.pageViewStats
             .sort((a, b) => b.count - a.count)
@@ -79,7 +67,7 @@ const Home: NextPageWithLayout = () => {
               `${page.exitCount}`,
               `${page.bounceCount}`,
               `${page.count}`,
-              formatTime(page.avgTimeSpent),
+              `${page.avgInteractionCount.toFixed(2)}`,
             ])}
         />
       </HeaderContainer>
