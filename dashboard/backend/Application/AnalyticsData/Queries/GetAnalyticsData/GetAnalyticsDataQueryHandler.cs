@@ -33,7 +33,7 @@ namespace Application.AnalyticsData.Queries.GetAnalyticsData
 
         public async Task<AnalyticsDataDTO> Handle(GetAnalyticsDataQuery request, CancellationToken cancellationToken)
         {
-            Website? website = await _applicationDbContext.Websites.AsNoTracking().FirstOrDefaultAsync(x => x.ID == request.websiteId && x.UserId == _userService.Id, cancellationToken);
+            Website? website = await _applicationDbContext.Websites.AsNoTracking().FirstOrDefaultAsync(x => x.ID == request.websiteId && (x.UserId == _userService.Id || x.Shares.Any(y => y.UserId == _userService.Id)), cancellationToken);
 
             if (website == null) throw new NullReferenceException("Website not found");
 

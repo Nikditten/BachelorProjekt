@@ -49,10 +49,10 @@ const Home: NextPageWithLayout = () => {
             [
               (analyticsData?.sessionCount ?? 0).toString(),
               (analyticsData?.activeSessionCount ?? 0).toString(),
-              (analyticsData?.avgPageVisited.toFixed(2) ?? 0).toString(),
+              (analyticsData?.avgPageVisited?.toFixed(2) ?? 0).toString(),
               formatTime(analyticsData?.avgSessionDuration ?? 0),
-              `${analyticsData?.bounceRate.toFixed(2) ?? 0}%`,
-              `${analyticsData?.isPWAPercentage.toFixed(2) ?? 0}%`,
+              `${analyticsData?.bounceRate?.toFixed(2) ?? 0}%`,
+              `${analyticsData?.isPWAPercentage?.toFixed(2) ?? 0}%`,
             ],
           ]}
         />
@@ -160,22 +160,25 @@ const Home: NextPageWithLayout = () => {
           tableData={[
             [
               `${
-                analyticsData?.screenSizeStats.lessThan640.toFixed(2) ?? 0.0
+                analyticsData?.screenSizeStats.lessThan640?.toFixed(2) ?? 0.0
               }%`,
               `${
-                analyticsData?.screenSizeStats.greaterThan640.toFixed(2) ?? 0.0
+                analyticsData?.screenSizeStats.greaterThan640?.toFixed(2) ?? 0.0
               }%`,
               `${
-                analyticsData?.screenSizeStats.greaterThan768.toFixed(2) ?? 0.0
+                analyticsData?.screenSizeStats.greaterThan768?.toFixed(2) ?? 0.0
               }%`,
               `${
-                analyticsData?.screenSizeStats.greaterThan1024.toFixed(2) ?? 0.0
+                analyticsData?.screenSizeStats.greaterThan1024?.toFixed(2) ??
+                0.0
               }%`,
               `${
-                analyticsData?.screenSizeStats.greaterThan1280.toFixed(2) ?? 0.0
+                analyticsData?.screenSizeStats.greaterThan1280?.toFixed(2) ??
+                0.0
               }%`,
               `${
-                analyticsData?.screenSizeStats.greaterThan1536.toFixed(2) ?? 0.0
+                analyticsData?.screenSizeStats.greaterThan1536?.toFixed(2) ??
+                0.0
               }%`,
             ],
           ]}

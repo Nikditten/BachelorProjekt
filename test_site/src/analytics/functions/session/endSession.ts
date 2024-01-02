@@ -5,7 +5,7 @@ const endSession = async (websiteKey: string) => {
 
   if (!sessionID) return null;
 
-  const res = await fetchData('Session/End', 'PUT', {
+  await fetchData('Session/End', 'PUT', {
     websiteKey: websiteKey,
     sessionID: sessionID,
   });
