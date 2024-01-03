@@ -22,7 +22,8 @@ namespace Application.DTOs
         {
             get
             {
-                return _sessions.Count(x => x.UpdatedAt <= x.UpdatedAt.AddMinutes(5));
+                // A section is active if the session is updated in the last 15 minutes
+                return _sessions.Count(x => x.UpdatedAt > DateTime.Now.AddMinutes(-15));
             }
         }
         public double AvgUniquePageVisited

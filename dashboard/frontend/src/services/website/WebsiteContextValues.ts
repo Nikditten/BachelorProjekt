@@ -103,6 +103,18 @@ export const WebsiteContextValue = (): WebsiteProps => {
             return website;
           }),
         );
+
+        setActiveWebsite((prev) => {
+          if (prev && prev.id === id) {
+            return {
+              ...prev,
+              name,
+              url,
+            };
+          }
+
+          return prev;
+        });
       }
     },
     [updateWebsite],
