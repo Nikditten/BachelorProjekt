@@ -32,8 +32,6 @@ export const DataCollectorContextValue = (
         document.referrer.includes('android-app://'),
     };
 
-    console.log(document.referrer);
-
     startSession(body);
   }, [websiteKey]);
 

@@ -9,7 +9,6 @@ const startSession = async (body: any): Promise<boolean> => {
     return false;
   } else {
     const session = await res.json();
-    console.log(session);
     setCookie('sessionID', session);
     return true;
   }

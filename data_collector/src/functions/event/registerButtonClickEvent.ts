@@ -8,8 +8,6 @@ const registerButtonClickEvent = async (
 ) => {
   const sessionId = getCookie('sessionID');
 
-  console.log('button', button);
-
   if (!sessionId) return null;
 
   const body = {
