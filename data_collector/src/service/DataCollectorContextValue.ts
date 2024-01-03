@@ -26,8 +26,13 @@ export const DataCollectorContextValue = (
       browser: getBrowser(),
       language: navigator.language.split('-')[0],
       orientation: window.screen.orientation.type.includes('portrait') ? 0 : 1,
-      isPWA: window.matchMedia('(display-mode: standalone)').matches,
+      isPWA:
+        window.matchMedia('(display-mode: standalone)').matches ||
+        (window.navigator as any).standalone ||
+        document.referrer.includes('android-app://'),
     };
+
+    console.log(document.referrer);
 
     startSession(body);
   }, [websiteKey]);
