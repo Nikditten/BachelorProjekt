@@ -57,7 +57,7 @@ const Home: NextPageWithLayout = () => {
             "Exit",
             "Bounce",
             "Visits",
-            "Interactions",
+            "AVG. Interactions",
           ]}
           tableData={analyticsData?.pageViewStats
             .sort((a, b) => b.count - a.count)

@@ -1,7 +1,7 @@
 ﻿
 using Application.DTOs;
 using Application.Users.Commands.CreateUser;
-using Application.Users.Commands.LoginUser;
+using Application.Users.Queries.LoginUser;
 using Application.Users.Commands.ChangeUsername;
 using Application.Users.Queries.GetUser;
 using MediatR;
@@ -30,9 +30,9 @@ namespace API.Controllers
 
         [AllowAnonymous]
         [HttpPost("[action]")]
-        public async Task<ActionResult<string>> Login([FromBody] LoginUserCommand command)
+        public async Task<ActionResult<string>> Login([FromBody] LoginUserQuery query)
         {
-            return await _mediator.Send(command);
+            return await _mediator.Send(query);
         }
 
         [Authorize]

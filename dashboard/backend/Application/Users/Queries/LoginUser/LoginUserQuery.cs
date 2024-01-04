@@ -1,9 +1,9 @@
 ﻿
 using MediatR;
 
-namespace Application.Users.Commands.LoginUser
+namespace Application.Users.Queries.LoginUser
 {
-	public class LoginUserCommand : IRequest<string>
+	public class LoginUserQuery : IRequest<string>
 	{
 		public required string Username { get; set; }
 

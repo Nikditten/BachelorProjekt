@@ -5,9 +5,9 @@ using Domain.Entities;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
-namespace Application.Users.Commands.LoginUser
+namespace Application.Users.Queries.LoginUser
 {
-    public class LoginUserCommandHandler : IRequestHandler<LoginUserCommand, string>
+    public class LoginUserQueryHandler : IRequestHandler<LoginUserQuery, string>
     {
 
         private readonly IApplicationDbContext _applicationDbContext;
@@ -16,7 +16,7 @@ namespace Application.Users.Commands.LoginUser
 
         private readonly ITokenService _tokenService;
 
-        public LoginUserCommandHandler(IApplicationDbContext applicationDbContext, IPasswordService passwordService, ITokenService tokenService)
+        public LoginUserQueryHandler(IApplicationDbContext applicationDbContext, IPasswordService passwordService, ITokenService tokenService)
         {
             _applicationDbContext = applicationDbContext;
 
@@ -25,7 +25,7 @@ namespace Application.Users.Commands.LoginUser
             _tokenService = tokenService;
         }
 
-        public async Task<string> Handle(LoginUserCommand request, CancellationToken cancellationToken)
+        public async Task<string> Handle(LoginUserQuery request, CancellationToken cancellationToken)
         {
             User? user = await _applicationDbContext.Users.FirstOrDefaultAsync(x => x.Username == request.Username, cancellationToken);
 
