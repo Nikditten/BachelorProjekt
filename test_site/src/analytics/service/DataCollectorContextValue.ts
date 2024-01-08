@@ -46,48 +46,50 @@ export const DataCollectorContextValue = (
   }, [router.pathname]);
 
   useEffect(() => {
-    window.addEventListener('click', (e: any) => {
+    window.onclick = (e: any) => {
       if (e.target instanceof HTMLButtonElement) {
         registerButtonClickEvent(websiteKey, e.target, session);
       } else if (e.target instanceof HTMLAnchorElement) {
         registerLinkClickEvent(websiteKey, e.target, session);
       }
-    });
+    };
 
     return () => {
-      window.removeEventListener('click', () => {});
+      window.onclick = null;
     };
-  }, [session]);
+  }, [websiteKey, session]);
 
   useEffect(() => {
     const videos = document.querySelectorAll('video');
 
     videos.forEach((video) => {
-      video.addEventListener('play', () => {
+      video.onplay = () => {
+        if (video.currentTime > 0) return;
         startVideoSession(websiteKey, video, session).then((videoSession) => {
           console.log('startVideoSession', videoSession);
           setVideoSession(videoSession);
         });
-      });
+      };
 
-      video.addEventListener('pause', () => {
+      video.onpause = () => {
+        if (video.currentTime === video.duration) return;
         pauseVideoSession(websiteKey, video, videoSession);
-      });
+      };
 
-      video.addEventListener('ended', () => {
+      video.onended = () => {
         endVideoSession(websiteKey, video.currentTime, videoSession);
         setVideoSession(null);
-      });
+      };
     });
 
     return () => {
       videos.forEach((video) => {
-        video.removeEventListener('play', () => {});
-        video.removeEventListener('pause', () => {});
-        video.removeEventListener('ended', () => {});
+        video.onplay = null;
+        video.onpause = null;
+        video.onended = null;
       });
     };
-  }, [router.pathname, videoSession]);
+  }, [websiteKey, router.pathname, videoSession, session]);
 
   return {};
 };
