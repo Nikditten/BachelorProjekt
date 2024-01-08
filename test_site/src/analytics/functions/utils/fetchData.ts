@@ -4,10 +4,6 @@ const fetchData = async (
   body?: any,
   apiURL?: string
 ): Promise<Response> => {
-  console.log(
-    'fetchData',
-    `${apiURL ?? process.env.NEXT_PUBLIC_BACKEND_URL}/api/collector/${endpoint}`
-  );
   const url = `${
     apiURL ?? process.env.NEXT_PUBLIC_BACKEND_URL
   }/api/collector/${endpoint}`;
