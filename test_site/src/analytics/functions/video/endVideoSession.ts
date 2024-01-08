@@ -4,7 +4,8 @@ import fetchData from '../utils/fetchData';
 const endVideoSession = async (
   key: string,
   duration: number,
-  videoSession: string | null
+  videoSession: string | null,
+  url?: string
 ) => {
   console.log('endVideoSession', videoSession);
 

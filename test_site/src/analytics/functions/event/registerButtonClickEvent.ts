@@ -4,7 +4,8 @@ import fetchData from '../utils/fetchData';
 const registerButtonClickEvent = async (
   key: string,
   button: HTMLButtonElement,
-  session: string | null
+  session: string | null,
+  url?: string
 ) => {
   console.log('registerButtonClickEvent', session);
   if (!session) return null;
@@ -18,7 +19,7 @@ const registerButtonClickEvent = async (
     url: window.location.href,
   };
 
-  await fetchData('Event/CreateClickEvent', 'POST', body);
+  await fetchData('Event/CreateClickEvent', 'POST', body, url);
 };
 
 export default registerButtonClickEvent;

@@ -3,6 +3,7 @@ import { DataCollectorContextValue } from './DataCollectorContextValue';
 
 interface Props {
   websiteKey: string;
+  apiURL?: string;
 }
 
 const DataCollectorContext = createContext<
@@ -12,8 +13,9 @@ const DataCollectorContext = createContext<
 export const DataCollectorContextProvider: FC<PropsWithChildren<Props>> = ({
   children,
   websiteKey,
+  apiURL,
 }) => {
-  const value = DataCollectorContextValue(websiteKey);
+  const value = DataCollectorContextValue(websiteKey, apiURL);
 
   return (
     <DataCollectorContext.Provider value={value}>

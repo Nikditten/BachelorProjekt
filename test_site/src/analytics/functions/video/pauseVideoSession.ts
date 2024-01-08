@@ -3,7 +3,8 @@ import fetchData from '../utils/fetchData';
 const pauseVideoSession = async (
   key: string,
   video: HTMLVideoElement,
-  videoSession: string | null
+  videoSession: string | null,
+  url?: string
 ) => {
   console.log('pauseVideoSession', videoSession);
 

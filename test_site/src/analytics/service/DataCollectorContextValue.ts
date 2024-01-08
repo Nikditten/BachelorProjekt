@@ -14,7 +14,8 @@ import {
 type DataCollectorProps = {};
 
 export const DataCollectorContextValue = (
-  websiteKey: string
+  websiteKey: string,
+  apiUrl?: string
 ): DataCollectorProps => {
   const router = useRouter();
 
@@ -35,22 +36,22 @@ export const DataCollectorContextValue = (
         document.referrer.includes('android-app://'),
     };
 
-    startSession(body).then((session) => {
+    startSession(body, apiUrl).then((session) => {
       console.log('startSession', session);
       setSession(session);
     });
   }, [websiteKey]);
 
   useEffect(() => {
-    registerNavigationEvent(websiteKey, window.location.href, session);
+    registerNavigationEvent(websiteKey, window.location.href, session, apiUrl);
   }, [router.pathname]);
 
   useEffect(() => {
     window.onclick = (e: any) => {
       if (e.target instanceof HTMLButtonElement) {
-        registerButtonClickEvent(websiteKey, e.target, session);
+        registerButtonClickEvent(websiteKey, e.target, session, apiUrl);
       } else if (e.target instanceof HTMLAnchorElement) {
-        registerLinkClickEvent(websiteKey, e.target, session);
+        registerLinkClickEvent(websiteKey, e.target, session, apiUrl);
       }
     };
 
@@ -65,19 +66,21 @@ export const DataCollectorContextValue = (
     videos.forEach((video) => {
       video.onplay = () => {
         if (video.currentTime > 0) return;
-        startVideoSession(websiteKey, video, session).then((videoSession) => {
-          console.log('startVideoSession', videoSession);
-          setVideoSession(videoSession);
-        });
+        startVideoSession(websiteKey, video, session, apiUrl).then(
+          (videoSession) => {
+            console.log('startVideoSession', videoSession);
+            setVideoSession(videoSession);
+          }
+        );
       };
 
       video.onpause = () => {
         if (video.currentTime === video.duration) return;
-        pauseVideoSession(websiteKey, video, videoSession);
+        pauseVideoSession(websiteKey, video, videoSession, apiUrl);
       };
 
       video.onended = () => {
-        endVideoSession(websiteKey, video.currentTime, videoSession);
+        endVideoSession(websiteKey, video.currentTime, videoSession, apiUrl);
         setVideoSession(null);
       };
     });

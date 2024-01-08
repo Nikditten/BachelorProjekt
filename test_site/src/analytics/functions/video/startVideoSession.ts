@@ -3,7 +3,8 @@ import fetchData from '../utils/fetchData';
 const startVideoSession = async (
   key: string,
   video: HTMLVideoElement,
-  session: string | null
+  session: string | null,
+  url?: string
 ): Promise<string | null> => {
   if (video.currentTime > 0) return null;
 

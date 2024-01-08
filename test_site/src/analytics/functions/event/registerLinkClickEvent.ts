@@ -4,7 +4,8 @@ import fetchData from '../utils/fetchData';
 const registerLinkClickEvent = async (
   key: string,
   link: HTMLAnchorElement,
-  session: string | null
+  session: string | null,
+  url?: string
 ) => {
   console.log('registerLinkClickEvent', session);
   if (!session) return null;
@@ -18,7 +19,7 @@ const registerLinkClickEvent = async (
     url: link.href,
   };
 
-  await fetchData('Event/CreateClickEvent', 'POST', body);
+  await fetchData('Event/CreateClickEvent', 'POST', body, url);
 };
 
 export default registerLinkClickEvent;
