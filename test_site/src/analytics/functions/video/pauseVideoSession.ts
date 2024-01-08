@@ -1,18 +1,19 @@
-import { getCookie } from '../utils/cookie';
 import fetchData from '../utils/fetchData';
 
-const pauseVideoSession = async (key: string, video: HTMLVideoElement) => {
-  const sessionId = getCookie('sessionID');
-  const videoSessionID = getCookie('videoSessionID');
+const pauseVideoSession = async (
+  key: string,
+  video: HTMLVideoElement,
+  videoSession: string | null
+) => {
+  console.log('pauseVideoSession', videoSession);
 
-  if (!sessionId || !videoSessionID) return null;
+  if (!videoSession) return null;
   if (video.currentTime === 0 || video.duration === video.currentTime)
     return null;
 
   const play = {
     websiteKey: key,
-    sessionID: sessionId,
-    videoSessionID: videoSessionID,
+    videoSessionID: videoSession,
     duration: video.currentTime,
   };
 

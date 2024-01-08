@@ -1,5 +1,5 @@
 import { useRouter } from 'next/router';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import {
   endVideoSession,
   getBrowser,
@@ -18,6 +18,9 @@ export const DataCollectorContextValue = (
 ): DataCollectorProps => {
   const router = useRouter();
 
+  const [session, setSession] = useState<string | null>(null);
+  const [videoSession, setVideoSession] = useState<string | null>(null);
+
   useEffect(() => {
     const body = {
       websiteKey: websiteKey,
@@ -32,41 +35,48 @@ export const DataCollectorContextValue = (
         document.referrer.includes('android-app://'),
     };
 
-    startSession(body);
+    startSession(body).then((session) => {
+      console.log('startSession', session);
+      setSession(session);
+    });
   }, [websiteKey]);
 
   useEffect(() => {
-    registerNavigationEvent(websiteKey, window.location.href);
+    registerNavigationEvent(websiteKey, window.location.href, session);
   }, [router.pathname]);
 
   useEffect(() => {
-    window.addEventListener('click', (e) => {
+    window.addEventListener('click', (e: any) => {
       if (e.target instanceof HTMLButtonElement) {
-        registerButtonClickEvent(websiteKey, e.target);
+        registerButtonClickEvent(websiteKey, e.target, session);
       } else if (e.target instanceof HTMLAnchorElement) {
-        registerLinkClickEvent(websiteKey, e.target);
+        registerLinkClickEvent(websiteKey, e.target, session);
       }
     });
 
     return () => {
       window.removeEventListener('click', () => {});
     };
-  }, []);
+  }, [session]);
 
   useEffect(() => {
     const videos = document.querySelectorAll('video');
 
     videos.forEach((video) => {
       video.addEventListener('play', () => {
-        startVideoSession(websiteKey, video);
+        startVideoSession(websiteKey, video, session).then((videoSession) => {
+          console.log('startVideoSession', videoSession);
+          setVideoSession(videoSession);
+        });
       });
 
       video.addEventListener('pause', () => {
-        pauseVideoSession(websiteKey, video);
+        pauseVideoSession(websiteKey, video, videoSession);
       });
 
       video.addEventListener('ended', () => {
-        endVideoSession(websiteKey, video.currentTime);
+        endVideoSession(websiteKey, video.currentTime, videoSession);
+        setVideoSession(null);
       });
     });
 
@@ -77,7 +87,7 @@ export const DataCollectorContextValue = (
         video.removeEventListener('ended', () => {});
       });
     };
-  }, [router.pathname]);
+  }, [router.pathname, videoSession]);
 
   return {};
 };

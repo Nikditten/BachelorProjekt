@@ -22,13 +22,13 @@ namespace Application.VideoSessions.Commands.EndVideoSession
 
             if (website == null) throw new NullReferenceException("Website not found");
 
-            Session? session = await _applicationDbContext.Sessions.AsNoTracking().FirstOrDefaultAsync(x => x.ID == request.SessionID, cancellationToken);
-
-            if (session == null) throw new NullReferenceException("Session not found");
-
             VideoSession? videoSession = await _applicationDbContext.VideoSessions.Include(x => x.VideoEvents).AsNoTracking().FirstOrDefaultAsync(x => x.ID == request.VideoSessionID, cancellationToken);
 
             if (videoSession == null) throw new NullReferenceException("VideoSession not found");
+
+            Session? session = await _applicationDbContext.Sessions.FirstOrDefaultAsync(x => x.ID == videoSession.SessionId, cancellationToken);
+
+            if (session == null) throw new NullReferenceException("Session not found");
 
             var videoEvent = new VideoEvent
             {

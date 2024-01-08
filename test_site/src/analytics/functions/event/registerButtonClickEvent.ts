@@ -1,18 +1,17 @@
 import ElementType from '@/analytics/types/ElementType';
-import { getCookie } from '../utils/cookie';
 import fetchData from '../utils/fetchData';
 
 const registerButtonClickEvent = async (
   key: string,
-  button: HTMLButtonElement
+  button: HTMLButtonElement,
+  session: string | null
 ) => {
-  const sessionId = getCookie('sessionID');
-
-  if (!sessionId) return null;
+  console.log('registerButtonClickEvent', session);
+  if (!session) return null;
 
   const body = {
     websiteKey: key,
-    sessionID: sessionId,
+    sessionID: session,
     elementID: button.id,
     elementType: ElementType.Button,
     elementText: button.innerText,

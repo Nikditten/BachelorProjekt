@@ -1,14 +1,16 @@
-import { getCookie } from '../utils/cookie';
 import fetchData from '../utils/fetchData';
 
-const registerNavigationEvent = async (key: string, url: string) => {
-  const sessionId = getCookie('sessionID');
-
-  if (!sessionId) return null;
+const registerNavigationEvent = async (
+  key: string,
+  url: string,
+  session: string | null
+) => {
+  console.log('registerNavigationEvent', session);
+  if (!session) return null;
 
   await fetchData('Event/CreateNavigationEvent', 'POST', {
     websiteKey: key,
-    sessionID: sessionId,
+    sessionID: session,
     url,
   });
 };

@@ -1,16 +1,17 @@
-import { getCookie, setCookie } from '../utils/cookie';
 import fetchData from '../utils/fetchData';
 
-const startVideoSession = async (key: string, video: HTMLVideoElement) => {
+const startVideoSession = async (
+  key: string,
+  video: HTMLVideoElement,
+  session: string | null
+): Promise<string | null> => {
   if (video.currentTime > 0) return null;
 
-  const sessionId = getCookie('sessionID');
-
-  if (!sessionId) return null;
+  if (!session) return null;
 
   const play = {
     websiteKey: key,
-    sessionID: sessionId,
+    sessionID: session,
     videoID: video.id,
     source: video.src,
     duration: video.duration,
@@ -20,11 +21,10 @@ const startVideoSession = async (key: string, video: HTMLVideoElement) => {
   const res = await fetchData('Event/CreateVideoSession', 'POST', play);
 
   if (res.status !== 200) {
-    console.error('Error starting video session');
     return null;
   } else {
-    const videosession = await res.json();
-    setCookie('videoSessionID', videosession);
+    const videoSession = await res.json();
+    return videoSession;
   }
 };
 

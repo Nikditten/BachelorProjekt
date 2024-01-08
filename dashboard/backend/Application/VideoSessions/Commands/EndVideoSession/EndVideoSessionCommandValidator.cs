@@ -10,9 +10,6 @@ namespace Application.VideoSessions.Commands.EndVideoSession
             RuleFor(x => x.WebsiteKey)
                 .NotEmpty();
 
-            RuleFor(x => x.SessionID)
-                .NotEmpty();
-
             RuleFor(x => x.VideoSessionID)
                 .NotEmpty();
 

@@ -1,16 +1,18 @@
-import { deleteCookie, getCookie } from '../utils/cookie';
+import { deleteCookie } from '../utils/cookie';
 import fetchData from '../utils/fetchData';
 
-const endVideoSession = async (key: string, duration: number) => {
-  const sessionId = getCookie('sessionID');
-  const videoSessionID = getCookie('videoSessionID');
+const endVideoSession = async (
+  key: string,
+  duration: number,
+  videoSession: string | null
+) => {
+  console.log('endVideoSession', videoSession);
 
-  if (!sessionId || !videoSessionID) return null;
+  if (!videoSession) return null;
 
   const play = {
     websiteKey: key,
-    sessionID: sessionId,
-    videoSessionID: videoSessionID,
+    videoSessionID: videoSession,
     duration: duration,
   };
 
