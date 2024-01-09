@@ -1,6 +1,7 @@
 ﻿
 using Application.Common.Exceptions;
 using Application.Common.Interfaces;
+using AutoMapper;
 using Domain.Entities;
 using MediatR;
 
@@ -13,11 +14,13 @@ namespace Application.Websites.Commands.CreateWebsite
 
         private readonly IUserService _userService;
 
-        public CreateWebsiteCommandHandler(IApplicationDbContext applicationDbContext, IUserService userService)
+        private readonly IMapper _mapper;
+
+        public CreateWebsiteCommandHandler(IApplicationDbContext applicationDbContext, IUserService userService, IMapper mapper)
         {
             _applicationDbContext = applicationDbContext;
-
             _userService = userService;
+            _mapper = mapper;
         }
 
         public async Task<CreatedWebsiteDTO> Handle(CreateWebsiteCommand request, CancellationToken cancellationToken)
@@ -32,9 +35,7 @@ namespace Application.Websites.Commands.CreateWebsite
 
             await _applicationDbContext.SaveChangesAsync(cancellationToken);
 
-            CreatedWebsiteDTO createdWebsiteDTO = new CreatedWebsiteDTO { Id = website.ID, Key = website.Key };
-
-            return createdWebsiteDTO;
+            return _mapper.Map<CreatedWebsiteDTO>(website);
         }
     }
 }

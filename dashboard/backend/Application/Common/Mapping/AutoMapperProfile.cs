@@ -1,5 +1,6 @@
 using Application.DTOs;
 using Application.Shares.Queries.GetUsers;
+using Application.Websites.Commands.CreateWebsite;
 using AutoMapper;
 using Domain.Entities;
 
@@ -14,6 +15,7 @@ namespace Application.Common.Mapping
             CreateMap<User, SharedUserDTO>();
             CreateMap<Shared, SharedDTO>();
             CreateMap<Website, WebsiteDTO>();
+            CreateMap<Website, CreatedWebsiteDTO>();
         }
     }
 }

@@ -10,13 +10,11 @@ namespace Application.Websites.Queries.GetWebsites
     {
         private readonly IApplicationDbContext _applicationDbContext;
         private readonly IUserService _userService;
-        private readonly IMapper _mapper;
 
-        public GetWebsitesQueryHandler(IApplicationDbContext applicationDbContext, IUserService userService, IMapper mapper)
+        public GetWebsitesQueryHandler(IApplicationDbContext applicationDbContext, IUserService userService)
         {
             _applicationDbContext = applicationDbContext;
             _userService = userService;
-            _mapper = mapper;
         }
 
         public async Task<List<UserWebsiteDTO>> Handle(GetWebsitesQuery request, CancellationToken cancellationToken)

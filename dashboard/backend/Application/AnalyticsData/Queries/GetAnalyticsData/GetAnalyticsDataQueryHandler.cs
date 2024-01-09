@@ -13,22 +13,10 @@ namespace Application.AnalyticsData.Queries.GetAnalyticsData
     {
         private readonly IApplicationDbContext _applicationDbContext;
         private readonly IUserService _userService;
-        private readonly IMapper _mapper;
-        public GetAnalyticsDataQueryHandler(IApplicationDbContext applicationDbContext, IUserService userService, IMapper mapper)
+        public GetAnalyticsDataQueryHandler(IApplicationDbContext applicationDbContext, IUserService userService)
         {
             _applicationDbContext = applicationDbContext;
             _userService = userService;
-            _mapper = mapper;
-        }
-
-        private static int CalcAvgPageVisited(List<Session> sessions)
-        {
-            int totalPageVisited = 0;
-            foreach (Session session in sessions)
-            {
-                totalPageVisited += session.NavigationEvents.Count;
-            }
-            return (totalPageVisited + sessions.Count) / sessions.Count;
         }
 
         public async Task<AnalyticsDataDTO> Handle(GetAnalyticsDataQuery request, CancellationToken cancellationToken)
