@@ -22,6 +22,8 @@ namespace Application.Websites.Commands.UpdateWebsite
 
             if (website == null) throw new NullReferenceException("Website does not exist");
 
+            if (website.UserId != _userService.Id) throw new UnauthorizedAccessException();
+
             website.Name = request.Name;
             website.Url = request.Url;
 
