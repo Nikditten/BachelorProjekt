@@ -97,14 +97,18 @@ namespace Application.DTOs
                 return _sessions
                 .SelectMany(x => x.NavigationEvents)
                 .GroupBy(x => x.URL)
-                .Select(x => new PageViewStatDTO
+                .Select(x =>
                 {
-                    Url = x.Key,
-                    Count = x.Count(),
-                    LandingCount = x.Count(y => y.Type == NavigationType.Landing) / x.Count(),
-                    ExitCount = x.Count(y => y.Session.NavigationEvents.Max(z => z.Index) == y.Index) / x.Count(),
-                    BounceCount = x.Count(y => y.Session.NavigationEvents.Count == 1 && y.Session.NavigationEvents.First().URL == y.URL) / x.Count(),
-                    AvgInteractionCount = x.Average(y => y.Session.ClickEvents.Count(z => z.URL == y.URL && z.ElementType == ElementType.Button) + y.Session.VideoSessions.Count(z => z.URL == y.URL)),
+                    double count = x.Count();
+                    return new PageViewStatDTO
+                    {
+                        Url = x.Key,
+                        Count = x.Count(),
+                        LandingCount = x.Count(y => y.Type == NavigationType.Landing) / count * 100,
+                        ExitCount = x.Count(y => y.Session.NavigationEvents.Max(z => z.Index) == y.Index) / count * 100,
+                        BounceCount = x.Count(y => y.Session.NavigationEvents.Count == 1 && y.Session.NavigationEvents.First().URL == y.URL) / count * 100,
+                        AvgInteractionCount = x.Average(y => y.Session.ClickEvents.Count(z => z.URL == y.URL && z.ElementType == ElementType.Button) + y.Session.VideoSessions.Count(z => z.URL == y.URL)),
+                    };
                 })
                 .ToList();
             }
