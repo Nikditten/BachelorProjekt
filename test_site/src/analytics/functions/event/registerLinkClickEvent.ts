@@ -1,13 +1,13 @@
-import ElementType from '@/analytics/types/ElementType';
-import fetchData from '../utils/fetchData';
+import ElementType from "../../types/ElementType";
+import fetchData from "../utils/fetchData";
 
 const registerLinkClickEvent = async (
   key: string,
   link: HTMLAnchorElement,
   session: string | null,
-  url?: string
+  url?: string,
 ) => {
-  console.log('registerLinkClickEvent', session);
+  console.log("registerLinkClickEvent", session);
   if (!session) return null;
 
   const body = {
@@ -19,7 +19,7 @@ const registerLinkClickEvent = async (
     url: link.href,
   };
 
-  await fetchData('Event/CreateClickEvent', 'POST', body, url);
+  await fetchData("Event/CreateClickEvent", "POST", body, url);
 };
 
 export default registerLinkClickEvent;
