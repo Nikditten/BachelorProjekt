@@ -63,9 +63,9 @@ const Home: NextPageWithLayout = () => {
             .sort((a, b) => b.count - a.count)
             .map((page) => [
               cleanUrl(page.url),
-              `${page.landingCount}`,
-              `${page.exitCount}`,
-              `${page.bounceCount}`,
+              `${page.landingCount.toFixed(2)}%`,
+              `${page.exitCount.toFixed(2)}%`,
+              `${page.bounceCount.toFixed(2)}%`,
               `${page.count}`,
               `${page.avgInteractionCount.toFixed(2)}`,
             ])}
