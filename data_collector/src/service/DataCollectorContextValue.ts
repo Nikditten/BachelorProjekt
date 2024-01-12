@@ -1,5 +1,5 @@
 import { useRouter } from 'next/router';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import {
   endVideoSession,
   getBrowser,
@@ -14,9 +14,13 @@ import {
 type DataCollectorProps = {};
 
 export const DataCollectorContextValue = (
-  websiteKey: string
+  websiteKey: string,
+  apiUrl?: string
 ): DataCollectorProps => {
   const router = useRouter();
+
+  const [session, setSession] = useState<string | null>(null);
+  const [videoSession, setVideoSession] = useState<string | null>(null);
 
   useEffect(() => {
     const body = {
@@ -32,52 +36,63 @@ export const DataCollectorContextValue = (
         document.referrer.includes('android-app://'),
     };
 
-    startSession(body);
+    startSession(body, apiUrl).then((session) => {
+      console.log('startSession', session);
+      setSession(session);
+    });
   }, [websiteKey]);
 
   useEffect(() => {
-    registerNavigationEvent(websiteKey, window.location.href);
+    registerNavigationEvent(websiteKey, window.location.href, session, apiUrl);
   }, [router.pathname]);
 
   useEffect(() => {
-    window.addEventListener('click', (e) => {
+    window.onclick = (e: any) => {
       if (e.target instanceof HTMLButtonElement) {
-        registerButtonClickEvent(websiteKey, e.target);
+        registerButtonClickEvent(websiteKey, e.target, session, apiUrl);
       } else if (e.target instanceof HTMLAnchorElement) {
-        registerLinkClickEvent(websiteKey, e.target);
+        registerLinkClickEvent(websiteKey, e.target, session, apiUrl);
       }
-    });
+    };
 
     return () => {
-      window.removeEventListener('click', () => {});
+      window.onclick = null;
     };
-  }, []);
+  }, [websiteKey, session]);
 
   useEffect(() => {
     const videos = document.querySelectorAll('video');
 
     videos.forEach((video) => {
-      video.addEventListener('play', () => {
-        startVideoSession(websiteKey, video);
-      });
+      video.onplay = () => {
+        if (video.currentTime > 0) return;
+        startVideoSession(websiteKey, video, session, apiUrl).then(
+          (videoSession) => {
+            console.log('startVideoSession', videoSession);
+            setVideoSession(videoSession);
+          }
+        );
+      };
 
-      video.addEventListener('pause', () => {
-        pauseVideoSession(websiteKey, video);
-      });
+      video.onpause = () => {
+        if (video.currentTime === video.duration) return;
+        pauseVideoSession(websiteKey, video, videoSession, apiUrl);
+      };
 
-      video.addEventListener('ended', () => {
-        endVideoSession(websiteKey, video.currentTime);
-      });
+      video.onended = () => {
+        endVideoSession(websiteKey, video.currentTime, videoSession, apiUrl);
+        setVideoSession(null);
+      };
     });
 
     return () => {
       videos.forEach((video) => {
-        video.removeEventListener('play', () => {});
-        video.removeEventListener('pause', () => {});
-        video.removeEventListener('ended', () => {});
+        video.onplay = null;
+        video.onpause = null;
+        video.onended = null;
       });
     };
-  }, [router.pathname]);
+  }, [websiteKey, router.pathname, videoSession, session]);
 
   return {};
 };

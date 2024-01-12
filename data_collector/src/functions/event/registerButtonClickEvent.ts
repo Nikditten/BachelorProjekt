@@ -1,25 +1,25 @@
-import ElementType from '@/analytics/types/ElementType';
-import { getCookie } from '../utils/cookie';
-import fetchData from '../utils/fetchData';
+import ElementType from "../../types/ElementType";
+import fetchData from "../utils/fetchData";
 
 const registerButtonClickEvent = async (
   key: string,
-  button: HTMLButtonElement
+  button: HTMLButtonElement,
+  session: string | null,
+  url?: string,
 ) => {
-  const sessionId = getCookie('sessionID');
-
-  if (!sessionId) return null;
+  console.log("registerButtonClickEvent", session);
+  if (!session) return null;
 
   const body = {
     websiteKey: key,
-    sessionID: sessionId,
+    sessionID: session,
     elementID: button.id,
     elementType: ElementType.Button,
     elementText: button.innerText,
     url: window.location.href,
   };
 
-  await fetchData('Event/CreateClickEvent', 'POST', body);
+  await fetchData("Event/CreateClickEvent", "POST", body, url);
 };
 
 export default registerButtonClickEvent;

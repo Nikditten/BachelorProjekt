@@ -1,9 +1,12 @@
 const fetchData = async (
   endpoint: string,
   method: 'POST' | 'PUT',
-  body?: any
+  body?: any,
+  apiURL?: string
 ): Promise<Response> => {
-  const url = `${process.env.NEXT_PUBLIC_BACKEND_URL}/${endpoint}`;
+  const url = `${
+    apiURL ?? process.env.NEXT_PUBLIC_BACKEND_URL
+  }/api/collector/${endpoint}`;
 
   try {
     const res = await fetch(url, {

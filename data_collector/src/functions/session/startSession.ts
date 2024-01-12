@@ -1,16 +1,16 @@
-import { setCookie } from '../utils/cookie';
 import fetchData from '../utils/fetchData';
 
-const startSession = async (body: any): Promise<boolean> => {
-  const res = await fetchData('Session/Create', 'POST', body);
+const startSession = async (
+  body: any,
+  url?: string
+): Promise<string | null> => {
+  const res = await fetchData('Session/Create', 'POST', body, url);
 
   if (res.status !== 200) {
-    console.error('Error starting session');
-    return false;
+    return null;
   } else {
     const session = await res.json();
-    setCookie('sessionID', session);
-    return true;
+    return session;
   }
 };
 
