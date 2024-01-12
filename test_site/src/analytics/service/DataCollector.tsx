@@ -1,5 +1,5 @@
 import { useRouter } from 'next/router';
-import { useEffect, useState } from 'react';
+import { FC, PropsWithChildren, useEffect, useState } from 'react';
 import {
   endVideoSession,
   getBrowser,
@@ -11,12 +11,16 @@ import {
   startVideoSession,
 } from '../functions';
 
-type DataCollectorProps = {};
+interface Props {
+  websiteKey: string;
+  apiUrl?: string;
+}
 
-export const DataCollectorContextValue = (
-  websiteKey: string,
-  apiUrl?: string
-): DataCollectorProps => {
+export const DataCollector: FC<PropsWithChildren<Props>> = ({
+  children,
+  websiteKey,
+  apiUrl,
+}) => {
   const router = useRouter();
 
   const [session, setSession] = useState<string | null>(null);
@@ -94,5 +98,5 @@ export const DataCollectorContextValue = (
     };
   }, [websiteKey, router.pathname, videoSession, session]);
 
-  return {};
+  return <>{children}</>;
 };

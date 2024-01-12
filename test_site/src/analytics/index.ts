@@ -1,6 +1,2 @@
-import {
-  DataCollectorContextProvider,
-  useDataCollector,
-} from './service/useDataCollector';
-
-export { DataCollectorContextProvider, useDataCollector };
+import { DataCollector } from './service/DataCollector';
+export { DataCollector };
