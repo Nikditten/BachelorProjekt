@@ -27,6 +27,8 @@ namespace Application.Websites.Commands.UpdateWebsite
             website.Name = request.Name;
             website.Url = request.Url;
 
+            _applicationDbContext.Websites.Update(website);
+
             await _applicationDbContext.SaveChangesAsync(cancellationToken);
 
             return Unit.Value;
