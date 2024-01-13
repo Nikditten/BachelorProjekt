@@ -2,8 +2,6 @@ using Application.DTOs;
 using Application.Shares.Commands.DeleteSharedWebsite;
 using Application.Shares.Commands.ShareWebsite;
 using Application.Shares.Queries.GetUsers;
-using Application.Users.Queries.GetUser;
-using Domain.Entities;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;

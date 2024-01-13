@@ -1,10 +1,5 @@
 using Application.AnalyticsData.Queries.GetAnalyticsData;
-using Application.ClickEvents.Commands.CreateClickEvent;
 using Application.DTOs;
-using Application.NavigationEvents.Commands.CreateNavigationEvent;
-using Application.VideoSessions.Commands.CreateVideoSession;
-using Application.VideoSessions.Commands.EndVideoSession;
-using Application.VideoSessions.Commands.PauseVideoSession;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
