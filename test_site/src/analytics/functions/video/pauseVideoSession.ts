@@ -4,7 +4,6 @@ const pauseVideoSession = async (
   key: string,
   video: HTMLVideoElement,
   videoSession: string | null,
-  url?: string
 ) => {
   console.log('pauseVideoSession', videoSession);
 
