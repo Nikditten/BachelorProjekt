@@ -1,4 +1,3 @@
-using Application.DTOs;
 using MediatR;
 
 namespace Application.Websites.Queries.GetWebsites
