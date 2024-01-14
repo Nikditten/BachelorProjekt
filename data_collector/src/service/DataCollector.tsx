@@ -69,7 +69,7 @@ export const DataCollector: FC<PropsWithChildren<Props>> = ({
 
     videos.forEach((video) => {
       video.onplay = () => {
-        if (video.currentTime > 0) return;
+        if (video.currentTime > 0 && videoSession) return;
         startVideoSession(websiteKey, video, session, apiUrl).then(
           (videoSession) => {
             console.log('startVideoSession', videoSession);

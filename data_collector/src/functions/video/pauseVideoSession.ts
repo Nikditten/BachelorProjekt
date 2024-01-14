@@ -4,7 +4,7 @@ const pauseVideoSession = async (
   key: string,
   video: HTMLVideoElement,
   videoSession: string | null,
-  url?: string
+  apiUrl?: string
 ) => {
   console.log('pauseVideoSession', videoSession);
 
@@ -18,7 +18,7 @@ const pauseVideoSession = async (
     duration: video.currentTime,
   };
 
-  const res = await fetchData('Event/PauseVideoSession', 'POST', play);
+  const res = await fetchData('Event/PauseVideoSession', 'POST', play, apiUrl);
 
   return res.status === 200;
 };

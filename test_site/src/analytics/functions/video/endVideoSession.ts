@@ -5,6 +5,7 @@ const endVideoSession = async (
   key: string,
   duration: number,
   videoSession: string | null,
+  apiUrl?: string
 ) => {
   console.log('endVideoSession', videoSession);
 
@@ -16,7 +17,7 @@ const endVideoSession = async (
     duration: duration,
   };
 
-  await fetchData('Event/EndVideoSession', 'POST', play);
+  await fetchData('Event/EndVideoSession', 'POST', play, apiUrl);
 
   deleteCookie('videoSessionID');
 };

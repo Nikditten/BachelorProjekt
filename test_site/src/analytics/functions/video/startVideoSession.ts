@@ -4,9 +4,8 @@ const startVideoSession = async (
   key: string,
   video: HTMLVideoElement,
   session: string | null,
+  apiUrl?: string
 ): Promise<string | null> => {
-  if (video.currentTime > 0) return null;
-
   if (!session) return null;
 
   const play = {
@@ -18,7 +17,7 @@ const startVideoSession = async (
     url: window.location.href,
   };
 
-  const res = await fetchData('Event/CreateVideoSession', 'POST', play);
+  const res = await fetchData('Event/CreateVideoSession', 'POST', play, apiUrl);
 
   if (res.status !== 200) {
     return null;
