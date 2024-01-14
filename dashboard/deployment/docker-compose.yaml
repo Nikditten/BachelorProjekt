@@ -28,6 +28,8 @@ services:
       - ASPNETCORE_URLS=http://+:${BACKEND_PORT}
       - ConnectionStrings__DefaultConnection=Server=db;PORT=${DATABASE_PORT};Database=${POSTGRES_DB};Username=${POSTGRES_USER};Password=${POSTGRES_PASSWORD};
       - JwtSettings__Key=${JWT_SECRET}
+      - JwtSettings__Issuer=${http://${BACKEND_HOST}:${BACKEND_PORT}/api}
+      - JwtSettings__Audience=${http://${BACKEND_HOST}:${BACKEND_PORT}/api}
     networks:
       - backend_network
       - frontend_network
