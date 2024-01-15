@@ -26,7 +26,6 @@ namespace API.Services
         {
             List<Claim> claims = new List<Claim>
             {
-                new Claim(JwtRegisteredClaimNames.Name, user.Name),
                 new Claim(JwtRegisteredClaimNames.NameId, user.ID.ToString()),
             };
 
