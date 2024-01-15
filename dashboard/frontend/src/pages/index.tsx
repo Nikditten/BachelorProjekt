@@ -37,8 +37,8 @@ const Home: NextPageWithLayout = () => {
             [
               (analyticsData?.sessionCount ?? 0).toString(),
               (analyticsData?.activeSessionCount ?? 0).toString(),
-              (analyticsData?.avgPageVisited?.toFixed(2) ?? 0).toString(),
               (analyticsData?.avgUniquePageVisited?.toFixed(2) ?? 0).toString(),
+              (analyticsData?.avgPageVisited?.toFixed(2) ?? 0).toString(),
               `${analyticsData?.bounceRate?.toFixed(2) ?? 0}%`,
               `${analyticsData?.isPWAPercentage?.toFixed(2) ?? 0}%`,
             ],
