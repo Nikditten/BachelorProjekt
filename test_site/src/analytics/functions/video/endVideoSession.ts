@@ -1,4 +1,3 @@
-import { deleteCookie } from '../utils/cookie';
 import fetchData from '../utils/fetchData';
 
 const endVideoSession = async (
@@ -18,8 +17,6 @@ const endVideoSession = async (
   };
 
   await fetchData('Event/EndVideoSession', 'POST', play, apiUrl);
-
-  deleteCookie('videoSessionID');
 };
 
 export default endVideoSession;
